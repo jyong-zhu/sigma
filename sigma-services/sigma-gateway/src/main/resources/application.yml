@@ -1,0 +1,12 @@
+server:
+  port: 9999
+
+spring:
+  application:
+    name: sigma-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true # 根据服务id进行路由
+          lower-case-service-id: true # 路由的路径为小写的service id

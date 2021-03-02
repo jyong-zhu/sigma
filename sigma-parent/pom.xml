@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>sigma-parent</artifactId>
+    <groupId>com.zone</groupId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <properties>
+        <versions.maven.plugin.version>2.8.1</versions.maven.plugin.version>
+        <!-- Spring Boot / Spring Cloud / Spring Cloud Alibaba 三者的对应版本 -->
+        <!-- https://github.com/alibaba/spring-cloud-alibaba/wiki/%E7%89%88%E6%9C%AC%E8%AF%B4%E6%98%8E -->
+        <spring-boot.version>2.3.2.RELEASE</spring-boot.version>
+        <spring-cloud-alibaba.version>2.2.4.RELEASE</spring-cloud-alibaba.version>
+        <spring-cloud-dependencies.version>Hoxton.SR8</spring-cloud-dependencies.version>
+
+        <hutool.version>5.4.1</hutool.version>
+        <swagger2.version>3.0.0</swagger2.version>
+        <guava.version>29.0-android</guava.version>
+        <lombok.version>1.18.16</lombok.version>
+        <druid-starter.version>1.1.22</druid-starter.version>
+        <mybatis-plus.version>3.2.0</mybatis-plus.version>
+        <mybatis-plus-generator.version>3.4.0</mybatis-plus-generator.version>
+        <!-- 设置maven编译的jdk版本 -->
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <!-- 指定maven编码的格式 -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <rocketmq.version>2.2.0</rocketmq.version>
+    </properties>
+
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- 统一修改版本号： -DgenerateBackupPoms=false 不进行备份 -->
+            <!-- mvn versions:set -DnewVersion=0.0.1-SNAPSHOT -DgenerateBackupPoms=false -->
+            <!-- 回退版本号 -->
+            <!-- mvn versions:revert -->
+            <dependency>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <version>${versions.maven.plugin.version}</version>
+                <type>maven-plugin</type>
+            </dependency>
+
+            <!-- BOM（Bill of Materials）文件 -->
+            <!-- 它不是一个依赖，而是定义了一整套相互兼容的jar包版本集合，相当于物料清单 -->
+            <!-- 这样做的好处是：在parent的基础上，使用import相当于实现多重继承 -->
+            <!-- 可以显式声明该pom文件里dependencyManagement下的依赖 -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- Spring Cloud -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud-dependencies.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- Spring Cloud Alibaba -->
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>${spring-cloud-alibaba.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- Mybatis-Plus -->
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>${mybatis-plus.version}</version>
+            </dependency>
+
+            <!-- Mybatis-Plus Generator -->
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-generator</artifactId>
+                <version>${mybatis-plus-generator.version}</version>
+            </dependency>
+
+            <!-- HuTool -->
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-all</artifactId>
+                <version>${hutool.version}</version>
+            </dependency>
+
+            <!-- Swagger2 -->
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger2</artifactId>
+                <version>${swagger2.version}</version>
+            </dependency>
+
+            <!-- guava -->
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
+
+            <!-- lombok -->
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+            </dependency>
+
+            <!--druid-->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid-spring-boot-starter</artifactId>
+                <version>${druid-starter.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.rocketmq</groupId>
+                <artifactId>rocketmq-spring-boot-starter</artifactId>
+                <version>${rocketmq.version}</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+    <!--
+      distributionManagement用于指明在mvn deploy的时候将生成的jar包deploy到哪个远程仓库中
+      如下两个标签：
+        repository用于release版本，
+        snapshotRepository用于snapshot版本
+      在项目中配置了这个标签之后，
+      需要在setting.xml中配置server相关的用户名与密码，用于仓库的用户名校验
+      同时要保证id相匹配, 如下：
+      <servers>
+        <server>
+          <id>maven-snapshots</id>
+          <username>root</username>
+          <password>pwd</password>
+        </server>
+        <server>
+          <id>maven-releases</id>
+          <username>root</username>
+          <password>pwd</password>
+        </server>
+      </servers>
+      当然，以下的配置是直接把中央仓库作为发布库来进行配置了
+      实际开发过程中需要把这个url改为私有的maven远程仓库
+     -->
+    <distributionManagement>
+        <repository>
+            <id>maven-releases</id>
+            <url>https://maven.aliyun.com/repository/central</url>
+        </repository>
+        <snapshotRepository>
+            <id>maven-snapshots</id>
+            <url>https://maven.aliyun.com/repository/central</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+</project>

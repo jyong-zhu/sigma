@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.zone</groupId>
+        <artifactId>sigma-parent</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <!--  父项目的pom.xml文件的相对路径，默认值为../pom.xml  -->
+        <relativePath>./sigma-parent</relativePath>
+    </parent>
+    <groupId>com.zone</groupId>
+    <artifactId>sigma</artifactId>
+    <packaging>pom</packaging>
+    <version>0.0.1-SNAPSHOT</version>
+    <modules>
+        <module>sigma-starters</module>
+        <module>sigma-services</module>
+        <module>sigma-rpc</module>
+    </modules>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>versions-maven-plugin</artifactId>
+            <type>maven-plugin</type>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+
+        <!-- 本项目的一些依赖 -->
+
+    </dependencies>
+
+
+</project>
