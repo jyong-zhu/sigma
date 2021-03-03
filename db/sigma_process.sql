@@ -57,7 +57,7 @@ CREATE TABLE `process_def_node`
     `node_people_type`  varchar(45) NOT NULL DEFAULT '' COMMENT '当前流程的处理人类型，指定用户/指定角色/用户参数/角色参数',
     -- 用户在查询待办的时候通过 所属角色 && user_id 去找待办
     `node_people_value` varchar(45) NOT NULL DEFAULT '' COMMENT '当前流程的处理人的信息，可以为参数${xxx}, 也可以为具体的值，这部分信息存储在candidateUser中',
-    `input_form_ids`    varchar(45) NULL COMMENT '挂靠在当前节点用于输入的表单， 用,隔开',
+    `input_form_ids`    text        NULL COMMENT '挂靠在当前节点用于输入的表单， 用,隔开',
     `display_form_ids`  text        NULL COMMENT '挂靠在当前节点用于展示的表单， 用,隔开',
 
     `create_time`       timestamp   NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -150,7 +150,7 @@ CREATE TABLE `process_instance_operation`
 (
     `id`             bigint(20)   NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `instance_id`    varchar(45)  NOT NULL COMMENT '流程实例id',
-    `operation_type` varchar(45)  NOT NULL COMMENT '操作类型（发起/转派/提交）',
+    `operation_type` varchar(45)  NOT NULL COMMENT '操作类型（发起/中止/提交/更新）',
     `bpmn_node_id`   varchar(45)  NOT NULL COMMENT '操作所处的节点id',
     `comment`        varchar(255) NOT NULL DEFAULT '' COMMENT '操作备注',
     `operate_by`     varchar(45)  NOT NULL COMMENT '操作人的user_id',

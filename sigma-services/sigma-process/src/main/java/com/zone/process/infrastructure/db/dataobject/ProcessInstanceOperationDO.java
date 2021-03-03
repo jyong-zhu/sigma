@@ -33,7 +33,7 @@ public class ProcessInstanceOperationDO implements Serializable {
     @ApiModelProperty(value = "流程实例id")
     private String instanceId;
 
-    @ApiModelProperty(value = "操作类型（发起/转派/提交）")
+    @ApiModelProperty(value = "操作类型（发起/中止/提交/更新）")
     private String operationType;
 
     @ApiModelProperty(value = "操作所处的节点id")
