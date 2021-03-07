@@ -1,14 +1,15 @@
 package com.zone.process.infrastructure.db.dataobject;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.time.LocalDateTime;
-import java.io.Serializable;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -16,13 +17,13 @@ import lombok.EqualsAndHashCode;
  * </p>
  *
  * @author Jone
- * @since 2021-03-02
+ * @since 2021-03-07
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableName("form_data")
-@ApiModel(value="FormDataDO对象", description="流程实例的表单数据")
-public class FormDataDO implements Serializable {
+@TableName("process_instance_data")
+@ApiModel(value = "ProcessInstanceDataDO对象", description = "流程实例的表单数据")
+public class ProcessInstanceDataDO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -30,14 +31,14 @@ public class FormDataDO implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
-    @ApiModelProperty(value = "表单id")
-    private Long formId;
-
     @ApiModelProperty(value = "流程实例id")
     private String instanceId;
 
     @ApiModelProperty(value = "当前录入表单所处的节点id")
     private String bpmnNodeId;
+
+    @ApiModelProperty(value = "所属表单id")
+    private Long formId;
 
     @ApiModelProperty(value = "表单的json串，冗余字段")
     private String formJson;

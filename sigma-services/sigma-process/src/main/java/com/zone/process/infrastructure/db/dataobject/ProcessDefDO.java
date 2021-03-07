@@ -1,14 +1,15 @@
 package com.zone.process.infrastructure.db.dataobject;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.time.LocalDateTime;
-import java.io.Serializable;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -16,7 +17,7 @@ import lombok.EqualsAndHashCode;
  * </p>
  *
  * @author Jone
- * @since 2021-03-02
+ * @since 2021-03-07
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -53,6 +54,9 @@ public class ProcessDefDO implements Serializable {
 
     @ApiModelProperty(value = "当前流程定义下所关联的全部表单id, 用,隔开")
     private String formIds;
+
+    @ApiModelProperty(value = "分类展示图标")
+    private String iconUrl;
 
     @ApiModelProperty(value = "创建时间")
     private LocalDateTime createTime;

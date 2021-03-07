@@ -1,7 +1,7 @@
 package com.zone.process.infrastructure.db.mapper;
 
-import com.zone.process.infrastructure.db.dataobject.FormDataDO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.zone.process.infrastructure.db.dataobject.ProcessInstanceDataDO;
 
 /**
  * <p>
@@ -9,8 +9,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author Jone
- * @since 2021-03-02
+ * @since 2021-03-07
  */
-public interface FormDataMapper extends BaseMapper<FormDataDO> {
+public interface ProcessInstanceDataMapper extends BaseMapper<ProcessInstanceDataDO> {
 
 }

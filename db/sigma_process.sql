@@ -14,7 +14,8 @@ CREATE TABLE `process_category`
     `update_time` timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     `update_by`   bigint(20)   NULL COMMENT 'user_id',
     `update_name` varchar(45)  NULL COMMENT 'user_name',
-    PRIMARY KEY (`id`) USING BTREE
+    PRIMARY KEY (`id`) USING BTREE,
+    UNIQUE KEY `category_name` (`name`) USING BTREE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   ROW_FORMAT = DYNAMIC COMMENT ='流程分类';
@@ -32,6 +33,7 @@ CREATE TABLE `process_def`
     `status`           tinyint(1)   NOT NULL DEFAULT '1' COMMENT '流程定义的状态，0-禁用 1-启用',
     `bpmn_xml`         text         NULL COMMENT '当前流程的bpmn2.0的xml定义',
     `form_ids`         text         NULL COMMENT '当前流程定义下所关联的全部表单id, 用,隔开',
+    `icon_url`         varchar(255) NOT NULL DEFAULT '' COMMENT '分类展示图标',
 
     `create_time`      timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `create_by`        bigint(20)   NOT NULL COMMENT 'user_id',
@@ -39,7 +41,8 @@ CREATE TABLE `process_def`
     `update_time`      timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     `update_by`        bigint(20)   NULL COMMENT 'user_id',
     `update_name`      varchar(45)  NULL COMMENT 'user_name',
-    PRIMARY KEY (`id`) USING BTREE
+    PRIMARY KEY (`id`) USING BTREE,
+    UNIQUE KEY `process_def_name` (`name`) USING BTREE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   ROW_FORMAT = DYNAMIC COMMENT ='流程定义';
@@ -48,24 +51,25 @@ CREATE TABLE `process_def`
 -- 对于 camunda 中的参数，这里做一个限制：不涉及除了流转人以外的所有参数的设置，这些参数都用扩展表来管理
 CREATE TABLE `process_def_node`
 (
-    `id`                bigint(20)  NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `def_id`            varchar(45) NOT NULL COMMENT '流程定义id',
-    `name`              varchar(45) NOT NULL COMMENT '流程节点名称',
-    `bpmn_node_type`    varchar(45) NOT NULL COMMENT 'bpmn2.0中节点的类型, userTask/exclusiveGateway',
-    `bpmn_node_id`      varchar(45) NOT NULL COMMENT 'bpmn2.0中节点的id',
+    `id`                  bigint(20)  NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `def_id`              varchar(45) NOT NULL COMMENT '流程定义id',
+    `name`                varchar(45) NOT NULL COMMENT '流程节点名称',
+    `bpmn_node_type`      varchar(45) NOT NULL COMMENT 'bpmn2.0中节点的类型, userTask/startEvent/endEvent',
+    `bpmn_node_id`        varchar(45) NOT NULL COMMENT 'bpmn2.0中节点的id',
+    `parent_bpmn_node_id` varchar(45) NOT NULL COMMENT '当前节点所属的父节点的id',
     -- 以下两种字段只有在节点类型是 task 的时候才会有，表示流转到当前节点的处理人是谁
-    `node_people_type`  varchar(45) NOT NULL DEFAULT '' COMMENT '当前流程的处理人类型，指定用户/指定角色/用户参数/角色参数',
+    `node_people_type`    varchar(45) NOT NULL DEFAULT '' COMMENT '当前流程的处理人类型，指定用户/指定角色/用户参数/角色参数',
     -- 用户在查询待办的时候通过 所属角色 && user_id 去找待办
-    `node_people_value` varchar(45) NOT NULL DEFAULT '' COMMENT '当前流程的处理人的信息，可以为参数${xxx}, 也可以为具体的值，这部分信息存储在candidateUser中',
-    `input_form_ids`    text        NULL COMMENT '挂靠在当前节点用于输入的表单， 用,隔开',
-    `display_form_ids`  text        NULL COMMENT '挂靠在当前节点用于展示的表单， 用,隔开',
+    `node_people_value`   varchar(45) NOT NULL DEFAULT '' COMMENT '当前流程的处理人的信息，可以为参数${xxx}, 也可以为具体的值，这部分信息存储在candidateUser中',
+    `input_form_ids`      text        NULL COMMENT '挂靠在当前节点用于输入的表单， 用,隔开',
+    `display_form_ids`    text        NULL COMMENT '挂靠在当前节点用于展示的表单， 用,隔开',
 
-    `create_time`       timestamp   NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `create_by`         bigint(20)  NOT NULL COMMENT 'user_id',
-    `create_name`       varchar(45) NOT NULL COMMENT 'user_name',
-    `update_time`       timestamp   NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    `update_by`         bigint(20)  NULL COMMENT 'user_id',
-    `update_name`       varchar(45) NULL COMMENT 'user_name',
+    `create_time`         timestamp   NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `create_by`           bigint(20)  NOT NULL COMMENT 'user_id',
+    `create_name`         varchar(45) NOT NULL COMMENT 'user_name',
+    `update_time`         timestamp   NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    `update_by`           bigint(20)  NULL COMMENT 'user_id',
+    `update_name`         varchar(45) NULL COMMENT 'user_name',
     PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
@@ -126,10 +130,8 @@ CREATE TABLE `process_instance`
     `def_id`       varchar(45)  NOT NULL COMMENT '流程定义id',
     `name`         varchar(45)  NOT NULL COMMENT '流程实例名称',
     `status`       varchar(45)  NOT NULL COMMENT '流程实例的状态，处理中/已完结',
-    `cur_node_id`  varchar(45)  NOT NULL COMMENT '当前流程停留的节点',
     `start_time`   timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '流程实例发起时间',
     `due_time`     timestamp    NULL COMMENT '流程实例要求时间',
-    `end_time`     timestamp    NULL COMMENT '流程实例结束时间',
     `submit_by`    varchar(45)  NOT NULL COMMENT '流程实例提交人的user_id',
     `submit_name`  varchar(45)  NOT NULL COMMENT '流程实例提交人的姓名',
     `desc`         varchar(255) NOT NULL DEFAULT '' COMMENT '描述信息',
@@ -168,35 +170,13 @@ CREATE TABLE `process_instance_operation`
   DEFAULT CHARSET = utf8mb4
   ROW_FORMAT = DYNAMIC COMMENT ='流程实例操作信息';
 
--- 表单定义相关
-CREATE TABLE `form_structure`
-(
-    `id`          bigint(20)   NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `name`        varchar(45)  NOT NULL COMMENT '表单名称',
-    `form_key`    varchar(45)  NOT NULL COMMENT '表单的key',
-    `version`     varchar(45)  NOT NULL COMMENT '表单的版本',
-    `form_json`   text         NOT NULL COMMENT '表单的json串',
-    `desc`        varchar(255) NOT NULL DEFAULT '' COMMENT '描述',
-
-    `create_time` timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `create_by`   bigint(20)   NOT NULL COMMENT 'user_id',
-    `create_name` varchar(45)  NOT NULL COMMENT 'user_name',
-    `update_time` timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    `update_by`   bigint(20)   NULL COMMENT 'user_id',
-    `update_name` varchar(45)  NULL COMMENT 'user_name',
-    PRIMARY KEY (`id`) USING BTREE,
-    UNIQUE KEY `uk_form_version` (`form_key`, `version`) USING BTREE
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4
-  ROW_FORMAT = DYNAMIC COMMENT ='表单结构信息';
-
 -- 表单数据存储
-CREATE TABLE `form_data`
+CREATE TABLE `process_instance_data`
 (
     `id`           bigint(20)   NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `form_id`      bigint(20)   NOT NULL COMMENT '表单id',
     `instance_id`  varchar(45)  NOT NULL COMMENT '流程实例id',
     `bpmn_node_id` varchar(45)  NOT NULL COMMENT '当前录入表单所处的节点id',
+    `form_id`      bigint(20)   NOT NULL COMMENT '所属表单id',
     `form_json`    text         NOT NULL COMMENT '表单的json串，冗余字段',
     `form_data`    text         NOT NULL COMMENT '流程实例在表单中对应的数据',
     `ext`          varchar(255) NOT NULL DEFAULT '' COMMENT '扩展信息',
@@ -211,3 +191,25 @@ CREATE TABLE `form_data`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   ROW_FORMAT = DYNAMIC COMMENT ='流程实例的表单数据';
+
+-- 表单定义相关
+CREATE TABLE `form_structure`
+(
+    `id`          bigint(20)   NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `name`        varchar(45)  NOT NULL COMMENT '表单名称',
+    `form_key`    varchar(45)  NOT NULL COMMENT '表单的key',
+    `version`     int          NOT NULL DEFAULT '1' COMMENT '表单的版本',
+    `form_json`   text         NOT NULL COMMENT '表单的json串',
+    `desc`        varchar(255) NOT NULL DEFAULT '' COMMENT '描述',
+
+    `create_time` timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `create_by`   bigint(20)   NOT NULL COMMENT 'user_id',
+    `create_name` varchar(45)  NOT NULL COMMENT 'user_name',
+    `update_time` timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    `update_by`   bigint(20)   NULL COMMENT 'user_id',
+    `update_name` varchar(45)  NULL COMMENT 'user_name',
+    PRIMARY KEY (`id`) USING BTREE,
+    UNIQUE KEY `uk_form_version` (`form_key`, `version`) USING BTREE
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  ROW_FORMAT = DYNAMIC COMMENT ='表单结构信息';

@@ -1,14 +1,15 @@
 package com.zone.process.infrastructure.db.dataobject;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.time.LocalDateTime;
-import java.io.Serializable;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -16,7 +17,7 @@ import lombok.EqualsAndHashCode;
  * </p>
  *
  * @author Jone
- * @since 2021-03-02
+ * @since 2021-03-07
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -42,17 +43,11 @@ public class ProcessInstanceDO implements Serializable {
     @ApiModelProperty(value = "流程实例的状态，处理中/已完结")
     private String status;
 
-    @ApiModelProperty(value = "当前流程停留的节点")
-    private String curNodeId;
-
     @ApiModelProperty(value = "流程实例发起时间")
     private LocalDateTime startTime;
 
     @ApiModelProperty(value = "流程实例要求时间")
     private LocalDateTime dueTime;
-
-    @ApiModelProperty(value = "流程实例结束时间")
-    private LocalDateTime endTime;
 
     @ApiModelProperty(value = "流程实例提交人的user_id")
     private String submitBy;

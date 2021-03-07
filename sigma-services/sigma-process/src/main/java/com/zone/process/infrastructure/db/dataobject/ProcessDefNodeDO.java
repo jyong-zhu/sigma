@@ -1,14 +1,15 @@
 package com.zone.process.infrastructure.db.dataobject;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.time.LocalDateTime;
-import java.io.Serializable;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -16,7 +17,7 @@ import lombok.EqualsAndHashCode;
  * </p>
  *
  * @author Jone
- * @since 2021-03-02
+ * @since 2021-03-07
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -36,11 +37,14 @@ public class ProcessDefNodeDO implements Serializable {
     @ApiModelProperty(value = "流程节点名称")
     private String name;
 
-    @ApiModelProperty(value = "bpmn2.0中节点的类型, userTask/exclusiveGateway")
+    @ApiModelProperty(value = "bpmn2.0中节点的类型, userTask/startEvent/endEvent")
     private String bpmnNodeType;
 
     @ApiModelProperty(value = "bpmn2.0中节点的id")
     private String bpmnNodeId;
+
+    @ApiModelProperty(value = "当前节点所属的父节点的id")
+    private String parentBpmnNodeId;
 
     @ApiModelProperty(value = "当前流程的处理人类型，指定用户/指定角色/用户参数/角色参数")
     private String nodePeopleType;

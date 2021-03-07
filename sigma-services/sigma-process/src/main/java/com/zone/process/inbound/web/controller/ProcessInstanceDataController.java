@@ -2,7 +2,6 @@ package com.zone.process.inbound.web.controller;
 
 
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -11,10 +10,10 @@ import org.springframework.web.bind.annotation.RestController;
  * </p>
  *
  * @author Jone
- * @since 2021-03-02
+ * @since 2021-03-07
  */
 @RestController
-@RequestMapping("/formDataDO")
-public class FormDataController {
+@RequestMapping("/processInstanceDataDO")
+public class ProcessInstanceDataController {
 
 }
