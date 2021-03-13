@@ -1,14 +1,16 @@
 package com.zone.auth.infrastructure.db.dataobject;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.time.LocalDateTime;
-import java.io.Serializable;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -16,9 +18,10 @@ import lombok.EqualsAndHashCode;
  * </p>
  *
  * @author Jone
- * @since 2021-03-02
+ * @since 2021-03-10
  */
 @Data
+@Accessors(chain = true)
 @EqualsAndHashCode(callSuper = false)
 @TableName("user_ext")
 @ApiModel(value="UserExtDO对象", description="用户扩展信息表")
@@ -31,7 +34,7 @@ public class UserExtDO implements Serializable {
     private Long id;
 
     @ApiModelProperty(value = "逻辑主键id")
-    private String userId;
+    private Long userId;
 
     @ApiModelProperty(value = "扩展字段名称")
     private String field;

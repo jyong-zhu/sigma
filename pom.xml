@@ -30,10 +30,52 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
-
-        <!-- 本项目的一些依赖 -->
-
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
     </dependencies>
+
+    <!--本项目的一些module-->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.zone</groupId>
+                <artifactId>sigma-starter-web</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.zone</groupId>
+                <artifactId>sigma-starter-mybatisplus</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.zone</groupId>
+                <artifactId>sigma-starter-commons</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.zone</groupId>
+                <artifactId>sigma-auth</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.zone</groupId>
+                <artifactId>sigma-gateway</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.zone</groupId>
+                <artifactId>sigma-process</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.zone</groupId>
+                <artifactId>sigma-rpc</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
 
 </project>

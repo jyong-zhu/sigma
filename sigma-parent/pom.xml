@@ -33,7 +33,7 @@
         <rocketmq.version>2.2.0</rocketmq.version>
     </properties>
 
-
+    <!-- 对三方依赖进行管理 -->
     <dependencyManagement>
         <dependencies>
             <!-- 统一修改版本号： -DgenerateBackupPoms=false 不进行备份 -->

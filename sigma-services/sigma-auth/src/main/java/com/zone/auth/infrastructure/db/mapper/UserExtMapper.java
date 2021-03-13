@@ -1,7 +1,7 @@
 package com.zone.auth.infrastructure.db.mapper;
 
-import com.zone.auth.infrastructure.db.dataobject.UserExtDO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.zone.auth.infrastructure.db.dataobject.UserExtDO;
 
 /**
  * <p>
@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author Jone
- * @since 2021-03-02
+ * @since 2021-03-10
  */
 public interface UserExtMapper extends BaseMapper<UserExtDO> {
 

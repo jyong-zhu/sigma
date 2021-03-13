@@ -9,6 +9,8 @@ CREATE TABLE user_basic
     `user_name`    varchar(45)  NOT NULL COMMENT '姓名',  -- 唯一索引
     `phone`        varchar(45)  NOT NULL COMMENT '手机号', -- 唯一索引
     `password`     varchar(255) NOT NULL COMMENT '密码，采用哈希算法进行单向加密',
+    `email`        varchar(45)  NOT NULL COMMENT '邮箱',
+    `role_id`      varchar(45)  NOT NULL DEFAULT '' COMMENT '角色id',
 
     `create_time`  timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `create_by`    bigint(20)   NOT NULL COMMENT 'user_id',
@@ -26,7 +28,7 @@ CREATE TABLE user_basic
 CREATE TABLE `user_ext`
 (
     `id`          bigint(20)   NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `user_id`     varchar(255) NOT NULL COMMENT '逻辑主键id',
+    `user_id`     bigint(20)   NOT NULL COMMENT '逻辑主键id',
     `field`       varchar(255) NOT NULL COMMENT '扩展字段名称',
     `field_type`  varchar(255) NOT NULL COMMENT '扩展字段的类型，Integer/Double/Long/String/Object等',
     `value`       text COMMENT '扩展字段的值',
