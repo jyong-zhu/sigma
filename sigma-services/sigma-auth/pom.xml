@@ -21,11 +21,6 @@
             <groupId>com.zone</groupId>
             <artifactId>sigma-starter-mybatisplus</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>com.zone</groupId>
-            <artifactId>sigma-starter-commons</artifactId>
-        </dependency>
     </dependencies>
 
 </project>
