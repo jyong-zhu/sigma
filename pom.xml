@@ -21,10 +21,19 @@
     </modules>
 
     <dependencies>
-        <!--所有项目都有的依赖由 commons 来管理-->
+        <!--所有项目的共有依赖-->
         <dependency>
-            <groupId>com.zone</groupId>
-            <artifactId>sigma-starter-commons</artifactId>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>versions-maven-plugin</artifactId>
+            <type>maven-plugin</type>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
         </dependency>
     </dependencies>
 
