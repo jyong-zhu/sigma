@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
  * @Description: 雪花算法生成分布式id
  */
 @Slf4j
-public class IdWorkerUtil {
+public final class IdWorkerUtil {
 
     private static final Pattern PATTERN_HOSTNAME = Pattern.compile("^.*\\D+([0-9]+)$");
 

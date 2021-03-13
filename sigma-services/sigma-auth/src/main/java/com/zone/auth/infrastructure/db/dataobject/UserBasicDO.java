@@ -49,7 +49,7 @@ public class UserBasicDO implements Serializable {
     private String email;
 
     @ApiModelProperty(value = "角色id")
-    private String roleId;
+    private Long roleId;
 
     @ApiModelProperty(value = "创建时间")
     private LocalDateTime createTime;

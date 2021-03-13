@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import com.zone.auth.application.service.command.cmd.UserRegisterCommand;
 import com.zone.auth.infrastructure.db.dataobject.UserBasicDO;
 import com.zone.auth.infrastructure.db.dataobject.UserExtDO;
+import com.zone.commons.util.SecurityUtil;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -32,11 +33,14 @@ public class User {
      * 创建用户
      */
     public static User create(UserRegisterCommand registerCommand, Long userId, String userName) {
+        // rsa 用私钥进行密码的解密
+        String decryptPwd = SecurityUtil.rsaDecrypt(registerCommand.getPassword());
         UserBasicDO userBasicDO = new UserBasicDO()
                 .setUserName(registerCommand.getAccountName())
                 .setAccountName(registerCommand.getAccountName())
                 .setEmail(registerCommand.getEmail())
-                .setPassword(registerCommand.getPassword())
+                // sha1 单向加密
+                .setPassword(SecurityUtil.digestSha1(decryptPwd))
                 .setPhone(registerCommand.getPhone())
                 .setRoleId(registerCommand.getRoleId())
                 .setCreateName(userName)

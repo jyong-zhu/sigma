@@ -6,6 +6,7 @@ import com.zone.auth.application.service.command.cmd.UserLoginCommand;
 import com.zone.auth.application.service.command.cmd.UserRegisterCommand;
 import com.zone.auth.application.service.query.UserQueryService;
 import com.zone.auth.application.service.query.dto.UserBasicDTO;
+import com.zone.commons.util.SecurityUtil;
 import com.zone.mybatisplus.util.Page;
 import com.zone.mybatisplus.util.PlusPageConverter;
 import io.swagger.annotations.Api;
@@ -57,5 +58,11 @@ public class UserController {
             @ApiParam(name = "pageNo") @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
             @ApiParam(name = "pageSize") @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
         return ResponseEntity.ok(PlusPageConverter.convert(userQueryService.page(accountName, userName, email, pageNo, pageSize)));
+    }
+
+    @ApiOperation("用户登陆接口")
+    @PostMapping("/public-key")
+    public ResponseEntity<String> queryPublicKey() {
+        return ResponseEntity.ok(SecurityUtil.getPublicKey());
     }
 }

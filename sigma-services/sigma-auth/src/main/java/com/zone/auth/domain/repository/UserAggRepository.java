@@ -13,4 +13,5 @@ public interface UserAggRepository {
 
     User queryById(Long id);
 
+    User queryByAccountName(String accountName);
 }

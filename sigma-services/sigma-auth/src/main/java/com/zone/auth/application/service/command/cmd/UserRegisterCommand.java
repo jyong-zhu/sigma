@@ -40,7 +40,7 @@ public class UserRegisterCommand {
     private String email;
 
     @ApiModelProperty("角色id")
-    private String roleId;
+    private Long roleId;
 
     @ApiModelProperty("额外的扩展信息")
     @Valid

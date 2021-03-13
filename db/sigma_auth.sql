@@ -10,7 +10,7 @@ CREATE TABLE user_basic
     `phone`        varchar(45)  NOT NULL COMMENT '手机号', -- 唯一索引
     `password`     varchar(255) NOT NULL COMMENT '密码，采用哈希算法进行单向加密',
     `email`        varchar(45)  NOT NULL COMMENT '邮箱',
-    `role_id`      varchar(45)  NOT NULL DEFAULT '' COMMENT '角色id',
+    `role_id`      bigint(20)   NULL COMMENT '角色id',
 
     `create_time`  timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `create_by`    bigint(20)   NOT NULL COMMENT 'user_id',

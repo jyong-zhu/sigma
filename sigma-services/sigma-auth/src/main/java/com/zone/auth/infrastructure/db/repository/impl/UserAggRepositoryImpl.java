@@ -51,6 +51,15 @@ public class UserAggRepositoryImpl implements UserAggRepository {
                 .setUserExtList(queryUserExtList(userBasicDO));
     }
 
+    @Override
+    public User queryByAccountName(String accountName) {
+        User user = new User();
+        UserBasicDO userBasicDO = userBasicMapper.selectOne(new QueryWrapper<UserBasicDO>()
+                .eq("account_name", accountName));
+        return user.setUserBasic(userBasicDO)
+                .setUserExtList(queryUserExtList(userBasicDO));
+    }
+
     private List<UserExtDO> queryUserExtList(UserBasicDO userBasicDO) {
         if (userBasicDO != null) {
             List<UserExtDO> userExtDOList = userExtMapper.selectList(
