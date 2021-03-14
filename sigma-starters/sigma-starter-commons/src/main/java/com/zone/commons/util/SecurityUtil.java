@@ -1,6 +1,5 @@
 package com.zone.commons.util;
 
-import cn.hutool.core.lang.Assert;
 import cn.hutool.crypto.SecureUtil;
 import cn.hutool.crypto.asymmetric.KeyType;
 import cn.hutool.crypto.asymmetric.RSA;
@@ -45,11 +44,4 @@ public final class SecurityUtil {
         return PUBLIC_KEY;
     }
 
-    public static void main(String[] args) {
-        RSA rsa = new RSA(PRIVATE_KEY, PUBLIC_KEY);
-        String pwd = "123";
-        String encryptPwd = rsa.encryptBase64(pwd, KeyType.PublicKey);
-        String decryptPwd = rsa.decryptStr(encryptPwd, KeyType.PrivateKey);
-        Assert.isTrue(pwd.equals(decryptPwd));
-    }
 }

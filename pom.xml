@@ -26,7 +26,7 @@
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>versions-maven-plugin</artifactId>
             <type>maven-plugin</type>
-            <!--排除冲突的日志实现-->
+            <!--所以为了仅有单一的日志实现，需要排除冲突的日志实现-->
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
@@ -44,10 +44,11 @@
         </dependency>
         <!--slf4j日志框架采用的是门面模式-->
         <!--SpringBoot日志默认采用的是Logback实现-->
-        <!--所以为了仅有单一的日志实现，这里采用logback作为slf4j的实现-->
+        <!--通过provided来引入slf4j-api，具体的交给SpringBoot来管理-->
         <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 

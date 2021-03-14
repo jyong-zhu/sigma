@@ -81,15 +81,17 @@ public final class JWTUtil {
         }
     }
 
-    public static void main(String[] args) {
-        LoginUser loginUser = new LoginUser()
-                .setUserId(1l)
-                .setUserName("admin")
-                .setRoleId(1l);
-        String jwtToken = createToken(loginUser);
-        System.out.println(jwtToken);
-
-        LoginUser verifyUser = verifyToken(jwtToken);
-        System.out.println(verifyUser);
-    }
+//    会报错java.lang.ClassNotFoundException: org.slf4j.LoggerFactory
+//    因为 slf4j 是 provided 声明的依赖
+//    public static void main(String[] args) {
+//        LoginUser loginUser = new LoginUser()
+//                .setUserId(1l)
+//                .setUserName("admin")
+//                .setRoleId(1l);
+//        String jwtToken = createToken(loginUser);
+//        System.out.println(jwtToken);
+//
+//        LoginUser verifyUser = verifyToken(jwtToken);
+//        System.out.println(verifyUser);
+//    }
 }
