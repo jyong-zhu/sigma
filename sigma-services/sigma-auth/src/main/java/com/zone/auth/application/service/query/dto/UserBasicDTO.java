@@ -26,14 +26,11 @@ public class UserBasicDTO {
     @ApiModelProperty("手机号")
     private String phone;
 
-    @ApiModelProperty("密码")
-    private String password;
-
     @ApiModelProperty("邮箱")
     private String email;
 
     @ApiModelProperty("角色id")
-    private String roleId;
+    private Long roleId;
 
     @ApiModelProperty("额外的扩展信息")
     private List<UserExtDTO> userExtDTOList;

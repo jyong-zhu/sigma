@@ -4,7 +4,7 @@ use `sigma_auth`;
 
 CREATE TABLE user_basic
 (
-    `id`           bigint(20)   NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `id`           bigint(20)   NOT NULL COMMENT '主键ID',
     `account_name` varchar(45)  NOT NULL COMMENT '账户名',
     `user_name`    varchar(45)  NOT NULL COMMENT '姓名',  -- 唯一索引
     `phone`        varchar(45)  NOT NULL COMMENT '手机号', -- 唯一索引
