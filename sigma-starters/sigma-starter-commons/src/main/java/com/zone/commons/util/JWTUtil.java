@@ -60,6 +60,7 @@ public final class JWTUtil {
 
     /**
      * 验证 JWT token
+     * 过期或者验签失败都会返回 null
      */
     public static LoginUser verifyToken(String token) {
         if (StrUtil.isBlank(token)) {

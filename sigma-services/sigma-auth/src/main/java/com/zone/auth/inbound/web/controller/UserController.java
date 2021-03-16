@@ -6,6 +6,7 @@ import com.zone.auth.application.service.command.cmd.UserLoginCommand;
 import com.zone.auth.application.service.command.cmd.UserRegisterCommand;
 import com.zone.auth.application.service.query.UserQueryService;
 import com.zone.auth.application.service.query.dto.UserBasicDTO;
+import com.zone.commons.entity.ResponseData;
 import com.zone.commons.util.SecurityUtil;
 import com.zone.mybatisplus.util.Page;
 import com.zone.mybatisplus.util.PlusPageConverter;
@@ -13,7 +14,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -39,30 +39,30 @@ public class UserController {
 
     @ApiOperation("用户登陆接口")
     @PostMapping("/login")
-    public ResponseEntity<String> login(@Valid @RequestBody UserLoginCommand loginCommand) {
-        return ResponseEntity.ok(userCmdService.login(loginCommand));
+    public ResponseData<String> login(@Valid @RequestBody UserLoginCommand loginCommand) {
+        return ResponseData.ok(userCmdService.login(loginCommand));
     }
 
     @ApiOperation("用户注册信息")
     @PostMapping("/register")
-    public ResponseEntity<Boolean> register(@Valid @RequestBody UserRegisterCommand registerCommand) {
-        return ResponseEntity.ok(userCmdService.register(registerCommand, 0L, "admin"));
+    public ResponseData<Boolean> register(@Valid @RequestBody UserRegisterCommand registerCommand) {
+        return ResponseData.ok(userCmdService.register(registerCommand, 0L, "admin"));
     }
 
     @ApiOperation("用户列表")
     @GetMapping("/page")
-    public ResponseEntity<Page<UserBasicDTO>> page(
+    public ResponseData<Page<UserBasicDTO>> page(
             @ApiParam("账户名") @RequestParam(value = "accountName", required = false) String accountName,
             @ApiParam("用户名") @RequestParam(value = "userName", required = false) String userName,
             @ApiParam("邮箱") @RequestParam(value = "email", required = false) String email,
             @ApiParam(name = "pageNo") @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
             @ApiParam(name = "pageSize") @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
-        return ResponseEntity.ok(PlusPageConverter.convert(userQueryService.page(accountName, userName, email, pageNo, pageSize)));
+        return ResponseData.ok(PlusPageConverter.convert(userQueryService.page(accountName, userName, email, pageNo, pageSize)));
     }
 
     @ApiOperation("用户登陆接口")
     @PostMapping("/public-key")
-    public ResponseEntity<String> queryPublicKey() {
-        return ResponseEntity.ok(SecurityUtil.getPublicKey());
+    public ResponseData<String> queryPublicKey() {
+        return ResponseData.ok(SecurityUtil.getPublicKey());
     }
 }
