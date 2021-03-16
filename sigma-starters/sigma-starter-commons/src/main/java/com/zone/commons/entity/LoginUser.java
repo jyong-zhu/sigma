@@ -16,6 +16,8 @@ public class LoginUser {
 
     private Long userId;
 
+    private String accountName;
+
     private String userName;
 
     private Long roleId;

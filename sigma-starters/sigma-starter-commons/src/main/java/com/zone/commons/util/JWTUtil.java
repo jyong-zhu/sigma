@@ -6,6 +6,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.google.common.collect.Maps;
+import com.zone.commons.consts.GatewayConstants;
 import com.zone.commons.entity.LoginUser;
 import lombok.extern.slf4j.Slf4j;
 
@@ -40,9 +41,10 @@ public final class JWTUtil {
         headerMap.put("alg", "HS256");
 
         Map<String, Object> claimMap = Maps.newHashMap();
-        claimMap.put("userId", loginUser.getUserId());
-        claimMap.put("userName", loginUser.getUserName());
-        claimMap.put("roleId", loginUser.getRoleId());
+        claimMap.put(GatewayConstants.ACCOUNT_NAME, loginUser.getAccountName());
+        claimMap.put(GatewayConstants.USER_ID, loginUser.getUserId());
+        claimMap.put(GatewayConstants.USER_NAME, loginUser.getUserName());
+        claimMap.put(GatewayConstants.ROLE_ID, loginUser.getRoleId());
 
         return JWT.create()
                 .withHeader(headerMap)
@@ -72,10 +74,13 @@ public final class JWTUtil {
             DecodedJWT jwt = verifier.verify(token);
             Map<String, Object> claimMap = jwt.getClaim("userInfo").asMap();
             LoginUser loginUser = new LoginUser()
-                    .setUserId(claimMap.get("userId") == null ? null : Long.valueOf(claimMap.get("userId").toString()))
-                    .setUserName(claimMap.getOrDefault("userName", "").toString())
-                    .setRoleId(claimMap.get("roleId") == null ? null : Long.valueOf(claimMap.get("roleId").toString()));
-            return loginUser.getUserId() == null ? null : loginUser;
+                    .setUserId(claimMap.get(GatewayConstants.USER_ID) == null ? null : Long.valueOf(claimMap.get(GatewayConstants.USER_ID).toString()))
+                    .setUserName(claimMap.getOrDefault(GatewayConstants.USER_NAME, "").toString())
+                    .setAccountName(claimMap.getOrDefault(GatewayConstants.ACCOUNT_NAME, "").toString())
+                    .setRoleId(claimMap.get(GatewayConstants.ROLE_ID) == null ? null : Long.valueOf(claimMap.get(GatewayConstants.ROLE_ID).toString()));
+            return loginUser.getUserId() == null
+                    || StrUtil.isBlank(loginUser.getAccountName())
+                    || StrUtil.isBlank(loginUser.getUserName()) ? null : loginUser;
         } catch (Exception e) {
             log.error("验证 " + token + " 时出错");
             return null;

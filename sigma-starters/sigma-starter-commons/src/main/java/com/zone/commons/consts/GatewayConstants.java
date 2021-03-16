@@ -23,5 +23,12 @@ public class GatewayConstants {
 
     public static final String jsonContentType = "application/json;charset=UTF-8";
 
+    public static final String USER_NAME = "userName";
+
+    public static final String ACCOUNT_NAME = "accountName";
+
+    public static final String USER_ID = "userId";
+
+    public static final String ROLE_ID = "roleId";
 
 }

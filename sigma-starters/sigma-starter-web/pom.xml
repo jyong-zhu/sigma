@@ -12,6 +12,12 @@
     <artifactId>sigma-starter-web</artifactId>
 
     <dependencies>
+
+        <dependency>
+            <groupId>com.zone</groupId>
+            <artifactId>sigma-starter-commons</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger2</artifactId>
