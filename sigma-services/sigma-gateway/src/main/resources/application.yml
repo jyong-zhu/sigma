@@ -8,5 +8,14 @@ spring:
     gateway:
       discovery:
         locator:
-          enabled: true # 根据服务id进行路由
+          # gateway开启服务注册和发现的功能，自动根据服务id进行路由
+          # 所以网关能够自动根据服务名进行转发，如果没有匹配的服务名，则报404
+          enabled: true
           lower-case-service-id: true # 路由的路径为小写的service id
+
+    nacos:
+      config:
+        server-addr: 127.0.0.1:8848
+        file-extension: yaml # 配置文件的格式，目前只支持 properties 和 yaml 类型
+      discovery:
+        server-addr: 127.0.0.1:8848
