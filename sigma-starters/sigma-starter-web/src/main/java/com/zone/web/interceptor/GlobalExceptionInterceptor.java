@@ -13,6 +13,7 @@ import java.sql.SQLIntegrityConstraintViolationException;
  * @Description:
  */
 @Slf4j
+// 拦截器，对 controller 进行增强处理
 @RestControllerAdvice
 public class GlobalExceptionInterceptor {
 
