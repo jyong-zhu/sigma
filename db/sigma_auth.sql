@@ -43,3 +43,12 @@ CREATE TABLE `user_ext`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   ROW_FORMAT = DYNAMIC COMMENT ='用户扩展信息表';
+
+INSERT INTO sigma_auth.user_basic (id, account_name, user_name, phone, password, email, role_id, create_time, create_by,
+                                   create_name, update_time, update_by, update_name)
+VALUES (1, 'admin', 'admin', '15900000000', '7c4a8d09ca3762af61e59520943dc26494f8941b', 'admin@163.com', 1,
+        '2021-03-17 21:54:32', 1, 'admin', '2021-03-17 21:55:04', 1, 'admin');
+
+INSERT INTO sigma_auth.user_ext (id, user_id, field, field_type, value, create_time, create_by, create_name,
+                                 update_time, update_by, update_name)
+VALUES (1, 1, 'sex', 'integer', '1', '2021-03-17 21:54:32', 1, 'admin', '2021-03-17 21:55:11', 1, 'admin');

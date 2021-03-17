@@ -6,6 +6,8 @@ import com.zone.auth.application.service.command.cmd.UserLoginCommand;
 import com.zone.auth.application.service.command.cmd.UserRegisterCommand;
 import com.zone.auth.application.service.query.UserQueryService;
 import com.zone.auth.application.service.query.dto.UserBasicDTO;
+import com.zone.commons.context.CurrentContext;
+import com.zone.commons.entity.LoginUser;
 import com.zone.commons.entity.ResponseData;
 import com.zone.commons.util.SecurityUtil;
 import com.zone.mybatisplus.util.Page;
@@ -46,7 +48,8 @@ public class UserController {
     @ApiOperation("用户注册信息")
     @PostMapping("/register")
     public ResponseData<Boolean> register(@Valid @RequestBody UserRegisterCommand registerCommand) {
-        return ResponseData.ok(userCmdService.register(registerCommand, 0L, "admin"));
+        LoginUser loginUser = CurrentContext.getUser();
+        return ResponseData.ok(userCmdService.register(registerCommand, loginUser.getUserId(), loginUser.getUserName()));
     }
 
     @ApiOperation("用户列表")

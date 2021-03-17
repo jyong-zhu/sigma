@@ -5,6 +5,7 @@ import com.zone.commons.consts.GatewayConstants;
 import com.zone.commons.context.CurrentContext;
 import com.zone.commons.entity.LoginUser;
 import com.zone.commons.util.JWTUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -16,12 +17,14 @@ import javax.servlet.http.HttpServletResponse;
  * @Date: 2021/3/17 1:05 上午
  * @Description: 声明拦截器
  */
+@Slf4j
 @Component
 public class ContextInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
+        log.info("=================拦截器设置ThreadLocal<LoginUser>=================");
         String authorization = request.getHeader(GatewayConstants.Authorization);
         String userId = request.getHeader(GatewayConstants.USER_ID);
         String userName = request.getHeader(GatewayConstants.USER_NAME);
@@ -43,15 +46,16 @@ public class ContextInterceptor implements HandlerInterceptor {
         LoginUser loginUser = JWTUtil.verifyToken(authorization);
         if (loginUser != null) {
             CurrentContext.setUser(loginUser);
-            return true;
         }
 
-        return false;
+        // 默认放行
+        return true;
     }
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
         // 清除 ThreadLocal 中的 loginUser 信息
         CurrentContext.remove();
+        log.info("=================拦截器清除ThreadLocal<LoginUser>=================");
     }
 }

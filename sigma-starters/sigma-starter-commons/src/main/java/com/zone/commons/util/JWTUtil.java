@@ -21,8 +21,8 @@ import java.util.Map;
 @Slf4j
 public final class JWTUtil {
 
-    // 过期时间15min
-    private static final long EXPIRE_TIME = 15 * 60 * 1000;
+    // 过期时间24h
+    private static final long EXPIRE_TIME = 24 * 60 * 60 * 1000;
 
     // JWT中的 header 与 payload 是不加密的，用 signature 来验证前面两者是否被修改。
     // signature 的生成是用以下这个 Secret 来生成的
