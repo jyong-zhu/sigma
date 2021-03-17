@@ -1,2 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.zone.web.config.ContextInterceptorConfig
+  com.zone.web.config.InterceptorConfig,\
+  com.zone.web.config.ExceptionConfig
