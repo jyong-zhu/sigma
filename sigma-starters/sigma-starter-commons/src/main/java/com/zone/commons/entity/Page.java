@@ -1,4 +1,4 @@
-package com.zone.mybatisplus.util;
+package com.zone.commons.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -16,6 +16,10 @@
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.zone</groupId>
+            <artifactId>sigma-starter-commons</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
