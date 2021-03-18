@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
  * @Description:
  */
 @Configuration
-public class ExceptionConfig {
+public class GlobalExceptionConfig {
 
     @Bean
     public GlobalExceptionInterceptor getGlobalExceptionInterceptor() {

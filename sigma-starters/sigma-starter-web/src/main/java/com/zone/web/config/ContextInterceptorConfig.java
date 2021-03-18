@@ -12,7 +12,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @Description:
  */
 @Configuration
-public class InterceptorConfig implements WebMvcConfigurer {
+public class ContextInterceptorConfig implements WebMvcConfigurer {
 
     @Bean
     public ContextInterceptor getContextInterceptor() {
