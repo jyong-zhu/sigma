@@ -3,31 +3,22 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>sigma</artifactId>
+        <artifactId>sigma-starters</artifactId>
         <groupId>com.zone</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>sigma-services</artifactId>
-
-    <packaging>pom</packaging>
-
-    <modules>
-        <module>sigma-auth</module>
-        <module>sigma-registry</module>
-        <module>sigma-gateway</module>
-        <module>sigma-process</module>
-    </modules>
+    <artifactId>sigma-starter-feign</artifactId>
 
     <dependencies>
         <dependency>
-            <groupId>com.zone</groupId>
-            <artifactId>sigma-rpc</artifactId>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
         <dependency>
             <groupId>com.zone</groupId>
-            <artifactId>sigma-starter-feign</artifactId>
+            <artifactId>sigma-starter-commons</artifactId>
         </dependency>
     </dependencies>
 

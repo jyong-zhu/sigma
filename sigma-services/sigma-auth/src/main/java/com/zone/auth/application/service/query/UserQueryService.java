@@ -42,4 +42,8 @@ public class UserQueryService {
         return page.convert(converter::apply);
     }
 
+    public String queryUserName(Long userId) {
+        UserBasicDO userBasicDO = userBasicMapper.selectById(userId);
+        return userBasicDO == null ? "" : userBasicDO.getUserName();
+    }
 }

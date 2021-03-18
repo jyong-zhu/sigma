@@ -144,9 +144,9 @@ public class ResponseBodyInterceptor implements ResponseBodyAdvice<ResponseData>
 
         ResponseData responseData;
         if ("get".equals(setValue.type())) {
-            responseData = restTemplate.postForObject(setValue.url(), paramMap, ResponseData.class);
-        } else {
             responseData = restTemplate.getForObject(setValue.url(), ResponseData.class, paramMap);
+        } else {
+            responseData = restTemplate.postForObject(setValue.url(), paramMap, ResponseData.class);
         }
         // 如果为空，将返回体中的数据直接返回
         if (StrUtil.isBlank(setValue.resField())) {

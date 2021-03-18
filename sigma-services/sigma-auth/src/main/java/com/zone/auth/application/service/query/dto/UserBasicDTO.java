@@ -17,6 +17,9 @@ import java.util.List;
 @Accessors(chain = true)
 public class UserBasicDTO {
 
+    @ApiModelProperty("id")
+    private Long id;
+
     @ApiModelProperty("账户名")
     private String accountName;
 

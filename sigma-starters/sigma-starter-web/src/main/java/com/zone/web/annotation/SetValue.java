@@ -15,7 +15,7 @@ public @interface SetValue {
     /**
      * 请求的接口地址
      */
-    String url() default "";
+    String url() default "http://sigma-auth/rpc/user/name";
 
     /**
      * get or post

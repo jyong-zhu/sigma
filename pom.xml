@@ -72,6 +72,11 @@
             </dependency>
             <dependency>
                 <groupId>com.zone</groupId>
+                <artifactId>sigma-starter-feign</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.zone</groupId>
                 <artifactId>sigma-auth</artifactId>
                 <version>${project.version}</version>
             </dependency>
