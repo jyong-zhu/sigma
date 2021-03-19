@@ -23,6 +23,7 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @Author: jianyong.zhu
@@ -144,21 +145,30 @@ public class ResponseBodyInterceptor implements ResponseBodyAdvice<ResponseData>
 
         ResponseData responseData;
         if ("get".equals(setValue.type())) {
-            responseData = restTemplate.getForObject(setValue.url(), ResponseData.class, paramMap);
+            // get方法需要改写url路径
+            String url = setValue.url() + "?";
+            String paramUrl = paramMap.keySet().stream().map(key -> key + "={" + key + "}").collect(Collectors.joining("&"));
+            responseData = restTemplate.getForObject(url + paramUrl, ResponseData.class, paramMap);
         } else {
             responseData = restTemplate.postForObject(setValue.url(), paramMap, ResponseData.class);
         }
-        // 如果为空，将返回体中的数据直接返回
-        if (StrUtil.isBlank(setValue.resField())) {
-            return responseData.getData();
-        }
 
-        Object resObj = responseData.getData();
-        Field field = ReflectionUtils.findField(setValue.resClass(), setValue.resField());
-        if (field != null) {
-            ReflectionUtils.makeAccessible(field);
-            Object value = ReflectionUtils.getField(field, resObj);
-            return value;
+        if (responseData != null) {
+            // 如果resField为空，将返回体中的数据直接返回
+            if (StrUtil.isBlank(setValue.resField())) {
+                return responseData.getData();
+            }
+
+            // 否则返回 data 中的对应字段
+            Object resObj = responseData.getData();
+            if (resObj != null) {
+                Field field = ReflectionUtils.findField(resObj.getClass(), setValue.resField());
+                if (field != null) {
+                    ReflectionUtils.makeAccessible(field);
+                    Object value = ReflectionUtils.getField(field, resObj);
+                    return value;
+                }
+            }
         }
 
         return null;

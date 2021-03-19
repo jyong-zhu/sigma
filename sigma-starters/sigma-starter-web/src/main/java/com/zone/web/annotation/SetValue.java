@@ -25,7 +25,7 @@ public @interface SetValue {
     /**
      * 请求的参数名
      */
-    String param() default "userId";
+    String param() default "id";
 
     /**
      * 请求的参数值在当前对象中的字段名
@@ -33,12 +33,7 @@ public @interface SetValue {
     String field();
 
     /**
-     * 响应的类
-     */
-    Class resClass() default String.class;
-
-    /**
-     * 响应的字段名，为空则直接返回响应体
+     * 响应的字段名，为空则直接返回响应体，否则从对应的 obj 中拿值
      */
     String resField() default "";
 }
