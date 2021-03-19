@@ -42,7 +42,7 @@ public class AuthorizationFilter implements GlobalFilter, Ordered {
         }
 
         // 校验 token
-        String token = exchange.getRequest().getHeaders().getFirst(GatewayConstants.Authorization);
+        String token = exchange.getRequest().getHeaders().getFirst(GatewayConstants.AUTHORIZATION);
         if (StrUtil.isBlank(token)) {
             return unAuthorized(exchange.getResponse(), "请求未携带token");
         }
@@ -79,7 +79,7 @@ public class AuthorizationFilter implements GlobalFilter, Ordered {
 
     private Mono<Void> unAuthorized(ServerHttpResponse response, String msg) {
         response.setStatusCode(HttpStatus.UNAUTHORIZED);
-        response.getHeaders().add(HttpHeaders.CONTENT_TYPE, GatewayConstants.jsonContentType);
+        response.getHeaders().add(HttpHeaders.CONTENT_TYPE, GatewayConstants.JSON_CHARSET_UTF_8);
         ResponseData<String> data = ResponseData.error(HttpStatus.UNAUTHORIZED.value(), msg);
         DataBuffer dataBuffer = response.bufferFactory().wrap(JSONUtil.toJsonStr(data).getBytes());
         return response.writeWith(Mono.just(dataBuffer));

@@ -19,9 +19,9 @@ public class GatewayConstants {
             "/doc.html",
             "/v2/api-docs/**");
 
-    public static final String Authorization = "Authorization";
+    public static final String AUTHORIZATION = "Authorization";
 
-    public static final String jsonContentType = "application/json;charset=UTF-8";
+    public static final String JSON_CHARSET_UTF_8 = "application/json;charset=UTF-8";
 
     public static final String USER_NAME = "userName";
 

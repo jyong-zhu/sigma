@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * @Author: jianyong.zhu
  * @Date: 2021/3/17 1:05 上午
- * @Description: 声明拦截器
+ * @Description: 声明拦截器，对进来的请求进行拦截
  */
 @Slf4j
 @Component
@@ -25,7 +25,7 @@ public class ContextInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
         log.info("=================拦截器设置ThreadLocal<LoginUser>=================");
-        String authorization = request.getHeader(GatewayConstants.Authorization);
+        String authorization = request.getHeader(GatewayConstants.AUTHORIZATION);
         String userId = request.getHeader(GatewayConstants.USER_ID);
         String userName = request.getHeader(GatewayConstants.USER_NAME);
         String accountName = request.getHeader(GatewayConstants.ACCOUNT_NAME);
