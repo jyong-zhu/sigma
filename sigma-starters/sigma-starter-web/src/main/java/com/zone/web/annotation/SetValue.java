@@ -25,12 +25,12 @@ public @interface SetValue {
     /**
      * 请求的参数名
      */
-    String param() default "id";
+    String[] params() default "id";
 
     /**
-     * 请求的参数值在当前对象中的字段名
+     * 请求的参数值在当前对象中的字段名, 需要与 params 一一对应
      */
-    String field();
+    String[] fields();
 
     /**
      * 如果要设置的对象是个list，则需要告知list中的对象的class

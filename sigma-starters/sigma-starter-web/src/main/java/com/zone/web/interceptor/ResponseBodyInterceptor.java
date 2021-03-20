@@ -52,8 +52,6 @@ public class ResponseBodyInterceptor implements ResponseBodyAdvice<ResponseData>
         // 拦截 controller 返回的 response data
         // 这里可以对返回体做一些通用逻辑的处理
         // 比如修改返回值、添加返回值、对返回数据加密、根据id去其他微服务中查值等等
-        // 这里实现了根据id去其他微服务中查值这个功能,
-        // @SetValue注解的字段类型需要与微服务返回的类型保持一致
         if (data != null) {
             recursiveSetValue(data.getData());
         }
@@ -121,11 +119,13 @@ public class ResponseBodyInterceptor implements ResponseBodyAdvice<ResponseData>
             try {
                 // 获取接口的请求参数, 仅支持单个参数
                 Map<String, Object> paramMap = Maps.newHashMap();
-                Field field = ReflectionUtils.findField(curObj.getClass(), setValue.field());
-                if (field != null) {
-                    ReflectionUtils.makeAccessible(field);
-                    Object value = ReflectionUtils.getField(field, curObj);
-                    paramMap.put(setValue.param(), value);
+                for (int i = 0; i < setValue.fields().length; i++) {
+                    Field field = ReflectionUtils.findField(curObj.getClass(), setValue.fields()[i]);
+                    if (field != null) {
+                        ReflectionUtils.makeAccessible(field);
+                        Object value = ReflectionUtils.getField(field, curObj);
+                        paramMap.put(setValue.params()[i], value);
+                    }
                 }
 
                 // 请求获取值
