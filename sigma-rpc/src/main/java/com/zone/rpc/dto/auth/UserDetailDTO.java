@@ -1,25 +1,19 @@
-package com.zone.auth.application.service.query.dto;
+package com.zone.rpc.dto.auth;
 
-import com.zone.rpc.dto.auth.UserDetailDTO;
-import com.zone.web.annotation.SetValue;
-import com.zone.web.annotation.SetValueTag;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import java.util.List;
-
 /**
  * @Author: jianyong.zhu
- * @Date: 2021/3/10 11:35 下午
+ * @Date: 2021/3/20 11:54 上午
  * @Description:
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@SetValueTag
-public class UserBasicDTO {
+public class UserDetailDTO {
 
     @ApiModelProperty("id")
     private Long id;
@@ -33,16 +27,9 @@ public class UserBasicDTO {
     @ApiModelProperty("手机号")
     private String phone;
 
-    @SetValue(field = "id")
-    private UserDetailDTO detailDTO;
-
     @ApiModelProperty("邮箱")
     private String email;
 
     @ApiModelProperty("角色id")
     private Long roleId;
-
-    @ApiModelProperty("额外的扩展信息")
-    private List<UserExtDTO> userExtDTOList;
-
 }

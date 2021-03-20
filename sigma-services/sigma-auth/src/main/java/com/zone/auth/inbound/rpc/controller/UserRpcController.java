@@ -2,7 +2,8 @@ package com.zone.auth.inbound.rpc.controller;
 
 import com.zone.auth.application.service.query.UserQueryService;
 import com.zone.commons.entity.ResponseData;
-import com.zone.rpc.feign.UserFeignClient;
+import com.zone.rpc.dto.auth.UserDetailDTO;
+import com.zone.rpc.feign.auth.UserFeignClient;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,7 +21,7 @@ public class UserRpcController implements UserFeignClient {
     private UserQueryService userQueryService;
 
     @Override
-    public ResponseData<String> queryUserName(Long userId) {
+    public ResponseData<UserDetailDTO> queryUserInfo(Long userId) {
         return ResponseData.ok(userQueryService.queryUserName(userId));
     }
 }

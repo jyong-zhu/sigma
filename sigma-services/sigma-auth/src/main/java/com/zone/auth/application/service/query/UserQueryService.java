@@ -5,9 +5,11 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zone.auth.application.service.query.converter.UserBasicConverter;
+import com.zone.auth.application.service.query.converter.UserDetailConverter;
 import com.zone.auth.application.service.query.dto.UserBasicDTO;
 import com.zone.auth.infrastructure.db.dataobject.UserBasicDO;
 import com.zone.auth.infrastructure.db.mapper.UserBasicMapper;
+import com.zone.rpc.dto.auth.UserDetailDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +29,9 @@ public class UserQueryService {
     @Autowired
     private UserBasicConverter converter;
 
+    @Autowired
+    private UserDetailConverter userDetailConverter;
+
     public IPage<UserBasicDTO> page(String accountName, String userName, String email, Integer pageNo, Integer pageSize) {
         QueryWrapper<UserBasicDO> queryWrapper = new QueryWrapper<>();
         if (StrUtil.isNotBlank(accountName)) {
@@ -42,8 +47,8 @@ public class UserQueryService {
         return page.convert(converter::apply);
     }
 
-    public String queryUserName(Long userId) {
+    public UserDetailDTO queryUserName(Long userId) {
         UserBasicDO userBasicDO = userBasicMapper.selectById(userId);
-        return userBasicDO == null ? "" : userBasicDO.getUserName();
+        return userDetailConverter.apply(userBasicDO);
     }
 }

@@ -15,7 +15,7 @@ public @interface SetValue {
     /**
      * 请求的接口地址
      */
-    String url() default "http://sigma-auth/rpc/user/name";
+    String url() default "http://sigma-auth/rpc/user";
 
     /**
      * get or post
@@ -33,7 +33,7 @@ public @interface SetValue {
     String field();
 
     /**
-     * 响应的字段名，为空则直接返回响应体，否则从对应的 obj 中拿值
+     * 如果要设置的对象是个list，则需要告知list中的对象的class
      */
-    String resField() default "";
+    Class itemClass() default String.class;
 }

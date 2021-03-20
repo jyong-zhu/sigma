@@ -1,6 +1,7 @@
 package com.zone.web.interceptor;
 
-import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONArray;
+import cn.hutool.json.JSONUtil;
 import com.google.common.collect.Maps;
 import com.zone.commons.entity.Page;
 import com.zone.commons.entity.ResponseData;
@@ -50,7 +51,9 @@ public class ResponseBodyInterceptor implements ResponseBodyAdvice<ResponseData>
     public ResponseData beforeBodyWrite(ResponseData data, MethodParameter methodParameter, MediaType mediaType, Class aClass, ServerHttpRequest serverHttpRequest, ServerHttpResponse serverHttpResponse) {
         // 拦截 controller 返回的 response data
         // 这里可以对返回体做一些通用逻辑的处理
-        // 比如修改返回值、添加返回值、从用户中心根据userId查询userName等等
+        // 比如修改返回值、添加返回值、对返回数据加密、根据id去其他微服务中查值等等
+        // 这里实现了根据id去其他微服务中查值这个功能,
+        // @SetValue注解的字段类型需要与微服务返回的类型保持一致
         if (data != null) {
             recursiveSetValue(data.getData());
         }
@@ -126,7 +129,7 @@ public class ResponseBodyInterceptor implements ResponseBodyAdvice<ResponseData>
                 }
 
                 // 请求获取值
-                Object value = queryRpc(setValue, paramMap);
+                Object value = queryRpc(setValue, paramMap, targetField.getType());
 
                 // 设值
                 ReflectionUtils.makeAccessible(targetField);
@@ -141,7 +144,7 @@ public class ResponseBodyInterceptor implements ResponseBodyAdvice<ResponseData>
     /**
      * 通过 restTemplate 访问接口，请求数据
      */
-    private Object queryRpc(SetValue setValue, Map<String, Object> paramMap) {
+    private Object queryRpc(SetValue setValue, Map<String, Object> paramMap, Class targetClass) {
 
         ResponseData responseData;
         if ("get".equals(setValue.type())) {
@@ -153,24 +156,21 @@ public class ResponseBodyInterceptor implements ResponseBodyAdvice<ResponseData>
             responseData = restTemplate.postForObject(setValue.url(), paramMap, ResponseData.class);
         }
 
-        if (responseData != null) {
-            // 如果resField为空，将返回体中的数据直接返回
-            if (StrUtil.isBlank(setValue.resField())) {
-                return responseData.getData();
+        // 返回查询的数据
+        if (responseData != null && responseData.getSuccess() && responseData.getData() != null) {
+            String json = JSONUtil.toJsonStr(responseData.getData());
+            // 如果是对象
+            if (JSONUtil.isJsonObj(json)) {
+                return JSONUtil.toBean(json, targetClass);
             }
-
-            // 否则返回 data 中的对应字段
-            Object resObj = responseData.getData();
-            if (resObj != null) {
-                Field field = ReflectionUtils.findField(resObj.getClass(), setValue.resField());
-                if (field != null) {
-                    ReflectionUtils.makeAccessible(field);
-                    Object value = ReflectionUtils.getField(field, resObj);
-                    return value;
-                }
+            // 如果是数组
+            if (JSONUtil.isJsonArray(json)) {
+                JSONArray jsonArray = JSONUtil.parseArray(json);
+                return jsonArray.toList(setValue.itemClass());
             }
+            // 不是json直接返回
+            return responseData.getData();
         }
-
         return null;
     }
 }
