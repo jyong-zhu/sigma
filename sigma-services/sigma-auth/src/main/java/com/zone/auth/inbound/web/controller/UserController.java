@@ -12,7 +12,6 @@ import com.zone.commons.entity.Page;
 import com.zone.commons.entity.ResponseData;
 import com.zone.commons.util.SecurityUtil;
 import com.zone.mybatisplus.util.PlusPageConverter;
-import com.zone.web.annotation.SetValueTag;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -55,7 +54,6 @@ public class UserController {
 
     @ApiOperation("用户列表")
     @GetMapping("/page")
-    @SetValueTag
     public ResponseData<Page<UserBasicDTO>> page(
             @ApiParam("账户名") @RequestParam(value = "accountName", required = false) String accountName,
             @ApiParam("用户名") @RequestParam(value = "userName", required = false) String userName,

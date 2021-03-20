@@ -1,8 +1,5 @@
 package com.zone.auth.application.service.query.dto;
 
-import com.zone.rpc.dto.auth.UserDetailDTO;
-import com.zone.web.annotation.SetValue;
-import com.zone.web.annotation.SetValueTag;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -18,7 +15,6 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@SetValueTag
 public class UserBasicDTO {
 
     @ApiModelProperty("id")
@@ -32,9 +28,6 @@ public class UserBasicDTO {
 
     @ApiModelProperty("手机号")
     private String phone;
-
-    @SetValue(field = "id")
-    private UserDetailDTO detailDTO;
 
     @ApiModelProperty("邮箱")
     private String email;
