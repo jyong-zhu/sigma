@@ -16,6 +16,7 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
+        <!--scope设置为provided，因为sigma-starter-web中一定会有-->
         <dependency>
             <groupId>com.zone</groupId>
             <artifactId>sigma-starter-commons</artifactId>

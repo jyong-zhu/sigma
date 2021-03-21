@@ -20,15 +20,4 @@
         <module>sigma-process</module>
     </modules>
 
-    <dependencies>
-        <dependency>
-            <groupId>com.zone</groupId>
-            <artifactId>sigma-rpc</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.zone</groupId>
-            <artifactId>sigma-starter-feign</artifactId>
-        </dependency>
-    </dependencies>
-
 </project>

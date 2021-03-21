@@ -22,6 +22,11 @@
       <artifactId>sigma-starter-commons</artifactId>
     </dependency>
 
+    <dependency>
+      <groupId>com.zone</groupId>
+      <artifactId>sigma-rpc</artifactId>
+    </dependency>
+
     <!-- nacos 配置相关-->
     <dependency>
       <groupId>com.alibaba.cloud</groupId>
