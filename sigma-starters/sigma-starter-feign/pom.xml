@@ -19,6 +19,7 @@
         <dependency>
             <groupId>com.zone</groupId>
             <artifactId>sigma-starter-commons</artifactId>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 

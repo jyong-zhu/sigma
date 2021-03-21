@@ -17,11 +17,6 @@
             <artifactId>sigma-starter-web</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.zone</groupId>
-            <artifactId>sigma-starter-mybatis</artifactId>
-        </dependency>
-
     </dependencies>
 
 </project>
