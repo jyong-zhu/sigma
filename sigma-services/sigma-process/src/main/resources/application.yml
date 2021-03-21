@@ -19,5 +19,10 @@ spring:
         file-extension: yaml # 配置文件的格式，目前只支持 properties 和 yaml 类型
       discovery:
         server-addr: 127.0.0.1:8848
+
+feign:
+  hystrix:
+    enabled: true
+
 server:
   port: 8090
