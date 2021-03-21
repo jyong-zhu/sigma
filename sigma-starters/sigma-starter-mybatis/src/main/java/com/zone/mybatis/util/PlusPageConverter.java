@@ -1,4 +1,4 @@
-package com.zone.mybatisplus.util;
+package com.zone.mybatis.util;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.zone.commons.entity.Page;

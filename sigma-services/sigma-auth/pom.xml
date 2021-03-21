@@ -19,7 +19,7 @@
 
         <dependency>
             <groupId>com.zone</groupId>
-            <artifactId>sigma-starter-mybatisplus</artifactId>
+            <artifactId>sigma-starter-mybatis</artifactId>
         </dependency>
 
     </dependencies>

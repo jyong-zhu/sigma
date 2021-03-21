@@ -15,7 +15,7 @@
         <module>sigma-starter-generator</module>
         <module>sigma-starter-commons</module>
         <module>sigma-starter-web</module>
-        <module>sigma-starter-mybatisplus</module>
+        <module>sigma-starter-mybatis</module>
         <module>sigma-starter-feign</module>
     </modules>
 

@@ -11,7 +11,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  * @Description:
  */
 @EnableFeignClients
-@MapperScan(basePackages = "com.zone.*.infrastructure.db.mapper,")
+@MapperScan(basePackages = "com.zone.*.infrastructure.db.mapper")
 @SpringBootApplication
 public class SigmaAuthApplication {
 

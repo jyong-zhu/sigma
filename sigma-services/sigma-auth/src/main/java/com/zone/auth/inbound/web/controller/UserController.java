@@ -11,7 +11,7 @@ import com.zone.commons.entity.LoginUser;
 import com.zone.commons.entity.Page;
 import com.zone.commons.entity.ResponseData;
 import com.zone.commons.util.SecurityUtil;
-import com.zone.mybatisplus.util.PlusPageConverter;
+import com.zone.mybatis.util.PlusPageConverter;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;

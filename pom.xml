@@ -62,7 +62,7 @@
             </dependency>
             <dependency>
                 <groupId>com.zone</groupId>
-                <artifactId>sigma-starter-mybatisplus</artifactId>
+                <artifactId>sigma-starter-mybatis</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
