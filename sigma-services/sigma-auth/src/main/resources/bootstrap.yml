@@ -15,8 +15,10 @@ spring:
       config:
         server-addr: 127.0.0.1:8848
         file-extension: yaml # 配置文件的格式，目前只支持 properties 和 yaml 类型
+        enabled: true
+        group: DEFAULT_GROUP
       discovery:
         server-addr: 127.0.0.1:8848
 
 server:
-  port: 8080
+  port: 9090

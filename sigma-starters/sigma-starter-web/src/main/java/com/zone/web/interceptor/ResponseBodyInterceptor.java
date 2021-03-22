@@ -59,7 +59,7 @@ public class ResponseBodyInterceptor implements ResponseBodyAdvice<ResponseData>
     }
 
     /**
-     * 递归设置用户姓名
+     * 递归设置字段值
      */
     private void recursiveSetValue(Object curObj) {
         if (curObj == null) {

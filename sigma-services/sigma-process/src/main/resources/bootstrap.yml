@@ -1,4 +1,6 @@
-
+# bootstrap.yml 先加载，application.yml 后加载
+# bootstrap.yml 中的属性具有高优先级，不会被 application.yml 中的属性覆盖
+# 在使用 nacos 作为配置中心时，需要在 bootstrap.yml 中指定 nacos 的相关地址
 
 spring:
   application:
@@ -16,7 +18,9 @@ spring:
     nacos:
       config:
         server-addr: 127.0.0.1:8848
-        file-extension: yaml # 配置文件的格式，目前只支持 properties 和 yaml 类型
+        file-extension: yml # 配置文件的格式，目前只支持 properties 和 yaml 类型
+        enabled: true
+        group: DEFAULT_GROUP
       discovery:
         server-addr: 127.0.0.1:8848
 
@@ -25,4 +29,4 @@ feign:
     enabled: true
 
 server:
-  port: 8090
+  port: 9091
