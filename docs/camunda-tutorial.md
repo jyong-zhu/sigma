@@ -79,8 +79,7 @@
    ```java
    List<Task> tasks = taskService.createNativeTaskQuery().sql("SELECT count(*) FROM " + managementService.getTableName(Task.class) + " T WHERE T.NAME_ = #{taskName}") .parameter("taskName", "aOpenTask").list();
    
-   long count = taskService.createNativeTaskQuery().sql("SELECT count(*) FROM " + managementService.getTableName(Task.class) + " T1, "
-   + managementService.getTableName(VariableInstanceEntity.class) + " V1 WHERE V1.TASK_ID_ = T1.ID_").count();
+   long count = taskService.createNativeTaskQuery().sql("SELECT count(*) FROM " + managementService.getTableName(Task.class) + " T1, " + managementService.getTableName(VariableInstanceEntity.class) + " V1 WHERE V1.TASK_ID_ = T1.ID_").count();
    ```
 
 ## Camunda 使用
@@ -88,8 +87,7 @@
 1. **部署流程定义**
 
    ```java
-   Deployment deployment = repositoryService.createDeployment()
-                       .addInputStream(processName + ".bpmn", xmlStream).deploy();
+   Deployment deployment = repositoryService.createDeployment().addInputStream(processName + ".bpmn", xmlStream).deploy();
    ```
 
 2. **发起流程实例**
