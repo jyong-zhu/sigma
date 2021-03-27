@@ -44,6 +44,15 @@ public class ProcessInstDO implements Serializable {
     @ApiModelProperty(value = "流程实例的状态，进行中/已结束")
     private String status;
 
+    @ApiModelProperty(value = "当前流程停留的节点id, 多个用,隔开")
+    private String curNodeId;
+
+    @ApiModelProperty(value = "当前流程停留的节点名称, 多个用,隔开")
+    private String curNodeName;
+
+    @ApiModelProperty(value = "当前处理人的id，多个用,隔开，支持userId/roleId")
+    private String curHandlerId;
+
     @ApiModelProperty(value = "流程实例要求时间")
     private LocalDateTime dueTime;
 
