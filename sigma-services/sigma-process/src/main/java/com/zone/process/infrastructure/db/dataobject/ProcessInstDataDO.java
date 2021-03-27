@@ -3,6 +3,7 @@ package com.zone.process.infrastructure.db.dataobject;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.Version;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -17,13 +18,13 @@ import java.time.LocalDateTime;
  * </p>
  *
  * @author Jone
- * @since 2021-03-07
+ * @since 2021-03-27
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableName("process_instance_data")
-@ApiModel(value = "ProcessInstanceDataDO对象", description = "流程实例的表单数据")
-public class ProcessInstanceDataDO implements Serializable {
+@TableName("process_inst_data")
+@ApiModel(value = "ProcessInstDataDO对象", description = "流程实例的表单数据")
+public class ProcessInstDataDO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -40,14 +41,15 @@ public class ProcessInstanceDataDO implements Serializable {
     @ApiModelProperty(value = "所属表单id")
     private Long formId;
 
-    @ApiModelProperty(value = "表单的json串，冗余字段")
-    private String formJson;
-
     @ApiModelProperty(value = "流程实例在表单中对应的数据")
     private String formData;
 
     @ApiModelProperty(value = "扩展信息")
     private String ext;
+
+    @ApiModelProperty(value = "乐观锁版本")
+    @Version
+    private Integer version;
 
     @ApiModelProperty(value = "创建时间")
     private LocalDateTime createTime;

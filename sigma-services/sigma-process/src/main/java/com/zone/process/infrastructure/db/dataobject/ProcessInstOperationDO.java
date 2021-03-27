@@ -3,6 +3,7 @@ package com.zone.process.infrastructure.db.dataobject;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.Version;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -17,13 +18,13 @@ import java.time.LocalDateTime;
  * </p>
  *
  * @author Jone
- * @since 2021-03-07
+ * @since 2021-03-27
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableName("process_instance_operation")
-@ApiModel(value="ProcessInstanceOperationDO对象", description="流程实例操作信息")
-public class ProcessInstanceOperationDO implements Serializable {
+@TableName("process_inst_operation")
+@ApiModel(value = "ProcessInstOperationDO对象", description = "流程实例操作信息")
+public class ProcessInstOperationDO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -34,7 +35,7 @@ public class ProcessInstanceOperationDO implements Serializable {
     @ApiModelProperty(value = "流程实例id")
     private String instanceId;
 
-    @ApiModelProperty(value = "操作类型（发起/中止/提交/更新）")
+    @ApiModelProperty(value = "操作类型（start/complete/update/insert/stop）")
     private String operationType;
 
     @ApiModelProperty(value = "操作所处的节点id")
@@ -51,6 +52,10 @@ public class ProcessInstanceOperationDO implements Serializable {
 
     @ApiModelProperty(value = "扩展数据")
     private String ext;
+
+    @ApiModelProperty(value = "乐观锁版本")
+    @Version
+    private Integer version;
 
     @ApiModelProperty(value = "创建时间")
     private LocalDateTime createTime;

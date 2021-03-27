@@ -1,7 +1,7 @@
 package com.zone.process.infrastructure.db.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.zone.process.infrastructure.db.dataobject.ProcessInstanceDataDO;
+import com.zone.process.infrastructure.db.dataobject.ProcessInstDataDO;
 
 /**
  * <p>
@@ -9,8 +9,8 @@ import com.zone.process.infrastructure.db.dataobject.ProcessInstanceDataDO;
  * </p>
  *
  * @author Jone
- * @since 2021-03-07
+ * @since 2021-03-27
  */
-public interface ProcessInstanceDataMapper extends BaseMapper<ProcessInstanceDataDO> {
+public interface ProcessInstDataMapper extends BaseMapper<ProcessInstDataDO> {
 
 }

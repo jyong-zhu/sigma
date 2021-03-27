@@ -77,8 +77,6 @@ CREATE TABLE `process_def_node`
   DEFAULT CHARSET = utf8mb4
   ROW_FORMAT = DYNAMIC COMMENT ='流程定义中的节点信息';
 
--- 流程节点上的参数
--- 表示当前 node_id 中需要传入流程中的参数, 这个参数的值来源于 form_id 这张表中的 field_id 这个字段
 CREATE TABLE `process_def_node_variable`
 (
     `id`            bigint(20)   NOT NULL AUTO_INCREMENT COMMENT '主键ID',
@@ -127,7 +125,6 @@ CREATE TABLE `process_def_node_property`
   DEFAULT CHARSET = utf8mb4
   ROW_FORMAT = DYNAMIC COMMENT ='流程定义中节点上的属性信息';
 
--- 流程实例相关
 CREATE TABLE `process_inst`
 (
     `id`           bigint(20)   NOT NULL AUTO_INCREMENT COMMENT '主键ID',
@@ -155,7 +152,6 @@ CREATE TABLE `process_inst`
   DEFAULT CHARSET = utf8mb4
   ROW_FORMAT = DYNAMIC COMMENT ='流程实例信息';
 
--- 操作记录
 CREATE TABLE `process_inst_operation`
 (
     `id`             bigint(20)   NOT NULL AUTO_INCREMENT COMMENT '主键ID',
@@ -181,7 +177,6 @@ CREATE TABLE `process_inst_operation`
   DEFAULT CHARSET = utf8mb4
   ROW_FORMAT = DYNAMIC COMMENT ='流程实例操作信息';
 
--- 表单数据存储
 CREATE TABLE `process_inst_data`
 (
     `id`           bigint(20)   NOT NULL AUTO_INCREMENT COMMENT '主键ID',
@@ -204,23 +199,22 @@ CREATE TABLE `process_inst_data`
   DEFAULT CHARSET = utf8mb4
   ROW_FORMAT = DYNAMIC COMMENT ='流程实例的表单数据';
 
--- 表单定义相关
 CREATE TABLE `form_structure`
 (
-    `id`          bigint(20)   NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `name`        varchar(45)  NOT NULL COMMENT '表单名称',
-    `form_key`    varchar(45)  NOT NULL COMMENT '表单的key',
-    `version`     int          NOT NULL DEFAULT '1' COMMENT '表单的版本',
-    `form_json`   text         NOT NULL COMMENT '表单的json串',
-    `desc`        varchar(255) NOT NULL DEFAULT '' COMMENT '描述',
+    `id`           bigint(20)   NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `name`         varchar(45)  NOT NULL COMMENT '表单名称',
+    `form_key`     varchar(45)  NOT NULL COMMENT '表单的key',
+    `form_version` int          NOT NULL DEFAULT '1' COMMENT '表单的版本',
+    `form_json`    text         NOT NULL COMMENT '表单的json串',
+    `desc`         varchar(255) NOT NULL DEFAULT '' COMMENT '描述',
 
-    `version`     int          NOT NULL DEFAULT '0' COMMENT '乐观锁版本',
-    `create_time` timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `create_by`   bigint(20)   NOT NULL COMMENT 'user_id',
-    `create_name` varchar(45)  NOT NULL COMMENT 'user_name',
-    `update_time` timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    `update_by`   bigint(20)   NULL COMMENT 'user_id',
-    `update_name` varchar(45)  NULL COMMENT 'user_name',
+    `version`      int          NOT NULL DEFAULT '0' COMMENT '乐观锁版本',
+    `create_time`  timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `create_by`    bigint(20)   NOT NULL COMMENT 'user_id',
+    `create_name`  varchar(45)  NOT NULL COMMENT 'user_name',
+    `update_time`  timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    `update_by`    bigint(20)   NULL COMMENT 'user_id',
+    `update_name`  varchar(45)  NULL COMMENT 'user_name',
     PRIMARY KEY (`id`) USING BTREE,
     UNIQUE KEY `uk_form_version` (`form_key`, `version`) USING BTREE,
     INDEX `index_form_name` (`name`) USING BTREE

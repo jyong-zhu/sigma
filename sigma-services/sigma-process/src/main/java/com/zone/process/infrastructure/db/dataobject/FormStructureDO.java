@@ -3,6 +3,7 @@ package com.zone.process.infrastructure.db.dataobject;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.Version;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -17,7 +18,7 @@ import java.time.LocalDateTime;
  * </p>
  *
  * @author Jone
- * @since 2021-03-07
+ * @since 2021-03-27
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -38,13 +39,17 @@ public class FormStructureDO implements Serializable {
     private String formKey;
 
     @ApiModelProperty(value = "表单的版本")
-    private Integer version;
+    private Integer formVersion;
 
     @ApiModelProperty(value = "表单的json串")
     private String formJson;
 
     @ApiModelProperty(value = "描述")
     private String desc;
+
+    @ApiModelProperty(value = "乐观锁版本")
+    @Version
+    private Integer version;
 
     @ApiModelProperty(value = "创建时间")
     private LocalDateTime createTime;

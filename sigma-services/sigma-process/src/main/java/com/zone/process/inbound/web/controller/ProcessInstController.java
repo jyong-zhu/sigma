@@ -6,14 +6,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
- * 表单结构信息 前端控制器
+ * 流程实例信息 前端控制器
  * </p>
  *
  * @author Jone
  * @since 2021-03-27
  */
 @RestController
-@RequestMapping("/formStructureDO")
-public class FormStructureController {
+@RequestMapping("/processInstDO")
+public class ProcessInstController {
 
 }

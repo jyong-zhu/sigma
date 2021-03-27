@@ -3,6 +3,7 @@ package com.zone.process.infrastructure.db.dataobject;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.Version;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -17,7 +18,7 @@ import java.time.LocalDateTime;
  * </p>
  *
  * @author Jone
- * @since 2021-03-07
+ * @since 2021-03-27
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -52,11 +53,18 @@ public class ProcessDefDO implements Serializable {
     @ApiModelProperty(value = "当前流程的bpmn2.0的xml定义")
     private String bpmnXml;
 
+    @ApiModelProperty(value = "开始节点的id")
+    private String startBpmnNodeId;
+
     @ApiModelProperty(value = "当前流程定义下所关联的全部表单id, 用,隔开")
     private String formIds;
 
     @ApiModelProperty(value = "分类展示图标")
     private String iconUrl;
+
+    @ApiModelProperty(value = "乐观锁版本")
+    @Version
+    private Integer version;
 
     @ApiModelProperty(value = "创建时间")
     private LocalDateTime createTime;
