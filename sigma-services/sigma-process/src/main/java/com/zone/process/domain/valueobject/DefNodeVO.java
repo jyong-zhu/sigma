@@ -1,11 +1,10 @@
-package com.zone.process.application.service.command.cmd;
+package com.zone.process.domain.valueobject;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
 
@@ -17,18 +16,16 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class DefNodeCommand {
+public class DefNodeVO {
 
     @ApiModelProperty("节点id")
     @NotBlank(message = "节点id不能为空")
     private String bpmnNodeId;
 
     @ApiModelProperty("当前节点处理人的类型，ID/PARAM/PAR_MULTI_INSTANCE/SEQ_MULTI_INSTANCE")
-    @NotBlank(message = "处理人类型不能为空")
     private String nodePeopleType;
 
     @ApiModelProperty("当前节点处理人的值，具体值或变量名")
-    @NotBlank(message = "处理人的值不能为空")
     private String nodePeopleValue;
 
     @ApiModelProperty("挂靠在当前节点用于输入的表单， 用,隔开")
@@ -38,10 +35,8 @@ public class DefNodeCommand {
     private String displayFormIds;
 
     @ApiModelProperty("节点的扩展属性")
-    @Valid
-    private List<DefNodePropertyCommand> propertyCommandList;
+    private List<DefNodePropertyVO> propertyCommandList;
 
     @ApiModelProperty("节点的变量信息")
-    @Valid
-    private List<DefNodeVariableCommand> variableCommandList;
+    private List<DefNodeVariableVO> variableCommandList;
 }

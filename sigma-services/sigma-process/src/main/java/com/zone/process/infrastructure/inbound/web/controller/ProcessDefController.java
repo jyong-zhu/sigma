@@ -39,7 +39,7 @@ public class ProcessDefController {
     @PostMapping("/deploy")
     public ResponseData<Long> deploy(@Valid @RequestBody DefDeployCommand deployCommand) {
         LoginUser loginUser = CurrentContext.getUser();
-        return ResponseData.ok(null);
+        return ResponseData.ok(cmdService.deploy(deployCommand, loginUser));
     }
 
     @ApiOperation(value = "分页查询流程定义列表", notes = "列表返回的流程定义均为最新版本的数据")
