@@ -33,7 +33,7 @@ public class ProcessInstDataDO implements Serializable {
     private Long id;
 
     @ApiModelProperty(value = "流程实例id")
-    private String instanceId;
+    private Long instanceId;
 
     @ApiModelProperty(value = "当前录入表单所处的节点id")
     private String bpmnNodeId;

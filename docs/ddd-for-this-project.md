@@ -45,13 +45,13 @@
 ```latex
 ├── application.service
 │       ├── command
-│       │   └── cmd
+│       │   ├── cmd
+│       │   └── transfer
 │       └── query
 │           ├── assembler
 │           └── dto
 ├── domain
 │   ├── agg
-│   ├── entity
 │   ├── event
 │   ├── repository
 │   ├── service
@@ -67,11 +67,15 @@
 │   │   ├── job.controller
 │   │   ├── rpc.controller
 │   │   └── web.controller
-│   └── process.impl
+│   └── process
+│       ├── adapter
+│       └── impl
 └── shared
     ├── client
     ├── constants
+    ├── enums
     ├── process
+    │   └── valueobject
     └── utils
 ```
 
@@ -85,12 +89,23 @@
 
 3. shared 层用于存放会被 query 和 command 操作共用的接口和数据类，比如一些 utils，一些接口定义都可以放在这。
 
-4. 在实际开发中，基础设施层会采用适配器将内层的领域对象或其他数据对象转化为自己这层的数据对象，但常常这两个对象中的字段几乎一致。因此为了不必要的转化，同时基于外层能够访问内层的数据类或方法这一原则，可以在基础设施层直接将内层的数据类或方法进行透传，或者进行简单的封装，比如在 controller 中直接将 command.cmd 或者 query.dto 作为 controller 的入参或者出参。
+4. 在实际落地过程中，基础设施层会采用适配器将内层的领域对象或其他数据对象转化为自己这层的数据对象，但常常这两个对象中的字段几乎一致。因此为了不必要的转化，同时基于外层能够访问内层的数据类或方法这一原则，可以在基础设施层直接将内层的数据类或方法进行透传，或者进行简单的封装，比如在 controller 中直接将 command.cmd 或者 query.dto 作为 controller 的入参或者出参。
 
    > 在 infrastructure.db 中由于存在 data object，所以这里的适配器转化必不可少，这也是 adapter 路径存在的原因，它需要将 domain 中的领域对象转化为数据数据表对应的 data object。有一种方式是将 data object 直接作为实体放到 domain 中，但这样做的话会导致查询的时候涉及到 domain 层，相当于查询也拥有了领域的概念，不可取，所以还是放在 infrastructure.db 中，然后通过 adapter 做转化。
    >
    > 其实将 data object 放在 infrastructure.db 中也有一个好处，那就是数据表的变动不会影响到领域对象，虽然一般 data object 与 domain object 基本一一对应，但是将 data object 抽出来后会更加的灵活。
 
-5. 同样也是为了不必要的转化，在应用服务层可以直接将 entity 或者 valueobject 中的类作为 command.cmd 中的类上面的某个属性的类型。这没有违背外层调用内层的规则，但可以避免不必要的转化代码。比如在创建聚合的时候不用再去创建值对象，因为在 command.cmd 中接收到的就是一个值对象了。
+5. command.transfer 这一层的主要作用是将 command 对象转化为 domain 对象，因为在 domain 层中是无法获取到 command 对象的。
 
-6. domain 中的目录并没有按照聚合的维度去划分，而是打平之后按不同的类型去管理，其中包括聚合/领域事件/值对象/仓储接口/领域服务/实体这几种类型。
+   > 在六边形架构中，经常涉及到层与层之间数据的转化，如 command 中的 transfer， db 中的 adapter，这些转化操作都是在调用侧实现的，被调用侧是无法感知到调用侧的数据结构的。这样做的好处就是达到了高内聚、低耦合的效果。
+
+6. 领域服务中的代码主要是以下几种：
+
+   - 不是属于单个聚合根的业务或者需要多个聚合根配合的业务，放在领域服务中，注意是业务，如果没有业务，协调工作应该放到应用服务中。
+   - 需要通过rpc等其它外部服务处理业务的，放在领域服务中。
+
+   需要注意的是，领域服务是无状态的，它关注的是行为，而非状态。简单来说领域服务还是去调用写在领域对象上的业务方法而不是把所有业务逻辑都写在领域服务中。
+
+7. domain 中的目录并没有按照聚合的维度去划分，而是打平之后按不同的类型去管理，其中包括聚合/领域事件/值对象/仓储接口/领域服务 这几种类型。
+
+8. 为了简单起见，查询这块操作我违反了 DIP 原则，但这样写起代码来更加简洁不累赘，不用做一些无意义的转化操作。而且查询本身并没有领域的概念，故无需强制遵循 ddd 这套标准，不然反而会增加无意义的复杂度。详见[这篇文章](https://mp.weixin.qq.com/s/R-jBnPhWJHs7J-4CETV88A)。

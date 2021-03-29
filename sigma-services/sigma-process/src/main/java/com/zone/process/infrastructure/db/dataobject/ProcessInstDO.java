@@ -36,7 +36,7 @@ public class ProcessInstDO implements Serializable {
     private String procInstId;
 
     @ApiModelProperty(value = "流程定义id")
-    private String defId;
+    private Long defId;
 
     @ApiModelProperty(value = "流程实例名称")
     private String name;

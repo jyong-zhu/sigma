@@ -24,7 +24,7 @@ CREATE TABLE `process_category`
 CREATE TABLE `process_def`
 (
     `id`                 bigint(20)   NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `category_id`        varchar(45)  NOT NULL COMMENT '流程分类id',
+    `category_id`        bigint(20)   NOT NULL COMMENT '流程分类id',
     `proc_def_id`        varchar(200) NOT NULL COMMENT 'camunda中的流程定义id，关联到ACT_RE_PROCDEF',
     `proc_def_key`       varchar(200) NOT NULL COMMENT 'camunda中的流程定义key，关联到ACT_RE_PROCDEF的key',
     `proc_def_version`   int          NOT NULL DEFAULT '1' COMMENT 'camunda中的流程定义版本，关联到ACT_RE_PROCDEF的version',
@@ -54,7 +54,7 @@ CREATE TABLE `process_def`
 CREATE TABLE `process_def_node`
 (
     `id`                  bigint(20)  NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `def_id`              varchar(45) NOT NULL COMMENT '流程定义id',
+    `def_id`              bigint(20)  NOT NULL COMMENT '流程定义id',
     `name`                varchar(45) NOT NULL COMMENT '流程节点名称',
     `bpmn_node_type`      varchar(45) NOT NULL COMMENT 'bpmn2.0中节点的类型, userTask/startEvent/endEvent',
     `bpmn_node_id`        varchar(45) NOT NULL COMMENT 'bpmn2.0中节点的id',
@@ -80,7 +80,7 @@ CREATE TABLE `process_def_node`
 CREATE TABLE `process_def_node_variable`
 (
     `id`            bigint(20)   NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `node_id`       varchar(45)  NOT NULL COMMENT '流程节点id',
+    `node_id`       bigint(20)   NOT NULL COMMENT '流程节点id',
     `bpmn_node_id`  varchar(45)  NOT NULL COMMENT 'bpmn中的流程节点id(冗余)',
     `variable_name` varchar(45)  NOT NULL COMMENT '流程节点的变量名称，这个参数可以在后续的节点中被引用',
     `java_type`     varchar(45)  NOT NULL DEFAULT 'java.lang.String' COMMENT '流程节点变量的类型',
@@ -105,7 +105,7 @@ CREATE TABLE `process_def_node_variable`
 CREATE TABLE `process_def_node_property`
 (
     `id`             bigint(20)   NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `node_id`        varchar(45)  NOT NULL COMMENT '流程节点id',
+    `node_id`        bigint(20)   NOT NULL COMMENT '流程节点id',
     `bpmn_node_id`   varchar(45)  NOT NULL COMMENT 'bpmn中的流程节点id(冗余)',
     `property_name`  varchar(45)  NOT NULL COMMENT '流程节点中的属性名称',
     `property_value` text         NOT NULL COMMENT '属性值',
@@ -129,7 +129,7 @@ CREATE TABLE `process_inst`
 (
     `id`             bigint(20)   NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `proc_inst_id`   varchar(45)  NOT NULL COMMENT 'camunda中的流程实例id',
-    `def_id`         varchar(45)  NOT NULL COMMENT '流程定义id',
+    `def_id`         bigint(20)   NOT NULL COMMENT '流程定义id',
     `name`           varchar(45)  NOT NULL COMMENT '流程实例名称',
     `status`         varchar(45)  NOT NULL COMMENT '流程实例的状态，进行中/已结束',
     `cur_node_id`    varchar(45)  NOT NULL COMMENT '当前流程停留的节点id, 多个用,隔开',
@@ -158,7 +158,7 @@ CREATE TABLE `process_inst`
 CREATE TABLE `process_inst_operation`
 (
     `id`             bigint(20)   NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `instance_id`    varchar(45)  NOT NULL COMMENT '流程实例id',
+    `instance_id`    bigint(20)   NOT NULL COMMENT '流程实例id',
     `operation_type` varchar(45)  NOT NULL COMMENT '操作类型（start/complete/update/insert/stop）',
     `bpmn_node_id`   varchar(45)  NOT NULL COMMENT '操作所处的节点id',
     `comment`        varchar(255) NOT NULL DEFAULT '' COMMENT '操作备注',
@@ -183,7 +183,7 @@ CREATE TABLE `process_inst_operation`
 CREATE TABLE `process_inst_data`
 (
     `id`           bigint(20)   NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `instance_id`  varchar(45)  NOT NULL COMMENT '流程实例id',
+    `instance_id`  bigint(20)   NOT NULL COMMENT '流程实例id',
     `bpmn_node_id` varchar(45)  NOT NULL COMMENT '当前录入表单所处的节点id',
     `form_id`      bigint(20)   NOT NULL COMMENT '所属表单id',
     `form_data`    text         NOT NULL COMMENT '流程实例在表单中对应的数据',

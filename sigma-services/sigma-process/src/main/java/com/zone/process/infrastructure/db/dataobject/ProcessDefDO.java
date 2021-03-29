@@ -33,7 +33,7 @@ public class ProcessDefDO implements Serializable {
     private Long id;
 
     @ApiModelProperty(value = "流程分类id")
-    private String categoryId;
+    private Long categoryId;
 
     @ApiModelProperty(value = "camunda中的流程定义id，关联到ACT_RE_PROCDEF")
     private String procDefId;
