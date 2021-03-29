@@ -33,7 +33,7 @@ public class ProcessDefNodeDO implements Serializable {
     private Long id;
 
     @ApiModelProperty(value = "流程定义id")
-    private String defId;
+    private Long defId;
 
     @ApiModelProperty(value = "流程节点名称")
     private String name;

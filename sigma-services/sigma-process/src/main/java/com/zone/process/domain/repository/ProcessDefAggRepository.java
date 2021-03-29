@@ -1,6 +1,5 @@
 package com.zone.process.domain.repository;
 
-import com.zone.commons.entity.LoginUser;
 import com.zone.process.domain.agg.ProcessDefAgg;
 
 /**
@@ -10,5 +9,5 @@ import com.zone.process.domain.agg.ProcessDefAgg;
  */
 public interface ProcessDefAggRepository {
 
-    void save(ProcessDefAgg processDefAgg, LoginUser loginUser);
+    void save(ProcessDefAgg processDefAgg);
 }

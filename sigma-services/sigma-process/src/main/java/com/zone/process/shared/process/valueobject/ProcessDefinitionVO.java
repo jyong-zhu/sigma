@@ -25,5 +25,5 @@ public class ProcessDefinitionVO {
     private String procDefKey;
 
     @ApiModelProperty("流程定义的版本")
-    private String procDefVersion;
+    private Integer procDefVersion;
 }

@@ -27,7 +27,7 @@ public class DefDeployCommand {
 
     @ApiModelProperty("bpmn2.0 xml")
     @NotBlank(message = "bpmn2.0 xml不能为空")
-    private String xml;
+    private String bpmnXml;
 
     @ApiModelProperty("流程定义名称")
     @NotBlank(message = "流程定义名称不能为空")
@@ -39,7 +39,7 @@ public class DefDeployCommand {
     @ApiModelProperty("分类展示图标")
     private String iconUrl;
 
-    @ApiModelProperty("流程定义中节点的信息")
+    @ApiModelProperty("流程定义中节点上的扩展信息")
     @Valid
     private List<DefNodeCommand> nodeList;
 
