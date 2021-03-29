@@ -1,4 +1,4 @@
-package com.zone.process.inbound.web.controller;
+package com.zone.process.infrastructure.inbound.web.controller;
 
 
 import com.zone.process.application.service.command.FormStructureCmdService;

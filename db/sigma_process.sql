@@ -59,8 +59,8 @@ CREATE TABLE `process_def_node`
     `bpmn_node_type`      varchar(45) NOT NULL COMMENT 'bpmn2.0中节点的类型, userTask/startEvent/endEvent',
     `bpmn_node_id`        varchar(45) NOT NULL COMMENT 'bpmn2.0中节点的id',
     `parent_bpmn_node_id` varchar(45) NOT NULL COMMENT '当前节点所属的父节点的id',
-    `node_people_type`    varchar(45) NOT NULL DEFAULT '' COMMENT '当前流程的处理人类型，指定用户/指定角色/用户参数/角色参数',
-    `node_people_value`   varchar(45) NOT NULL DEFAULT '' COMMENT '当前流程的处理人的信息，可以为参数${xxx}, 也可以为具体的值，这部分信息存储在candidateUser中',
+    `node_people_type`    varchar(45) NOT NULL DEFAULT '' COMMENT '当前节点处理人类型，ID/PARAM/PAR_MULTI_INSTANCE/SEQ_MULTI_INSTANCE',
+    `node_people_value`   varchar(45) NOT NULL DEFAULT '' COMMENT '当前节点处理人的值，可以是具体值，也可以是变量名',
     `input_form_ids`      text        NULL COMMENT '挂靠在当前节点用于输入的表单， 用,隔开',
     `display_form_ids`    text        NULL COMMENT '挂靠在当前节点用于展示的表单， 用,隔开',
 

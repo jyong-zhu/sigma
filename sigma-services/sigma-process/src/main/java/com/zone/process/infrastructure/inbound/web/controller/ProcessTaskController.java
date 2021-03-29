@@ -1,4 +1,4 @@
-package com.zone.process.inbound.web.controller;
+package com.zone.process.infrastructure.inbound.web.controller;
 
 import com.zone.commons.context.CurrentContext;
 import com.zone.commons.entity.LoginUser;

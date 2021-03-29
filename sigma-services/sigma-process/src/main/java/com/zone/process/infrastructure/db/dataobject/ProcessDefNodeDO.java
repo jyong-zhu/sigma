@@ -47,10 +47,10 @@ public class ProcessDefNodeDO implements Serializable {
     @ApiModelProperty(value = "当前节点所属的父节点的id")
     private String parentBpmnNodeId;
 
-    @ApiModelProperty(value = "当前流程的处理人类型，指定用户/指定角色/用户参数/角色参数")
+    @ApiModelProperty(value = "当前流程的处理人类型，ID/PARAM/PAR_MULTI_INSTANCE/SEQ_MULTI_INSTANCE")
     private String nodePeopleType;
 
-    @ApiModelProperty(value = "当前流程的处理人的信息，可以为参数${xxx}, 也可以为具体的值，这部分信息存储在candidateUser中")
+    @ApiModelProperty(value = "当前节点处理人的值，可以是具体值，也可以是变量名")
     private String nodePeopleValue;
 
     @ApiModelProperty(value = "挂靠在当前节点用于输入的表单， 用,隔开")
