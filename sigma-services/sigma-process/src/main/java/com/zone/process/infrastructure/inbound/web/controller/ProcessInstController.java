@@ -39,14 +39,14 @@ public class ProcessInstController {
     @PostMapping("/start")
     public ResponseData<Long> start(@Valid @RequestBody InstStartCommand startCommand) {
         LoginUser loginUser = CurrentContext.getUser();
-        return ResponseData.ok(null);
+        return ResponseData.ok(cmdService.start(startCommand, loginUser));
     }
 
     @ApiOperation(value = "中止流程实例", notes = "返回流程实例id")
     @PostMapping("stop")
-    public ResponseData<Long> stop(@Valid @RequestBody InstStopCommand instStopCommand) {
+    public ResponseData<Boolean> stop(@Valid @RequestBody InstStopCommand stopCommand) {
         LoginUser loginUser = CurrentContext.getUser();
-        return ResponseData.ok(null);
+        return ResponseData.ok(cmdService.stop(stopCommand, loginUser));
     }
 
     @ApiOperation(value = "流程实例列表", notes = "返回当前用户操作过或者发起的流程实例列表")

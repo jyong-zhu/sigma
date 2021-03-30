@@ -3,6 +3,7 @@ package com.zone.process.infrastructure.process.impl;
 import com.zone.process.infrastructure.process.adapter.ProcessDefinitionAdapter;
 import com.zone.process.shared.process.ProcessEngineCommandAPI;
 import com.zone.process.shared.process.valueobject.ProcessDefinitionVO;
+import com.zone.process.shared.process.valueobject.ProcessInstanceVO;
 import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.RepositoryService;
 import org.camunda.bpm.engine.repository.Deployment;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map;
 
 /**
  * @Author: jianyong.zhu
@@ -51,5 +53,20 @@ public class CamundaCommandService implements ProcessEngineCommandAPI {
             log.error("流程部署出错[{}]", e.getMessage());
         }
         return null;
+    }
+
+    @Override
+    public String startInstance(String processDefKey, Map<String, Object> paramMap) {
+        return null;
+    }
+
+    @Override
+    public ProcessInstanceVO syncInstance(String procInstId) {
+        return null;
+    }
+
+    @Override
+    public void stopInstance(String procInstId, String comment) {
+
     }
 }

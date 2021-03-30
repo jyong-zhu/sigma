@@ -31,11 +31,11 @@ public class ProcessTaskController {
     private ProcessTaskCmdService cmdService;
 
     // 操作任务/任务详情/任务列表
-    @ApiOperation(value = "操作任务", notes = "返回任务id")
+    @ApiOperation(value = "操作任务", notes = "返回任务操作结果")
     @PostMapping("/operate")
-    public ResponseData<String> operate(@Valid @RequestBody TaskOperateCommand operateCommand) {
+    public ResponseData<Boolean> operate(@Valid @RequestBody TaskOperateCommand operateCommand) {
         LoginUser loginUser = CurrentContext.getUser();
-        return ResponseData.ok(null);
+        return ResponseData.ok(cmdService.operate(operateCommand, loginUser));
     }
 
     @ApiOperation(value = "分页查询任务", notes = "返回分配给当前用户的任务")

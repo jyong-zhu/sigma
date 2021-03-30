@@ -1,6 +1,9 @@
 package com.zone.process.shared.process;
 
 import com.zone.process.shared.process.valueobject.ProcessDefinitionVO;
+import com.zone.process.shared.process.valueobject.ProcessInstanceVO;
+
+import java.util.Map;
 
 /**
  * @Author: jianyong.zhu
@@ -10,4 +13,10 @@ import com.zone.process.shared.process.valueobject.ProcessDefinitionVO;
 public interface ProcessEngineCommandAPI {
 
     ProcessDefinitionVO deploy(String xml, String name);
+
+    String startInstance(String processDefKey, Map<String, Object> paramMap);
+
+    ProcessInstanceVO syncInstance(String procInstId);
+
+    void stopInstance(String procInstId, String comment);
 }

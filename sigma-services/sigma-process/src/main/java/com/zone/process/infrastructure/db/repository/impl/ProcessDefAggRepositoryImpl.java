@@ -89,4 +89,9 @@ public class ProcessDefAggRepositoryImpl implements ProcessDefAggRepository {
             }
         }
     }
+
+    @Override
+    public ProcessDefAgg queryById(Long defId) {
+        return null;
+    }
 }

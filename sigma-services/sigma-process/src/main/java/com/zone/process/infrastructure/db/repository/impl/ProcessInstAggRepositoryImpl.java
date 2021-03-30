@@ -1,5 +1,6 @@
 package com.zone.process.infrastructure.db.repository.impl;
 
+import com.zone.process.domain.agg.ProcessInstAgg;
 import com.zone.process.domain.repository.ProcessInstAggRepository;
 import org.springframework.stereotype.Service;
 
@@ -10,4 +11,19 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class ProcessInstAggRepositoryImpl implements ProcessInstAggRepository {
+
+    @Override
+    public void save(ProcessInstAgg instAgg) {
+
+    }
+
+    @Override
+    public ProcessInstAgg queryById(Long id) {
+        return null;
+    }
+
+    @Override
+    public Boolean update(ProcessInstAgg instAgg) {
+        return null;
+    }
 }
