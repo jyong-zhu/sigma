@@ -3,7 +3,6 @@ package com.zone.process.infrastructure.process.impl;
 import com.zone.process.infrastructure.process.adapter.ProcessDefinitionAdapter;
 import com.zone.process.shared.process.ProcessEngineCommandAPI;
 import com.zone.process.shared.process.valueobject.ProcessDefinitionVO;
-import com.zone.process.shared.process.valueobject.ProcessInstanceVO;
 import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.RepositoryService;
 import org.camunda.bpm.engine.repository.Deployment;
@@ -61,12 +60,12 @@ public class CamundaCommandService implements ProcessEngineCommandAPI {
     }
 
     @Override
-    public ProcessInstanceVO syncInstance(String procInstId) {
-        return null;
+    public void stopInstance(String procInstId, String comment) {
+
     }
 
     @Override
-    public void stopInstance(String procInstId, String comment) {
+    public void operateTask(String taskId, Map<String, Object> paramMap, String operationType) {
 
     }
 }

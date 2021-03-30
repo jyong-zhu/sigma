@@ -14,4 +14,6 @@ public interface ProcessInstAggRepository {
     ProcessInstAgg queryById(Long id);
 
     Boolean update(ProcessInstAgg instAgg);
+
+    ProcessInstAgg queryByInstId(String procInstId);
 }

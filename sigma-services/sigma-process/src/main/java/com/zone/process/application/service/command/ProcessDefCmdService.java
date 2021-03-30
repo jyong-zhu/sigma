@@ -7,7 +7,7 @@ import com.zone.process.domain.agg.ProcessCategoryAgg;
 import com.zone.process.domain.agg.ProcessDefAgg;
 import com.zone.process.domain.repository.ProcessCategoryAggRepository;
 import com.zone.process.domain.repository.ProcessDefAggRepository;
-import com.zone.process.domain.service.ProcessDefDomainService;
+import com.zone.process.domain.service.AggIdentityDomainService;
 import com.zone.process.shared.process.ProcessEngineCommandAPI;
 import com.zone.process.shared.process.valueobject.ProcessDefinitionVO;
 import lombok.extern.slf4j.Slf4j;
@@ -28,13 +28,13 @@ public class ProcessDefCmdService {
     private ProcessEngineCommandAPI processEngineCommandAPI;
 
     @Autowired
-    private ProcessDefDomainService defDomainService;
-
-    @Autowired
     private ProcessCategoryAggRepository categoryAggRepository;
 
     @Autowired
     private ProcessDefAggRepository defAggRepository;
+
+    @Autowired
+    private AggIdentityDomainService identityDomainService;
 
     /**
      * 部署流程定义
@@ -49,7 +49,7 @@ public class ProcessDefCmdService {
         Preconditions.checkNotNull(definitionVO, "流程部署出错");
 
         ProcessDefAgg processDefAgg = ProcessDefAggTransfer.getProcessDefAgg(deployCommand);
-        processDefAgg.init(defDomainService.generateId(), definitionVO);
+        processDefAgg.init(identityDomainService.generateDefAggId(), definitionVO);
         defAggRepository.save(processDefAgg);
 
         return processDefAgg.getId();

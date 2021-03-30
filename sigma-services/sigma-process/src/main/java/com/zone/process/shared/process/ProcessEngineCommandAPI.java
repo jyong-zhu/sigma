@@ -1,7 +1,6 @@
 package com.zone.process.shared.process;
 
 import com.zone.process.shared.process.valueobject.ProcessDefinitionVO;
-import com.zone.process.shared.process.valueobject.ProcessInstanceVO;
 
 import java.util.Map;
 
@@ -16,7 +15,7 @@ public interface ProcessEngineCommandAPI {
 
     String startInstance(String processDefKey, Map<String, Object> paramMap);
 
-    ProcessInstanceVO syncInstance(String procInstId);
-
     void stopInstance(String procInstId, String comment);
+
+    void operateTask(String taskId, Map<String, Object> paramMap, String operationType);
 }

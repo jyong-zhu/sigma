@@ -1,6 +1,8 @@
 package com.zone.process.infrastructure.process.impl;
 
 import com.zone.process.shared.process.ProcessEngineQueryAPI;
+import com.zone.process.shared.process.valueobject.ProcessInstanceVO;
+import com.zone.process.shared.process.valueobject.TaskVO;
 import org.springframework.stereotype.Service;
 
 /**
@@ -10,4 +12,14 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class CamundaQueryService implements ProcessEngineQueryAPI {
+
+    @Override
+    public ProcessInstanceVO syncInstance(String procInstId) {
+        return null;
+    }
+
+    @Override
+    public TaskVO queryTaskById(String taskId) {
+        return null;
+    }
 }

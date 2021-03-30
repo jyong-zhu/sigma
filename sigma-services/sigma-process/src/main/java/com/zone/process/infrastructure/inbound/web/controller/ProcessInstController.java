@@ -44,7 +44,7 @@ public class ProcessInstController {
 
     @ApiOperation(value = "中止流程实例", notes = "返回流程实例id")
     @PostMapping("stop")
-    public ResponseData<Boolean> stop(@Valid @RequestBody InstStopCommand stopCommand) {
+    public ResponseData<Long> stop(@Valid @RequestBody InstStopCommand stopCommand) {
         LoginUser loginUser = CurrentContext.getUser();
         return ResponseData.ok(cmdService.stop(stopCommand, loginUser));
     }

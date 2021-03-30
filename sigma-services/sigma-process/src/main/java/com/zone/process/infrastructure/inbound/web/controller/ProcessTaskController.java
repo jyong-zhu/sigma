@@ -30,10 +30,9 @@ public class ProcessTaskController {
     @Autowired
     private ProcessTaskCmdService cmdService;
 
-    // 操作任务/任务详情/任务列表
-    @ApiOperation(value = "操作任务", notes = "返回任务操作结果")
+    @ApiOperation(value = "操作任务", notes = "返回任务所属的流程实例id")
     @PostMapping("/operate")
-    public ResponseData<Boolean> operate(@Valid @RequestBody TaskOperateCommand operateCommand) {
+    public ResponseData<Long> operate(@Valid @RequestBody TaskOperateCommand operateCommand) {
         LoginUser loginUser = CurrentContext.getUser();
         return ResponseData.ok(cmdService.operate(operateCommand, loginUser));
     }

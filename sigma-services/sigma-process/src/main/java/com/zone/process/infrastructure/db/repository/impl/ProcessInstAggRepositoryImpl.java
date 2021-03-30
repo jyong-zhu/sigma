@@ -26,4 +26,9 @@ public class ProcessInstAggRepositoryImpl implements ProcessInstAggRepository {
     public Boolean update(ProcessInstAgg instAgg) {
         return null;
     }
+
+    @Override
+    public ProcessInstAgg queryByInstId(String procInstId) {
+        return null;
+    }
 }

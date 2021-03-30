@@ -4,6 +4,7 @@ import com.zone.commons.entity.LoginUser;
 import com.zone.process.domain.valueobject.InstDataVO;
 import com.zone.process.domain.valueobject.InstOperationVO;
 import com.zone.process.shared.process.valueobject.ProcessInstanceVO;
+import com.zone.process.shared.process.valueobject.TaskVO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -89,6 +90,13 @@ public class ProcessInstAgg {
      * 同步流程实例的当前状态
      */
     public void sync(ProcessInstanceVO processInstanceVO) {
+
+    }
+
+    /**
+     * 操作任务
+     */
+    public void operateTask(TaskVO taskVO, String operationType, String comment, String ext, Map<Long, Map<String, Object>> formDataMap, LoginUser loginUser) {
 
     }
 }

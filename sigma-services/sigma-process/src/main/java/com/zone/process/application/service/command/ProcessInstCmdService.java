@@ -9,8 +9,10 @@ import com.zone.process.domain.agg.ProcessDefAgg;
 import com.zone.process.domain.agg.ProcessInstAgg;
 import com.zone.process.domain.repository.ProcessDefAggRepository;
 import com.zone.process.domain.repository.ProcessInstAggRepository;
-import com.zone.process.domain.service.ProcessInstDomainService;
+import com.zone.process.domain.service.AggIdentityDomainService;
+import com.zone.process.domain.service.InstanceParamDomainService;
 import com.zone.process.shared.process.ProcessEngineCommandAPI;
+import com.zone.process.shared.process.ProcessEngineQueryAPI;
 import com.zone.process.shared.process.valueobject.ProcessInstanceVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,13 +34,19 @@ public class ProcessInstCmdService {
     private ProcessEngineCommandAPI processEngineCommandAPI;
 
     @Autowired
+    private ProcessEngineQueryAPI processEngineQueryAPI;
+
+    @Autowired
     private ProcessDefAggRepository defAggRepository;
 
     @Autowired
     private ProcessInstAggRepository instAggRepository;
 
     @Autowired
-    private ProcessInstDomainService instDomainService;
+    private InstanceParamDomainService paramDomainService;
+
+    @Autowired
+    private AggIdentityDomainService identityDomainService;
 
 
     /**
@@ -51,13 +59,15 @@ public class ProcessInstCmdService {
         Preconditions.checkNotNull(defAgg, "流程定义不存在");
 
         // 发起流程实例
-        ProcessInstAgg instAgg = ProcessInstAggTransfer.getProcessInstAgg(startCommand);
-        Map<String, Object> paramMap = instDomainService.generateParamMap(instAgg, defAgg);
+        Map<String, Object> paramMap = paramDomainService.generateParamMap(startCommand.getFormDataMap(), defAgg.getStartBpmnNodeId(), defAgg);
         String procInstId = processEngineCommandAPI.startInstance(defAgg.getProcDefKey(), paramMap);
-        instAgg.init(instDomainService.generateId(), startCommand.getFormDataMap(), loginUser);
+
+        // 初始化相关数据
+        ProcessInstAgg instAgg = ProcessInstAggTransfer.getProcessInstAgg(startCommand);
+        instAgg.init(identityDomainService.generateInstAggId(), startCommand.getFormDataMap(), loginUser);
 
         // 同步流程实例的当前状态
-        ProcessInstanceVO processInstanceVO = processEngineCommandAPI.syncInstance(procInstId);
+        ProcessInstanceVO processInstanceVO = processEngineQueryAPI.syncInstance(procInstId);
         instAgg.sync(processInstanceVO);
 
         instAggRepository.save(instAgg);
@@ -69,7 +79,7 @@ public class ProcessInstCmdService {
      * 中止流程实例
      */
     @Transactional
-    public Boolean stop(InstStopCommand stopCommand, LoginUser loginUser) {
+    public Long stop(InstStopCommand stopCommand, LoginUser loginUser) {
 
         ProcessInstAgg instAgg = instAggRepository.queryById(stopCommand.getId());
         Preconditions.checkNotNull(instAgg, "流程实例不存在");
@@ -79,11 +89,13 @@ public class ProcessInstCmdService {
         instAgg.stop(stopCommand.getComment(), loginUser);
 
         // 同步流程实例的当前状态
-        ProcessInstanceVO processInstanceVO = processEngineCommandAPI.syncInstance(instAgg.getProcInstId());
+        ProcessInstanceVO processInstanceVO = processEngineQueryAPI.syncInstance(instAgg.getProcInstId());
         instAgg.sync(processInstanceVO);
 
-        Boolean result = instAggRepository.update(instAgg);
+        // 采用乐观锁更新，失败必须报错，否则camunda中的数据和扩展表中的数据不一致
+        Boolean isSuccess = instAggRepository.update(instAgg);
+        Preconditions.checkState(isSuccess, "中止流程实例失败");
 
-        return result;
+        return instAgg.getId();
     }
 }
