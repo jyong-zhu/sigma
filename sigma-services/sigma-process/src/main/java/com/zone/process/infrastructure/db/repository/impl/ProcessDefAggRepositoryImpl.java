@@ -45,6 +45,7 @@ public class ProcessDefAggRepositoryImpl implements ProcessDefAggRepository {
     public void save(ProcessDefAgg processDefAgg) {
 
         ProcessDefDO defDO = BeanUtil.copyProperties(processDefAgg, ProcessDefDO.class);
+        defDO.setVersion(0);
         defMapper.insert(defDO);
 
         if (CollectionUtil.isNotEmpty(processDefAgg.getNodeVOList())) {
@@ -55,12 +56,14 @@ public class ProcessDefAggRepositoryImpl implements ProcessDefAggRepository {
             processDefAgg.getNodeVOList().forEach(nodeVO -> {
                 Long nodeId = IdWorkerUtil.nextId();
                 ProcessDefNodeDO nodeDO = ProcessDefAggAdapter.getProcessDefNodeDO(nodeVO, defDO.getId(), nodeId);
+                nodeDO.setVersion(0);
                 nodeDOList.add(nodeDO);
 
                 if (CollectionUtil.isNotEmpty(nodeVO.getPropertyVOList())) {
                     nodeVO.getPropertyVOList().forEach(propertyVO -> {
                         Long id = IdWorkerUtil.nextId();
                         ProcessDefNodePropertyDO propertyDO = ProcessDefAggAdapter.getProcessDefNodePropertyDO(propertyVO, nodeId, nodeVO.getBpmnNodeId(), id);
+                        propertyDO.setVersion(0);
                         propertyList.add(propertyDO);
                     });
                 }
@@ -69,6 +72,7 @@ public class ProcessDefAggRepositoryImpl implements ProcessDefAggRepository {
                     nodeVO.getVariableVOList().forEach(variableVO -> {
                         Long id = IdWorkerUtil.nextId();
                         ProcessDefNodeVariableDO variableDO = ProcessDefAggAdapter.getProcessDefNodeVariableDO(variableVO, nodeId, nodeVO.getBpmnNodeId(), id);
+                        variableDO.setVersion(0);
                         variableList.add(variableDO);
                     });
                 }

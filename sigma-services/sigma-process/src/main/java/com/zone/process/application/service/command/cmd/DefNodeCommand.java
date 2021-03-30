@@ -24,11 +24,9 @@ public class DefNodeCommand {
     private String bpmnNodeId;
 
     @ApiModelProperty("当前节点处理人的类型，ID/PARAM/PAR_MULTI_INSTANCE/SEQ_MULTI_INSTANCE")
-    @NotBlank(message = "处理人类型不能为空")
     private String nodePeopleType;
 
     @ApiModelProperty("当前节点处理人的值，具体值或变量名")
-    @NotBlank(message = "处理人的值不能为空")
     private String nodePeopleValue;
 
     @ApiModelProperty("挂靠在当前节点用于输入的表单， 用,隔开")

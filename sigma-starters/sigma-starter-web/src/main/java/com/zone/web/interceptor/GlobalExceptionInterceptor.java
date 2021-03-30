@@ -31,7 +31,7 @@ public class GlobalExceptionInterceptor {
 
     @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
     public ResponseData<Object> uniqueKeyException(Exception e) {
-        log.error("数据库唯一索引出错：[{}]", e.getMessage());
-        return ResponseData.error("与现有值冲突");
+        log.error("数据库出错：[{}]", e.getMessage());
+        return ResponseData.error("数据出错");
     }
 }

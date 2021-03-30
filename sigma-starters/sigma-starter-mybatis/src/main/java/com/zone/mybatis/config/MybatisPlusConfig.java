@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.autoconfigure.ConfigurationCustomizer;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
+import com.zone.mybatis.handler.SigmaMetaObjectHandler;
 import com.zone.mybatis.mapper.SigmaSqlInjector;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
@@ -50,5 +51,10 @@ public class MybatisPlusConfig {
     @Bean
     public SigmaSqlInjector sqlInjector() {
         return new SigmaSqlInjector();
+    }
+
+    @Bean
+    public SigmaMetaObjectHandler metaObjectHandler() {
+        return new SigmaMetaObjectHandler();
     }
 }

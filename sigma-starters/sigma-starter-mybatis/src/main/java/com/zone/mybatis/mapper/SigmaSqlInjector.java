@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * @Author: jianyong.zhu
  * @Date: 2021/3/29 11:48 下午
- * @Description:
+ * @Description: 全局 sql 注入器
  */
 public class SigmaSqlInjector extends DefaultSqlInjector {
 

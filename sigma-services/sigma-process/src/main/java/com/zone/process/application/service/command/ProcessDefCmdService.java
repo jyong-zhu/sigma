@@ -13,6 +13,7 @@ import com.zone.process.shared.process.valueobject.ProcessDefinitionVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @Author: jianyong.zhu
@@ -38,6 +39,7 @@ public class ProcessDefCmdService {
     /**
      * 部署流程定义
      */
+    @Transactional
     public Long deploy(DefDeployCommand deployCommand) {
 
         ProcessCategoryAgg categoryAgg = categoryAggRepository.queryById(deployCommand.getCategoryId());

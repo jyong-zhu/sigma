@@ -1,9 +1,6 @@
 package com.zone.process.infrastructure.db.dataobject;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.Version;
+import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -43,21 +40,27 @@ public class ProcessCategoryDO implements Serializable {
     private Integer version;
 
     @ApiModelProperty(value = "创建时间")
+    @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
     @ApiModelProperty(value = "user_id")
+    @TableField(fill = FieldFill.INSERT)
     private Long createBy;
 
     @ApiModelProperty(value = "user_name")
+    @TableField(fill = FieldFill.INSERT)
     private String createName;
 
     @ApiModelProperty(value = "更新时间")
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
 
     @ApiModelProperty(value = "user_id")
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private Long updateBy;
 
     @ApiModelProperty(value = "user_name")
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private String updateName;
 
 

@@ -22,6 +22,6 @@ public class ProcessCategoryAggRepositoryImpl implements ProcessCategoryAggRepos
     @Override
     public ProcessCategoryAgg queryById(Long categoryId) {
         ProcessCategoryDO categoryDO = categoryMapper.selectById(categoryId);
-        return ProcessCategoryAggAdapter.getCategoryAgg(categoryDO);
+        return categoryDO == null ? null : ProcessCategoryAggAdapter.getCategoryAgg(categoryDO);
     }
 }

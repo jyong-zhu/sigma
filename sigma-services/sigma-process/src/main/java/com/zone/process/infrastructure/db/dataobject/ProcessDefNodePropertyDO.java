@@ -1,9 +1,6 @@
 package com.zone.process.infrastructure.db.dataobject;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.Version;
+import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -23,7 +20,7 @@ import java.time.LocalDateTime;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @TableName("process_def_node_property")
-@ApiModel(value="ProcessDefNodePropertyDO对象", description="流程定义中节点上的属性信息")
+@ApiModel(value = "ProcessDefNodePropertyDO对象", description = "流程定义中节点上的属性信息")
 public class ProcessDefNodePropertyDO implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -45,7 +42,7 @@ public class ProcessDefNodePropertyDO implements Serializable {
     private String propertyValue;
 
     @ApiModelProperty(value = "属性作用描述")
-    private String desc;
+    private String description;
 
     @ApiModelProperty(value = "扩展字段")
     private String ext;
@@ -55,22 +52,27 @@ public class ProcessDefNodePropertyDO implements Serializable {
     private Integer version;
 
     @ApiModelProperty(value = "创建时间")
+    @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
     @ApiModelProperty(value = "user_id")
+    @TableField(fill = FieldFill.INSERT)
     private Long createBy;
 
     @ApiModelProperty(value = "user_name")
+    @TableField(fill = FieldFill.INSERT)
     private String createName;
 
     @ApiModelProperty(value = "更新时间")
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
 
     @ApiModelProperty(value = "user_id")
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private Long updateBy;
 
     @ApiModelProperty(value = "user_name")
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private String updateName;
-
 
 }
