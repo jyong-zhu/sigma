@@ -29,7 +29,4 @@ public class DefNodeVariableVO {
 
     @ApiModelProperty(value = "默认的参数值")
     private String defaultValue;
-
-    @ApiModelProperty(value = "扩展字段")
-    private String ext;
 }

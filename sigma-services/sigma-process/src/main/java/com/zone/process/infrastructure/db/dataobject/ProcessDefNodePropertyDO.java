@@ -46,9 +46,6 @@ public class ProcessDefNodePropertyDO implements Serializable {
     @ApiModelProperty(value = "属性作用描述")
     private String description;
 
-    @ApiModelProperty(value = "扩展字段")
-    private String ext;
-
     @ApiModelProperty(value = "乐观锁版本")
     @Version
     private Integer version;

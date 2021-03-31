@@ -87,7 +87,6 @@ CREATE TABLE `process_def_node_variable`
     `form_id`       varchar(45) NOT NULL COMMENT '当前节点上挂靠的表单id',
     `field_id`      varchar(45) NOT NULL COMMENT '该表单中的字段id',
     `default_value` varchar(255)         DEFAULT NULL COMMENT '默认的参数值',
-    `ext`           varchar(255)         DEFAULT NULL COMMENT '扩展字段',
 
     `version`       int         NOT NULL DEFAULT '0' COMMENT '乐观锁版本',
     `create_time`   timestamp   NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -110,7 +109,6 @@ CREATE TABLE `process_def_node_property`
     `property_name`  varchar(45) NOT NULL COMMENT '流程节点中的属性名称',
     `property_value` text        NOT NULL COMMENT '属性值',
     `description`    varchar(255)         DEFAULT NULL COMMENT '属性作用描述',
-    `ext`            varchar(255)         DEFAULT NULL COMMENT '扩展字段',
 
     `version`        int         NOT NULL DEFAULT '0' COMMENT '乐观锁版本',
     `create_time`    timestamp   NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -164,7 +162,6 @@ CREATE TABLE `process_inst_operation`
     `comment`        varchar(255) NOT NULL DEFAULT '' COMMENT '操作备注',
     `operate_by`     bigint(20)   NOT NULL COMMENT '操作人的user_id',
     `operate_name`   varchar(45)  NOT NULL COMMENT '操作人的姓名',
-    `ext`            varchar(255) NOT NULL DEFAULT '' COMMENT '扩展数据',
 
     `version`        int          NOT NULL DEFAULT '0' COMMENT '乐观锁版本',
     `create_time`    timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -187,7 +184,6 @@ CREATE TABLE `process_inst_data`
     `bpmn_node_id` varchar(45)  NOT NULL COMMENT '当前录入表单所处的节点id',
     `form_id`      bigint(20)   NOT NULL COMMENT '所属表单id',
     `form_data`    text         NOT NULL COMMENT '流程实例在表单中对应的数据',
-    `ext`          varchar(255) NOT NULL DEFAULT '' COMMENT '扩展信息',
 
     `version`      int          NOT NULL DEFAULT '0' COMMENT '乐观锁版本',
     `create_time`  timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',

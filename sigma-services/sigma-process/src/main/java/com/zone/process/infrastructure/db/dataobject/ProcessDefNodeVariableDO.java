@@ -52,9 +52,6 @@ public class ProcessDefNodeVariableDO implements Serializable {
     @ApiModelProperty(value = "默认的参数值")
     private String defaultValue;
 
-    @ApiModelProperty(value = "扩展字段")
-    private String ext;
-
     @ApiModelProperty(value = "乐观锁版本")
     @Version
     private Integer version;

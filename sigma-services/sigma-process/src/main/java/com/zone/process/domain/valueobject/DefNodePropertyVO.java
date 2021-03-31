@@ -23,7 +23,4 @@ public class DefNodePropertyVO {
 
     @ApiModelProperty(value = "属性作用描述")
     private String desc;
-
-    @ApiModelProperty(value = "扩展字段")
-    private String ext;
 }

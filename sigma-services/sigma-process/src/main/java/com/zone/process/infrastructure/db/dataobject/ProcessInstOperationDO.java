@@ -49,9 +49,6 @@ public class ProcessInstOperationDO implements Serializable {
     @ApiModelProperty(value = "操作人的姓名")
     private String operateName;
 
-    @ApiModelProperty(value = "扩展数据")
-    private String ext;
-
     @ApiModelProperty(value = "乐观锁版本")
     @Version
     private Integer version;

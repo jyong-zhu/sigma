@@ -43,9 +43,6 @@ public class ProcessInstDataDO implements Serializable {
     @ApiModelProperty(value = "流程实例在表单中对应的数据")
     private String formData;
 
-    @ApiModelProperty(value = "扩展信息")
-    private String ext;
-
     @ApiModelProperty(value = "乐观锁版本")
     @Version
     private Integer version;
