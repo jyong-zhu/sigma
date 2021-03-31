@@ -2,8 +2,12 @@ package com.zone.process.infrastructure.db.repository.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.zone.process.application.service.command.transfer.ProcessInstAggTransfer;
 import com.zone.process.domain.agg.ProcessInstAgg;
 import com.zone.process.domain.repository.ProcessInstAggRepository;
+import com.zone.process.domain.valueobject.InstDataVO;
+import com.zone.process.domain.valueobject.InstOperationVO;
 import com.zone.process.infrastructure.db.adapter.ProcessInstAggAdapter;
 import com.zone.process.infrastructure.db.dataobject.ProcessInstDO;
 import com.zone.process.infrastructure.db.dataobject.ProcessInstDataDO;
@@ -15,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @Author: jianyong.zhu
@@ -54,12 +59,45 @@ public class ProcessInstAggRepositoryImpl implements ProcessInstAggRepository {
 
     @Override
     public ProcessInstAgg queryById(Long id) {
+        ProcessInstDO instDO = instMapper.selectById(id);
+        if (instDO != null) {
+            ProcessInstAgg instAgg = BeanUtil.copyProperties(instDO, ProcessInstAgg.class);
+
+            List<ProcessInstOperationDO> operationDOList = instOperationMapper.selectList(
+                    new QueryWrapper<ProcessInstOperationDO>().eq("instance_id", id));
+
+            List<ProcessInstDataDO> dataDOList = instDataMapper.selectList(
+                    new QueryWrapper<ProcessInstDataDO>().eq("instance_id", id));
+
+            instAgg.setOperationVOList(operationDOList.stream()
+                    .map(operation -> BeanUtil.copyProperties(operation, InstOperationVO.class))
+                    .collect(Collectors.toList()));
+
+            instAgg.setDataVOList(dataDOList.stream()
+                    .map(data -> BeanUtil.copyProperties(data, InstDataVO.class))
+                    .collect(Collectors.toList()));
+
+            return instAgg;
+        }
         return null;
     }
 
     @Override
     public Boolean update(ProcessInstAgg instAgg) {
-        return null;
+        ProcessInstDO instDO = BeanUtil.copyProperties(instAgg, ProcessInstDO.class);
+        int num = instMapper.updateById(instDO);
+        if (num > 0) {
+
+            instOperationMapper.delete(new QueryWrapper<ProcessInstOperationDO>().eq("instance_id", instDO.getId()));
+            instDataMapper.delete(new QueryWrapper<ProcessInstDataDO>().eq("instance_id", instDO.getId()));
+
+            List<ProcessInstOperationDO> instOperationDOList = ProcessInstAggTransfer.getInstOperationDOList(instAgg.getOperationVOList(), instDO.getId());
+            List<ProcessInstDataDO> instDataDOList = ProcessInstAggTransfer.getInstDataDOList(instAgg.getDataVOList(), instDO.getId());
+            instOperationMapper.insertBatchSomeColumn(instOperationDOList);
+            instDataMapper.insertBatchSomeColumn(instDataDOList);
+            return true;
+        }
+        return false;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.zone.process.infrastructure.process.impl;
 
+import com.google.common.base.Preconditions;
 import com.zone.process.infrastructure.process.adapter.ProcessDefinitionAdapter;
 import com.zone.process.shared.process.ProcessEngineCommandAPI;
 import com.zone.process.shared.process.valueobject.ProcessDefinitionVO;
@@ -73,7 +74,12 @@ public class CamundaCommandService implements ProcessEngineCommandAPI {
 
     @Override
     public void stopInstance(String procInstId, String comment) {
+        ProcessInstance processInstance = runtimeService.createProcessInstanceQuery()
+                .processInstanceId(procInstId).singleResult();
+        Preconditions.checkNotNull(processInstance, "流程实例已结束");
 
+        // camunda 将 runtime 中的一些数据删除，并将 ACT_HI_PROCINST 中的流程实例状态改为 INTERNALLY_TERMINATED
+        runtimeService.deleteProcessInstance(procInstId, comment);
     }
 
     @Override

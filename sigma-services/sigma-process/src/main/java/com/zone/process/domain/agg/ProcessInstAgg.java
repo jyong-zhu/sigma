@@ -93,8 +93,9 @@ public class ProcessInstAgg {
     /**
      * 中止流程实例
      */
-    public void stop(String comment, LoginUser loginUser) {
-
+    public void stop(String comment, String curNodeId, LoginUser loginUser) {
+        this.setStatus(InstanceStatusTypeEnum.FINISHED.getCode());
+        this.getOperationVOList().add(InstOperationVO.generateOperationVO(curNodeId, InstanceOperationTypeEnum.STOP.getCode(), comment, loginUser));
     }
 
     /**

@@ -91,7 +91,7 @@ public class ProcessInstCmdService {
 
         // 中止流程实例
         processEngineCommandAPI.stopInstance(instAgg.getProcInstId(), stopCommand.getComment());
-        instAgg.stop(stopCommand.getComment(), loginUser);
+        instAgg.stop(stopCommand.getComment(), instAgg.getCurNodeId(), loginUser);
 
         // 同步流程实例的当前状态
         ProcessInstanceVO processInstanceVO = processEngineQueryAPI.syncInstance(instAgg.getProcInstId());
