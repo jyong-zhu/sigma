@@ -7,6 +7,7 @@ import lombok.experimental.Accessors;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -29,6 +30,9 @@ public class TaskOperateCommand {
 
     @ApiModelProperty("评论")
     private String comment;
+
+    @ApiModelProperty("任务所属人")
+    private List<String> identityList;
 
     @ApiModelProperty("表单数据")
     @NotNull(message = "表单数据不能为空")

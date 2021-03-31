@@ -1,7 +1,10 @@
 package com.zone.process.infrastructure.process.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.common.base.Preconditions;
 import com.zone.process.infrastructure.process.adapter.ProcessDefinitionAdapter;
+import com.zone.process.infrastructure.process.dataobject.ActRuIdentitylinkDO;
+import com.zone.process.infrastructure.process.mapper.ActRuIdentitylinkMapper;
 import com.zone.process.shared.enums.TaskOperationTypeEnum;
 import com.zone.process.shared.process.ProcessEngineCommandAPI;
 import com.zone.process.shared.process.valueobject.ProcessDefinitionVO;
@@ -21,6 +24,7 @@ import org.springframework.stereotype.Service;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -40,6 +44,9 @@ public class CamundaCommandService implements ProcessEngineCommandAPI {
 
     @Autowired
     private TaskService taskService;
+
+    @Autowired
+    private ActRuIdentitylinkMapper identityLinkMapper;
 
     @Override
     public ProcessDefinitionVO deploy(String xml, String name) {
@@ -88,13 +95,15 @@ public class CamundaCommandService implements ProcessEngineCommandAPI {
     }
 
     @Override
-    public void operateTask(String taskId, String procInstId, Map<String, Object> paramMap, String operationType) {
+    public void operateTask(String taskId, String procInstId, Map<String, Object> paramMap, List<String> identityList, String operationType) {
         TaskOperationTypeEnum type = TaskOperationTypeEnum.getByCode(operationType);
         switch (type) {
             case COMPLETE:
                 taskService.complete(taskId, paramMap);
                 break;
             case UPDATE:
+                identityLinkMapper.delete(new QueryWrapper<ActRuIdentitylinkDO>().eq("TASK_ID_", taskId));
+                identityList.forEach(identity -> taskService.addCandidateGroup(taskId, identity));
                 runtimeService.setVariables(procInstId, paramMap);
                 break;
             case STOP:

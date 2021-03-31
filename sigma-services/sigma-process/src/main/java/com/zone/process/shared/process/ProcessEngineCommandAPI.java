@@ -2,6 +2,7 @@ package com.zone.process.shared.process;
 
 import com.zone.process.shared.process.valueobject.ProcessDefinitionVO;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -17,5 +18,5 @@ public interface ProcessEngineCommandAPI {
 
     void stopInstance(String procInstId, String comment);
 
-    void operateTask(String taskId, String procInstId, Map<String, Object> paramMap, String operationType);
+    void operateTask(String taskId, String procInstId, Map<String, Object> paramMap, List<String> identityList, String operationType);
 }

@@ -62,7 +62,7 @@ public class ProcessTaskCmdService {
 
         // 操作任务
         Map<String, Object> paramMap = paramDomainService.generateParamMap(operateCommand.getFormDataMap(), taskVO.getCurNodeId(), defAgg);
-        processEngineCommandAPI.operateTask(taskVO.getTaskId(), instAgg.getProcInstId(), paramMap, operateCommand.getOperationType());
+        processEngineCommandAPI.operateTask(taskVO.getTaskId(), instAgg.getProcInstId(), paramMap, operateCommand.getIdentityList(), operateCommand.getOperationType());
 
         // 添加相关信息
         instAgg.operateTask(taskVO, operateCommand.getOperationType(), operateCommand.getComment(), operateCommand.getFormDataMap(), loginUser);
