@@ -1,6 +1,8 @@
 package com.zone.process.domain.agg;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.zone.process.domain.valueobject.DefNodeVO;
 import com.zone.process.shared.enums.BpmnNodeTypeEnum;
 import com.zone.process.shared.process.valueobject.ProcessDefinitionVO;
@@ -10,6 +12,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @Author: jianyong.zhu
@@ -87,5 +90,18 @@ public class ProcessDefAgg {
             }
         }
         return null;
+    }
+
+    /**
+     * 获取指定id的节点列表
+     */
+    public List<DefNodeVO> getNodeByIdList(List<String> nodeIdList) {
+        if (CollectionUtil.isNotEmpty(nodeIdList)) {
+            return Lists.newArrayList();
+        }
+        return this.getNodeVOList().stream()
+                .filter(tmp -> nodeIdList.contains(tmp.getBpmnNodeId()))
+                .collect(Collectors.toList());
+
     }
 }

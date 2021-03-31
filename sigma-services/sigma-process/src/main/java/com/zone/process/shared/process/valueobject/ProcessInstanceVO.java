@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import java.util.List;
+
 /**
  * @Author: jianyong.zhu
  * @Date: 2021/3/31 6:03 上午
@@ -19,10 +21,10 @@ public class ProcessInstanceVO {
     private String procInstId;
 
     @ApiModelProperty("流程实例当前所处的节点id")
-    private String curNodeId;
+    private List<String> curNodeIdList;
 
     @ApiModelProperty("流程实例当前处理人的id")
-    private String curHandlerId;
+    private List<String> curHandlerIdList;
 
     @ApiModelProperty("流程实例是否已经结束")
     private Boolean isFinished;

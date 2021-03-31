@@ -15,7 +15,7 @@ import java.lang.annotation.*;
 @Target({ElementType.TYPE})
 @Documented
 @ComponentScan(basePackages = {"com.zone.*"})
-@MapperScan(basePackages = "com.zone.*.infrastructure.db.mapper")
+@MapperScan(basePackages = "com.zone.*.infrastructure")
 @SpringBootApplication
 public @interface SigmaSpringBootApplication {
     String value() default "";

@@ -70,7 +70,7 @@ public class ProcessInstCmdService {
 
         // 同步流程实例的当前状态
         ProcessInstanceVO processInstanceVO = processEngineQueryAPI.syncInstance(procInstId);
-        instAgg.sync(processInstanceVO);
+        instAgg.sync(processInstanceVO, defAgg);
 
         instAggRepository.save(instAgg);
 
@@ -86,13 +86,16 @@ public class ProcessInstCmdService {
         ProcessInstAgg instAgg = instAggRepository.queryById(stopCommand.getId());
         Preconditions.checkNotNull(instAgg, "流程实例不存在");
 
+        ProcessDefAgg defAgg = defAggRepository.queryById(instAgg.getDefId());
+        Preconditions.checkNotNull(defAgg, "流程定义不存在");
+
         // 中止流程实例
         processEngineCommandAPI.stopInstance(instAgg.getProcInstId(), stopCommand.getComment());
         instAgg.stop(stopCommand.getComment(), loginUser);
 
         // 同步流程实例的当前状态
         ProcessInstanceVO processInstanceVO = processEngineQueryAPI.syncInstance(instAgg.getProcInstId());
-        instAgg.sync(processInstanceVO);
+        instAgg.sync(processInstanceVO, defAgg);
 
         // 采用乐观锁更新，失败必须报错，否则camunda中的数据和扩展表中的数据不一致
         Boolean isSuccess = instAggRepository.update(instAgg);

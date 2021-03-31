@@ -1,10 +1,11 @@
 package com.zone.process.infrastructure.process.adapter;
 
+import cn.hutool.core.collection.CollectionUtil;
+import com.google.common.collect.Lists;
 import com.zone.process.shared.process.valueobject.ProcessInstanceVO;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @Author: jianyong.zhu
@@ -16,8 +17,8 @@ public class ProcessInstanceAdapter {
     public static ProcessInstanceVO getProcessInstanceVO(String procInstId, ProcessInstance processInstance, List<String> activityList, List<String> curHandlerList) {
         return new ProcessInstanceVO()
                 .setIsFinished(processInstance == null)
-                .setCurHandlerId(curHandlerList.stream().collect(Collectors.joining(",")))
+                .setCurHandlerIdList(CollectionUtil.isNotEmpty(curHandlerList) ? curHandlerList : Lists.newArrayList())
                 .setProcInstId(procInstId)
-                .setCurNodeId(activityList.stream().collect(Collectors.joining(",")));
+                .setCurNodeIdList(CollectionUtil.isNotEmpty(activityList) ? curHandlerList : Lists.newArrayList());
     }
 }

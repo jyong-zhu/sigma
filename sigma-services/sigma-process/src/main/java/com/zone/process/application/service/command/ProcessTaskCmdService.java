@@ -70,7 +70,7 @@ public class ProcessTaskCmdService {
 
         // 同步流程实例的状态
         ProcessInstanceVO processInstanceVO = processEngineQueryAPI.syncInstance(taskVO.getProcInstId());
-        instAgg.sync(processInstanceVO);
+        instAgg.sync(processInstanceVO, defAgg);
 
         Boolean isSuccess = instAggRepository.update(instAgg);
         Preconditions.checkState(isSuccess, "操作任务失败");

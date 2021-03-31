@@ -2,6 +2,7 @@ package com.zone.process.domain.agg;
 
 import com.google.common.collect.Lists;
 import com.zone.commons.entity.LoginUser;
+import com.zone.process.domain.valueobject.DefNodeVO;
 import com.zone.process.domain.valueobject.InstDataVO;
 import com.zone.process.domain.valueobject.InstOperationVO;
 import com.zone.process.shared.enums.InstanceOperationTypeEnum;
@@ -16,6 +17,7 @@ import lombok.experimental.Accessors;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @Author: jianyong.zhu
@@ -98,12 +100,12 @@ public class ProcessInstAgg {
     /**
      * 同步流程实例的当前状态
      */
-    public void sync(ProcessInstanceVO processInstanceVO) {
+    public void sync(ProcessInstanceVO processInstanceVO, ProcessDefAgg defAgg) {
         this.setStatus(processInstanceVO.getIsFinished() ? InstanceStatusTypeEnum.FINISHED.getCode() : InstanceStatusTypeEnum.ACTIVE.getCode());
-        this.setCurHandlerId(processInstanceVO.getCurHandlerId());
-        // todo 节点名称
-        this.setCurNodeId(processInstanceVO.getCurNodeId());
-        this.setCurNodeName("");
+        this.setCurHandlerId(processInstanceVO.getCurHandlerIdList().stream().collect(Collectors.joining(",")));
+        this.setCurNodeId(processInstanceVO.getCurNodeIdList().stream().collect(Collectors.joining(",")));
+        List<DefNodeVO> defNodeVOList = defAgg.getNodeByIdList(processInstanceVO.getCurNodeIdList());
+        this.setCurNodeName(defNodeVOList.stream().map(tmp -> tmp.getName()).collect(Collectors.joining(",")));
     }
 
     /**
