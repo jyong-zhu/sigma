@@ -11,7 +11,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum InstanceStatusTypeEnum {
-    IN_PROCESS("active", "进行中"),
+    ACTIVE("active", "进行中"),
     FINISHED("finished", "已结束"),
     ;
 

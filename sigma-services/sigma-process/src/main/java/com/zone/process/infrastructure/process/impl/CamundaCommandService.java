@@ -5,8 +5,10 @@ import com.zone.process.shared.process.ProcessEngineCommandAPI;
 import com.zone.process.shared.process.valueobject.ProcessDefinitionVO;
 import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.RepositoryService;
+import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.repository.Deployment;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
+import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.model.bpmn.Bpmn;
 import org.camunda.bpm.model.bpmn.BpmnModelInstance;
 import org.camunda.bpm.model.xml.ModelValidationException;
@@ -29,6 +31,9 @@ public class CamundaCommandService implements ProcessEngineCommandAPI {
 
     @Autowired
     private RepositoryService repositoryService;
+
+    @Autowired
+    private RuntimeService runtimeService;
 
     @Override
     public ProcessDefinitionVO deploy(String xml, String name) {
@@ -56,6 +61,13 @@ public class CamundaCommandService implements ProcessEngineCommandAPI {
 
     @Override
     public String startInstance(String processDefKey, Map<String, Object> paramMap) {
+        try {
+            // 通过 defKey 发起流程，默认是最新版本的流程定义
+            ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(processDefKey, paramMap);
+            return processInstance.getProcessInstanceId();
+        } catch (Exception e) {
+            log.error("发起流程实例出错：[{}]", e.getMessage());
+        }
         return null;
     }
 

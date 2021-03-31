@@ -1,9 +1,16 @@
 package com.zone.process.domain.valueobject;
 
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.json.JSONUtil;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: jianyong.zhu
@@ -24,6 +31,19 @@ public class InstDataVO {
     @ApiModelProperty(value = "流程实例在表单中对应的数据")
     private String formData;
 
-    @ApiModelProperty(value = "扩展信息")
-    private String ext;
+    /**
+     * 获取表单数据
+     */
+    public static List<InstDataVO> generateDataVOList(String nodeId, Map<Long, Map<String, Object>> formDataMap) {
+        List<InstDataVO> instDataVOList = Lists.newArrayList();
+        if (CollectionUtil.isNotEmpty(formDataMap)) {
+            formDataMap.forEach((key, value) -> {
+                Map<String, Object> dataMap = CollectionUtil.isNotEmpty(value) ? value : Maps.newHashMap();
+                instDataVOList.add(new InstDataVO().setBpmnNodeId(nodeId)
+                        .setFormData(JSONUtil.toJsonStr(dataMap))
+                        .setFormId(key));
+            });
+        }
+        return instDataVOList;
+    }
 }

@@ -1,8 +1,11 @@
 package com.zone.process.domain.agg;
 
+import com.google.common.collect.Lists;
 import com.zone.commons.entity.LoginUser;
 import com.zone.process.domain.valueobject.InstDataVO;
 import com.zone.process.domain.valueobject.InstOperationVO;
+import com.zone.process.shared.enums.InstanceOperationTypeEnum;
+import com.zone.process.shared.enums.InstanceStatusTypeEnum;
 import com.zone.process.shared.process.valueobject.ProcessInstanceVO;
 import com.zone.process.shared.process.valueobject.TaskVO;
 import io.swagger.annotations.ApiModelProperty;
@@ -55,7 +58,7 @@ public class ProcessInstAgg {
     private LocalDateTime submitTime;
 
     @ApiModelProperty(value = "流程实例提交人的user_id")
-    private String submitBy;
+    private Long submitBy;
 
     @ApiModelProperty(value = "流程实例提交人的姓名")
     private String submitName;
@@ -75,8 +78,14 @@ public class ProcessInstAgg {
     /**
      * 初始化流程实例
      */
-    public void init(Long id, Map<Long, Map<String, Object>> formDataMap, LoginUser loginUser) {
-
+    public void init(Long id, String procInstId, String nodeId, Map<Long, Map<String, Object>> formDataMap, LoginUser loginUser) {
+        this.setId(id);
+        this.setSubmitBy(loginUser.getUserId());
+        this.setSubmitName(loginUser.getUserName());
+        this.setSubmitTime(LocalDateTime.now());
+        this.setProcInstId(procInstId);
+        this.setDataVOList(InstDataVO.generateDataVOList(nodeId, formDataMap));
+        this.setOperationVOList(Lists.newArrayList(InstOperationVO.generateOperationVO(nodeId, InstanceOperationTypeEnum.START.getCode(), this.comment, loginUser)));
     }
 
     /**
@@ -90,7 +99,11 @@ public class ProcessInstAgg {
      * 同步流程实例的当前状态
      */
     public void sync(ProcessInstanceVO processInstanceVO) {
-
+        this.setStatus(processInstanceVO.getIsFinished() ? InstanceStatusTypeEnum.FINISHED.getCode() : InstanceStatusTypeEnum.ACTIVE.getCode());
+        this.setCurHandlerId(processInstanceVO.getCurHandlerId());
+        // todo 节点名称
+        this.setCurNodeId(processInstanceVO.getCurNodeId());
+        this.setCurNodeName("");
     }
 
     /**

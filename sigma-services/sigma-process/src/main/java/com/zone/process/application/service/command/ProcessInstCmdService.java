@@ -1,5 +1,6 @@
 package com.zone.process.application.service.command;
 
+import cn.hutool.core.util.StrUtil;
 import com.google.common.base.Preconditions;
 import com.zone.commons.entity.LoginUser;
 import com.zone.process.application.service.command.cmd.InstStartCommand;
@@ -61,10 +62,11 @@ public class ProcessInstCmdService {
         // 发起流程实例
         Map<String, Object> paramMap = paramDomainService.generateParamMap(startCommand.getFormDataMap(), defAgg.getStartBpmnNodeId(), defAgg);
         String procInstId = processEngineCommandAPI.startInstance(defAgg.getProcDefKey(), paramMap);
+        Preconditions.checkState(StrUtil.isNotBlank(procInstId), "发起流程实例失败");
 
         // 初始化相关数据
         ProcessInstAgg instAgg = ProcessInstAggTransfer.getProcessInstAgg(startCommand);
-        instAgg.init(identityDomainService.generateInstAggId(), startCommand.getFormDataMap(), loginUser);
+        instAgg.init(identityDomainService.generateInstAggId(), procInstId, defAgg.getStartBpmnNodeId(), startCommand.getFormDataMap(), loginUser);
 
         // 同步流程实例的当前状态
         ProcessInstanceVO processInstanceVO = processEngineQueryAPI.syncInstance(procInstId);

@@ -1,6 +1,6 @@
 package com.zone.process.infrastructure.db.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.zone.mybatis.mapper.SigmaMapper;
 import com.zone.process.infrastructure.db.dataobject.ProcessInstOperationDO;
 
 /**
@@ -11,6 +11,6 @@ import com.zone.process.infrastructure.db.dataobject.ProcessInstOperationDO;
  * @author Jone
  * @since 2021-03-27
  */
-public interface ProcessInstOperationMapper extends BaseMapper<ProcessInstOperationDO> {
+public interface ProcessInstOperationMapper extends SigmaMapper<ProcessInstOperationDO> {
 
 }

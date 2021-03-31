@@ -19,7 +19,7 @@ public class DefNodeVariableVO {
     private String variableName;
 
     @ApiModelProperty(value = "当前节点上挂靠的表单id")
-    private String formId;
+    private Long formId;
 
     @ApiModelProperty(value = "该表单中的字段id")
     private String fieldId;

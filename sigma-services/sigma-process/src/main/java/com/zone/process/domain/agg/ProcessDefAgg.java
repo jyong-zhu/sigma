@@ -76,4 +76,16 @@ public class ProcessDefAgg {
         Preconditions.checkState(startNode != null && endNode != null, "xml格式错误");
         this.setStartBpmnNodeId(startNode.getBpmnNodeId());
     }
+
+    /**
+     * 获取指定节点
+     */
+    public DefNodeVO getNodeByNodeId(String curNodeId) {
+        for (DefNodeVO nodeVO : this.getNodeVOList()) {
+            if (nodeVO.getBpmnNodeId().equals(curNodeId)) {
+                return nodeVO;
+            }
+        }
+        return null;
+    }
 }

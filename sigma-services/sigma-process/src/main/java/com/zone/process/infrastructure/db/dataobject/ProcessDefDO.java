@@ -1,6 +1,9 @@
 package com.zone.process.infrastructure.db.dataobject;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.Version;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -26,7 +29,6 @@ public class ProcessDefDO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "主键ID")
-    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     @ApiModelProperty(value = "流程分类id")
@@ -56,7 +58,7 @@ public class ProcessDefDO implements Serializable {
     @ApiModelProperty(value = "当前流程定义下所关联的全部表单id, 用,隔开")
     private String formIds;
 
-    @ApiModelProperty(value = "分类展示图标")
+    @ApiModelProperty(value = "流程定义展示图标")
     private String iconUrl;
 
     @ApiModelProperty(value = "乐观锁版本")

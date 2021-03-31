@@ -1,6 +1,9 @@
 package com.zone.process.infrastructure.db.dataobject;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.Version;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -26,7 +29,6 @@ public class ProcessInstDO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "主键ID")
-    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     @ApiModelProperty(value = "camunda中的流程实例id")
@@ -57,7 +59,7 @@ public class ProcessInstDO implements Serializable {
     private LocalDateTime submitTime;
 
     @ApiModelProperty(value = "流程实例提交人的user_id")
-    private String submitBy;
+    private Long submitBy;
 
     @ApiModelProperty(value = "流程实例提交人的姓名")
     private String submitName;

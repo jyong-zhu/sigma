@@ -2,10 +2,15 @@ package com.zone.process.infrastructure.db.repository.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.zone.commons.util.IdWorkerUtil;
 import com.zone.process.domain.agg.ProcessDefAgg;
 import com.zone.process.domain.repository.ProcessDefAggRepository;
+import com.zone.process.domain.valueobject.DefNodePropertyVO;
+import com.zone.process.domain.valueobject.DefNodeVO;
+import com.zone.process.domain.valueobject.DefNodeVariableVO;
 import com.zone.process.infrastructure.db.adapter.ProcessDefAggAdapter;
 import com.zone.process.infrastructure.db.dataobject.ProcessDefDO;
 import com.zone.process.infrastructure.db.dataobject.ProcessDefNodeDO;
@@ -19,6 +24,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @Author: jianyong.zhu
@@ -92,6 +99,59 @@ public class ProcessDefAggRepositoryImpl implements ProcessDefAggRepository {
 
     @Override
     public ProcessDefAgg queryById(Long defId) {
+
+        ProcessDefDO processDefDO = defMapper.selectById(defId);
+        if (processDefDO != null) {
+            ProcessDefAgg defAgg = BeanUtil.copyProperties(processDefDO, ProcessDefAgg.class);
+            defAgg.setNodeVOList(queryNodeList(defId));
+            return defAgg;
+        }
         return null;
+    }
+
+    private List<DefNodeVO> queryNodeList(Long defId) {
+        List<DefNodeVO> result = Lists.newArrayList();
+        List<ProcessDefNodeDO> nodeDOList = defNodeMapper.selectList(new QueryWrapper<ProcessDefNodeDO>()
+                .eq("def_id", defId));
+        if (CollectionUtil.isNotEmpty(nodeDOList)) {
+            // 只查一次，将节点参数与属性查出来
+            List<Long> nodeIdList = nodeDOList.stream().map(node -> node.getId()).collect(Collectors.toList());
+            List<ProcessDefNodePropertyDO> propertyDOList = nodePropertyMapper.selectList(
+                    new QueryWrapper<ProcessDefNodePropertyDO>().in("node_id", nodeIdList));
+            List<ProcessDefNodeVariableDO> variableDOList = nodeVariableMapper.selectList(
+                    new QueryWrapper<ProcessDefNodeVariableDO>().in("node_id", nodeIdList));
+
+            Map<Long, List<ProcessDefNodePropertyDO>> propertyMap = Maps.newHashMap();
+            Map<Long, List<ProcessDefNodeVariableDO>> variableMap = Maps.newHashMap();
+            propertyDOList.forEach(tmp -> {
+                List<ProcessDefNodePropertyDO> list = propertyMap.getOrDefault(tmp.getNodeId(), Lists.newArrayList());
+                list.add(tmp);
+                propertyMap.put(tmp.getNodeId(), list);
+            });
+            variableDOList.forEach(tmp -> {
+                List<ProcessDefNodeVariableDO> list = variableMap.getOrDefault(tmp.getNodeId(), Lists.newArrayList());
+                list.add(tmp);
+                variableMap.put(tmp.getNodeId(), list);
+            });
+
+
+            nodeDOList.forEach(node -> {
+                DefNodeVO nodeVO = BeanUtil.copyProperties(node, DefNodeVO.class);
+                nodeVO.setVariableVOList(getVariableVOList(variableMap.getOrDefault(node.getId(), Lists.newArrayList())));
+                nodeVO.setPropertyVOList(getPropertyVOList(propertyMap.getOrDefault(node.getId(), Lists.newArrayList())));
+                result.add(nodeVO);
+            });
+        }
+        return result;
+    }
+
+    private List<DefNodePropertyVO> getPropertyVOList(List<ProcessDefNodePropertyDO> propertyDOList) {
+        return CollectionUtil.isEmpty(propertyDOList) ? Lists.newArrayList() :
+                propertyDOList.stream().map(property -> BeanUtil.copyProperties(property, DefNodePropertyVO.class)).collect(Collectors.toList());
+    }
+
+    private List<DefNodeVariableVO> getVariableVOList(List<ProcessDefNodeVariableDO> variableDOList) {
+        return CollectionUtil.isEmpty(variableDOList) ? Lists.newArrayList() :
+                variableDOList.stream().map(variable -> BeanUtil.copyProperties(variable, DefNodeVariableVO.class)).collect(Collectors.toList());
     }
 }
