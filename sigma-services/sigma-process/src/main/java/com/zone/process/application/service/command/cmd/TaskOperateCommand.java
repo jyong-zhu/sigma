@@ -30,9 +30,6 @@ public class TaskOperateCommand {
     @ApiModelProperty("评论")
     private String comment;
 
-    @ApiModelProperty("扩展字段")
-    private String ext;
-
     @ApiModelProperty("表单数据")
     @NotNull(message = "表单数据不能为空")
     private Map<Long, Map<String, Object>> formDataMap;

@@ -51,7 +51,8 @@ public class CamundaQueryService implements ProcessEngineQueryAPI {
 
     @Override
     public TaskVO queryTaskById(String taskId) {
-        return null;
+        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        return ProcessInstanceAdapter.getTaskVO(task);
     }
 
     private ProcessInstance queryInstanceById(String procInstId) {

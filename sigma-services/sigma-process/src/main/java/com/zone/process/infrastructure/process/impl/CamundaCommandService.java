@@ -2,11 +2,13 @@ package com.zone.process.infrastructure.process.impl;
 
 import com.google.common.base.Preconditions;
 import com.zone.process.infrastructure.process.adapter.ProcessDefinitionAdapter;
+import com.zone.process.shared.enums.TaskOperationTypeEnum;
 import com.zone.process.shared.process.ProcessEngineCommandAPI;
 import com.zone.process.shared.process.valueobject.ProcessDefinitionVO;
 import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.RepositoryService;
 import org.camunda.bpm.engine.RuntimeService;
+import org.camunda.bpm.engine.TaskService;
 import org.camunda.bpm.engine.repository.Deployment;
 import org.camunda.bpm.engine.repository.ProcessDefinition;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
@@ -35,6 +37,9 @@ public class CamundaCommandService implements ProcessEngineCommandAPI {
 
     @Autowired
     private RuntimeService runtimeService;
+
+    @Autowired
+    private TaskService taskService;
 
     @Override
     public ProcessDefinitionVO deploy(String xml, String name) {
@@ -83,7 +88,19 @@ public class CamundaCommandService implements ProcessEngineCommandAPI {
     }
 
     @Override
-    public void operateTask(String taskId, Map<String, Object> paramMap, String operationType) {
+    public void operateTask(String taskId, String procInstId, Map<String, Object> paramMap, String operationType) {
+        TaskOperationTypeEnum type = TaskOperationTypeEnum.getByCode(operationType);
+        switch (type) {
+            case COMPLETE:
+                taskService.complete(taskId, paramMap);
+                break;
+            case UPDATE:
+                runtimeService.setVariables(procInstId, paramMap);
+                break;
+            case STOP:
+                stopInstance(procInstId, "");
+                break;
+        }
 
     }
 }

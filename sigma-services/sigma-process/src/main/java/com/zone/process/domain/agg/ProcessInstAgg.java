@@ -112,7 +112,8 @@ public class ProcessInstAgg {
     /**
      * 操作任务
      */
-    public void operateTask(TaskVO taskVO, String operationType, String comment, String ext, Map<Long, Map<String, Object>> formDataMap, LoginUser loginUser) {
-
+    public void operateTask(TaskVO taskVO, String operationType, String comment, Map<Long, Map<String, Object>> formDataMap, LoginUser loginUser) {
+        this.getDataVOList().addAll(InstDataVO.generateDataVOList(taskVO.getCurNodeId(), formDataMap));
+        this.getOperationVOList().add(InstOperationVO.generateOperationVO(taskVO.getCurNodeId(), operationType, comment, loginUser));
     }
 }

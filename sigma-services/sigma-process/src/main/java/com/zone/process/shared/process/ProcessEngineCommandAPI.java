@@ -17,5 +17,5 @@ public interface ProcessEngineCommandAPI {
 
     void stopInstance(String procInstId, String comment);
 
-    void operateTask(String taskId, Map<String, Object> paramMap, String operationType);
+    void operateTask(String taskId, String procInstId, Map<String, Object> paramMap, String operationType);
 }

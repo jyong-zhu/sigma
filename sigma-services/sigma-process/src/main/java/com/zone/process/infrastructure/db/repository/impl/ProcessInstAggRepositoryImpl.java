@@ -60,26 +60,7 @@ public class ProcessInstAggRepositoryImpl implements ProcessInstAggRepository {
     @Override
     public ProcessInstAgg queryById(Long id) {
         ProcessInstDO instDO = instMapper.selectById(id);
-        if (instDO != null) {
-            ProcessInstAgg instAgg = BeanUtil.copyProperties(instDO, ProcessInstAgg.class);
-
-            List<ProcessInstOperationDO> operationDOList = instOperationMapper.selectList(
-                    new QueryWrapper<ProcessInstOperationDO>().eq("instance_id", id));
-
-            List<ProcessInstDataDO> dataDOList = instDataMapper.selectList(
-                    new QueryWrapper<ProcessInstDataDO>().eq("instance_id", id));
-
-            instAgg.setOperationVOList(operationDOList.stream()
-                    .map(operation -> BeanUtil.copyProperties(operation, InstOperationVO.class))
-                    .collect(Collectors.toList()));
-
-            instAgg.setDataVOList(dataDOList.stream()
-                    .map(data -> BeanUtil.copyProperties(data, InstDataVO.class))
-                    .collect(Collectors.toList()));
-
-            return instAgg;
-        }
-        return null;
+        return assemble(instDO);
     }
 
     @Override
@@ -102,6 +83,31 @@ public class ProcessInstAggRepositoryImpl implements ProcessInstAggRepository {
 
     @Override
     public ProcessInstAgg queryByInstId(String procInstId) {
+        ProcessInstDO instDO = instMapper.selectOne(new QueryWrapper<ProcessInstDO>()
+                .eq("proc_inst_id", procInstId));
+        return assemble(instDO);
+    }
+
+    private ProcessInstAgg assemble(ProcessInstDO instDO) {
+        if (instDO != null) {
+            ProcessInstAgg instAgg = BeanUtil.copyProperties(instDO, ProcessInstAgg.class);
+
+            List<ProcessInstOperationDO> operationDOList = instOperationMapper.selectList(
+                    new QueryWrapper<ProcessInstOperationDO>().eq("instance_id", instDO.getId()));
+
+            List<ProcessInstDataDO> dataDOList = instDataMapper.selectList(
+                    new QueryWrapper<ProcessInstDataDO>().eq("instance_id", instDO.getId()));
+
+            instAgg.setOperationVOList(operationDOList.stream()
+                    .map(operation -> BeanUtil.copyProperties(operation, InstOperationVO.class))
+                    .collect(Collectors.toList()));
+
+            instAgg.setDataVOList(dataDOList.stream()
+                    .map(data -> BeanUtil.copyProperties(data, InstDataVO.class))
+                    .collect(Collectors.toList()));
+
+            return instAgg;
+        }
         return null;
     }
 }
