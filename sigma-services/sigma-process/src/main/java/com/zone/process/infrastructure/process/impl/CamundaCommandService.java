@@ -104,7 +104,6 @@ public class CamundaCommandService implements ProcessEngineCommandAPI {
             case UPDATE:
                 identityLinkMapper.delete(new QueryWrapper<ActRuIdentitylinkDO>().eq("TASK_ID_", taskId));
                 identityList.forEach(identity -> taskService.addCandidateGroup(taskId, identity));
-                runtimeService.setVariables(procInstId, paramMap);
                 break;
         }
 

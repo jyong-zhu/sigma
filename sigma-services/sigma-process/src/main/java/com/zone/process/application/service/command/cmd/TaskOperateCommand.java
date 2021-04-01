@@ -31,7 +31,7 @@ public class TaskOperateCommand {
     @ApiModelProperty("评论")
     private String comment;
 
-    @ApiModelProperty("任务所属人")
+    @ApiModelProperty("任务所属人，用于转派时指定人")
     private List<String> identityList;
 
     @ApiModelProperty("表单数据")

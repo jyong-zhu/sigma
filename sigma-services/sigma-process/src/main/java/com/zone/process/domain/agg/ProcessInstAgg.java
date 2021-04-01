@@ -1,6 +1,5 @@
 package com.zone.process.domain.agg;
 
-import com.google.common.collect.Lists;
 import com.zone.commons.entity.LoginUser;
 import com.zone.process.domain.valueobject.DefNodeVO;
 import com.zone.process.domain.valueobject.InstDataVO;
@@ -8,7 +7,6 @@ import com.zone.process.domain.valueobject.InstOperationVO;
 import com.zone.process.shared.enums.InstanceOperationTypeEnum;
 import com.zone.process.shared.enums.InstanceStatusTypeEnum;
 import com.zone.process.shared.process.valueobject.ProcessInstanceVO;
-import com.zone.process.shared.process.valueobject.TaskVO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -16,7 +14,6 @@ import lombok.experimental.Accessors;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -80,14 +77,12 @@ public class ProcessInstAgg {
     /**
      * 初始化流程实例
      */
-    public void init(Long id, String procInstId, String nodeId, Map<Long, Map<String, Object>> formDataMap, LoginUser loginUser) {
+    public void init(Long id, String procInstId, LoginUser loginUser) {
         this.setId(id);
         this.setSubmitBy(loginUser.getUserId());
         this.setSubmitName(loginUser.getUserName());
         this.setSubmitTime(LocalDateTime.now());
         this.setProcInstId(procInstId);
-        this.setDataVOList(InstDataVO.generateDataVOList(nodeId, formDataMap));
-        this.setOperationVOList(Lists.newArrayList(InstOperationVO.generateOperationVO(nodeId, InstanceOperationTypeEnum.START.getCode(), this.comment, loginUser)));
     }
 
     /**
@@ -109,11 +104,4 @@ public class ProcessInstAgg {
         this.setCurNodeName(defNodeVOList.stream().map(tmp -> tmp.getName()).collect(Collectors.joining(",")));
     }
 
-    /**
-     * 操作任务
-     */
-    public void operateTask(TaskVO taskVO, String operationType, String comment, Map<Long, Map<String, Object>> formDataMap, LoginUser loginUser) {
-        this.getDataVOList().addAll(InstDataVO.generateDataVOList(taskVO.getCurNodeId(), formDataMap));
-        this.getOperationVOList().add(InstOperationVO.generateOperationVO(taskVO.getCurNodeId(), operationType, comment, loginUser));
-    }
 }

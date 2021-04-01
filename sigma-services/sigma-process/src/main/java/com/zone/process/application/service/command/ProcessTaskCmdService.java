@@ -7,6 +7,7 @@ import com.zone.process.domain.agg.ProcessDefAgg;
 import com.zone.process.domain.agg.ProcessInstAgg;
 import com.zone.process.domain.repository.ProcessDefAggRepository;
 import com.zone.process.domain.repository.ProcessInstAggRepository;
+import com.zone.process.domain.service.InstanceDataDomainService;
 import com.zone.process.domain.service.InstanceParamDomainService;
 import com.zone.process.shared.process.ProcessEngineCommandAPI;
 import com.zone.process.shared.process.ProcessEngineQueryAPI;
@@ -44,6 +45,9 @@ public class ProcessTaskCmdService {
     @Autowired
     private InstanceParamDomainService paramDomainService;
 
+    @Autowired
+    private InstanceDataDomainService dataDomainService;
+
 
     /**
      * 操作任务
@@ -64,8 +68,8 @@ public class ProcessTaskCmdService {
         Map<String, Object> paramMap = paramDomainService.generateParamMap(operateCommand.getFormDataMap(), taskVO.getCurNodeId(), defAgg);
         processEngineCommandAPI.operateTask(taskVO.getTaskId(), instAgg.getProcInstId(), paramMap, operateCommand.getIdentityList(), operateCommand.getOperationType());
 
-        // 添加相关信息
-        instAgg.operateTask(taskVO, operateCommand.getOperationType(), operateCommand.getComment(), operateCommand.getFormDataMap(), loginUser);
+        // 保存相关数据
+        dataDomainService.saveUserTaskData(instAgg, taskVO, operateCommand.getOperationType(), operateCommand.getComment(), operateCommand.getFormDataMap(), defAgg, loginUser);
 
         // 同步流程实例的状态
         ProcessInstanceVO processInstanceVO = processEngineQueryAPI.syncInstance(taskVO.getProcInstId());

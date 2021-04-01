@@ -11,6 +11,7 @@ import com.zone.process.domain.agg.ProcessInstAgg;
 import com.zone.process.domain.repository.ProcessDefAggRepository;
 import com.zone.process.domain.repository.ProcessInstAggRepository;
 import com.zone.process.domain.service.AggIdentityDomainService;
+import com.zone.process.domain.service.InstanceDataDomainService;
 import com.zone.process.domain.service.InstanceParamDomainService;
 import com.zone.process.shared.process.ProcessEngineCommandAPI;
 import com.zone.process.shared.process.ProcessEngineQueryAPI;
@@ -49,6 +50,9 @@ public class ProcessInstCmdService {
     @Autowired
     private AggIdentityDomainService identityDomainService;
 
+    @Autowired
+    private InstanceDataDomainService dataDomainService;
+
 
     /**
      * 发起流程实例
@@ -64,9 +68,10 @@ public class ProcessInstCmdService {
         String procInstId = processEngineCommandAPI.startInstance(defAgg.getProcDefKey(), paramMap);
         Preconditions.checkState(StrUtil.isNotBlank(procInstId), "发起流程实例失败");
 
-        // 初始化相关数据
+        // 初始化并保存相关数据
         ProcessInstAgg instAgg = ProcessInstAggTransfer.getProcessInstAgg(startCommand);
-        instAgg.init(identityDomainService.generateInstAggId(), procInstId, defAgg.getStartBpmnNodeId(), startCommand.getFormDataMap(), loginUser);
+        instAgg.init(identityDomainService.generateInstAggId(), procInstId, loginUser);
+        dataDomainService.saveStartFormData(defAgg, instAgg, startCommand.getFormDataMap(), startCommand.getComment(), loginUser);
 
         // 同步流程实例的当前状态
         ProcessInstanceVO processInstanceVO = processEngineQueryAPI.syncInstance(procInstId);
