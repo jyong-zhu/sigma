@@ -31,12 +31,16 @@ public class InstOperationVO {
     @ApiModelProperty(value = "操作人的姓名")
     private String operateName;
 
-    public static InstOperationVO generateOperationVO(String nodeId, String operationType, String comment, LoginUser loginUser) {
+    @ApiModelProperty(value = "扩展字段")
+    private String ext;
+
+    public static InstOperationVO generateOperationVO(String nodeId, String operationType, String comment, LoginUser loginUser, String ext) {
         return new InstOperationVO()
                 .setBpmnNodeId(nodeId)
                 .setComment(comment)
                 .setOperationType(operationType)
                 .setOperateBy(loginUser.getUserId())
-                .setOperateName(loginUser.getUserName());
+                .setOperateName(loginUser.getUserName())
+                .setExt(ext);
     }
 }

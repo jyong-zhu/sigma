@@ -162,6 +162,7 @@ CREATE TABLE `process_inst_operation`
     `comment`        varchar(255) NOT NULL DEFAULT '' COMMENT '操作备注',
     `operate_by`     bigint(20)   NOT NULL COMMENT '操作人的user_id',
     `operate_name`   varchar(45)  NOT NULL COMMENT '操作人的姓名',
+    `ext`            varchar(255)          DEFAULT NULL COMMENT '扩展字段',
 
     `version`        int          NOT NULL DEFAULT '0' COMMENT '乐观锁版本',
     `create_time`    timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -179,19 +180,19 @@ CREATE TABLE `process_inst_operation`
 
 CREATE TABLE `process_inst_data`
 (
-    `id`           bigint(20)   NOT NULL COMMENT '主键ID',
-    `instance_id`  bigint(20)   NOT NULL COMMENT '流程实例id',
-    `bpmn_node_id` varchar(45)  NOT NULL COMMENT '当前录入表单所处的节点id',
-    `form_id`      bigint(20)   NOT NULL COMMENT '所属表单id',
-    `form_data`    text         NOT NULL COMMENT '流程实例在表单中对应的数据',
+    `id`           bigint(20)  NOT NULL COMMENT '主键ID',
+    `instance_id`  bigint(20)  NOT NULL COMMENT '流程实例id',
+    `bpmn_node_id` varchar(45) NOT NULL COMMENT '当前录入表单所处的节点id',
+    `form_id`      bigint(20)  NOT NULL COMMENT '所属表单id',
+    `form_data`    text        NOT NULL COMMENT '流程实例在表单中对应的数据',
 
-    `version`      int          NOT NULL DEFAULT '0' COMMENT '乐观锁版本',
-    `create_time`  timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `create_by`    bigint(20)   NOT NULL COMMENT 'user_id',
-    `create_name`  varchar(45)  NOT NULL COMMENT 'user_name',
-    `update_time`  timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    `update_by`    bigint(20)   NULL COMMENT 'user_id',
-    `update_name`  varchar(45)  NULL COMMENT 'user_name',
+    `version`      int         NOT NULL DEFAULT '0' COMMENT '乐观锁版本',
+    `create_time`  timestamp   NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `create_by`    bigint(20)  NOT NULL COMMENT 'user_id',
+    `create_name`  varchar(45) NOT NULL COMMENT 'user_name',
+    `update_time`  timestamp   NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    `update_by`    bigint(20)  NULL COMMENT 'user_id',
+    `update_name`  varchar(45) NULL COMMENT 'user_name',
     PRIMARY KEY (`id`) USING BTREE,
     INDEX `index_inst_node` (`instance_id`, `bpmn_node_id`) USING BTREE
 ) ENGINE = InnoDB
