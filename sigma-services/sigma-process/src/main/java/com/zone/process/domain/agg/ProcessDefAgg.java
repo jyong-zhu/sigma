@@ -96,7 +96,7 @@ public class ProcessDefAgg {
      * 获取指定id的节点列表
      */
     public List<DefNodeVO> getNodeByIdList(List<String> nodeIdList) {
-        if (CollectionUtil.isNotEmpty(nodeIdList)) {
+        if (CollectionUtil.isEmpty(nodeIdList)) {
             return Lists.newArrayList();
         }
         return this.getNodeVOList().stream()

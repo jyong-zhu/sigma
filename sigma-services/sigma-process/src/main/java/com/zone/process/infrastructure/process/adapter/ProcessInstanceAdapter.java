@@ -21,7 +21,7 @@ public class ProcessInstanceAdapter {
                 .setIsFinished(processInstance == null)
                 .setCurHandlerIdList(CollectionUtil.isNotEmpty(curHandlerList) ? curHandlerList : Lists.newArrayList())
                 .setProcInstId(procInstId)
-                .setCurNodeIdList(CollectionUtil.isNotEmpty(activityList) ? curHandlerList : Lists.newArrayList());
+                .setCurNodeIdList(CollectionUtil.isNotEmpty(activityList) ? activityList : Lists.newArrayList());
     }
 
     public static TaskVO getTaskVO(Task task) {
