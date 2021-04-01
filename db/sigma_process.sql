@@ -221,3 +221,7 @@ CREATE TABLE `form_structure`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   ROW_FORMAT = DYNAMIC COMMENT ='表单结构信息';
+
+INSERT INTO sigma_process.process_category (id, name, icon_url, version, create_time, create_by, create_name,
+                                            update_time, update_by, update_name)
+VALUES (1, '维修工单', '', 0, '2021-04-01 16:42:38', 1, 'admin', '2021-04-01 16:42:38', 1, 'admin');
