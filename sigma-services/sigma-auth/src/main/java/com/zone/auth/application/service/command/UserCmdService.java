@@ -51,7 +51,8 @@ public class UserCmdService {
                 new LoginUser().setAccountName(user.getUserBasic().getAccountName())
                         .setUserName(user.getUserBasic().getUserName())
                         .setUserId(user.getUserBasic().getId())
-                        .setRoleId(user.getUserBasic().getRoleId()));
+                        .setRoleId(user.getUserBasic().getRoleId() == null ?
+                                0 : user.getUserBasic().getRoleId()));
         return jwtToken;
     }
 

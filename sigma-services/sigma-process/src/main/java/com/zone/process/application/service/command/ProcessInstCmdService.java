@@ -83,13 +83,14 @@ public class ProcessInstCmdService {
     }
 
     /**
-     * 中止流程实例
+     * 中止流程实例，只支持中止自己发起的流程实例
      */
     @Transactional
     public Long stop(InstStopCommand stopCommand, LoginUser loginUser) {
 
         ProcessInstAgg instAgg = instAggRepository.queryById(stopCommand.getId());
-        Preconditions.checkNotNull(instAgg, "流程实例不存在");
+        Preconditions.checkState(instAgg != null
+                && instAgg.getSubmitBy().equals(loginUser.getUserId()), "流程实例不存在");
 
         ProcessDefAgg defAgg = defAggRepository.queryById(instAgg.getDefId());
         Preconditions.checkNotNull(defAgg, "流程定义不存在");

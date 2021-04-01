@@ -4,6 +4,7 @@ import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.json.JSONUtil;
 import com.google.common.collect.Maps;
 import com.zone.process.application.service.command.cmd.InstStartCommand;
+import com.zone.process.application.service.command.cmd.InstStopCommand;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
@@ -33,5 +34,14 @@ public class ProcessInstTest {
                 .setFormDataMap(paramMap);
 
         System.out.println(JSONUtil.toJsonStr(instStartCommand));
+    }
+
+    @Test
+    public void stop() {
+        InstStopCommand stopCommand = new InstStopCommand()
+                .setId(1406317344325664L)
+                .setComment("停止流程实例");
+
+        System.out.println(JSONUtil.toJsonStr(stopCommand));
     }
 }
