@@ -3,7 +3,6 @@ package com.zone.process.infrastructure.db.repository.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.zone.process.application.service.command.transfer.ProcessInstAggTransfer;
 import com.zone.process.domain.agg.ProcessInstAgg;
 import com.zone.process.domain.repository.ProcessInstAggRepository;
 import com.zone.process.domain.valueobject.InstDataVO;
@@ -72,8 +71,8 @@ public class ProcessInstAggRepositoryImpl implements ProcessInstAggRepository {
             instOperationMapper.delete(new QueryWrapper<ProcessInstOperationDO>().eq("instance_id", instDO.getId()));
             instDataMapper.delete(new QueryWrapper<ProcessInstDataDO>().eq("instance_id", instDO.getId()));
 
-            List<ProcessInstOperationDO> instOperationDOList = ProcessInstAggTransfer.getInstOperationDOList(instAgg.getOperationVOList(), instDO.getId());
-            List<ProcessInstDataDO> instDataDOList = ProcessInstAggTransfer.getInstDataDOList(instAgg.getDataVOList(), instDO.getId());
+            List<ProcessInstOperationDO> instOperationDOList = ProcessInstAggAdapter.getInstOperationDOList(instAgg.getOperationVOList(), instDO.getId());
+            List<ProcessInstDataDO> instDataDOList = ProcessInstAggAdapter.getInstDataDOList(instAgg.getDataVOList(), instDO.getId());
             instOperationMapper.insertBatchSomeColumn(instOperationDOList);
             instDataMapper.insertBatchSomeColumn(instDataDOList);
             return true;

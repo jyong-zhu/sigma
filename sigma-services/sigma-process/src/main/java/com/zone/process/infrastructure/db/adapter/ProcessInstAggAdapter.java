@@ -23,6 +23,7 @@ public class ProcessInstAggAdapter {
             ProcessInstDataDO dataDO = BeanUtil.copyProperties(tmp, ProcessInstDataDO.class);
             dataDO.setId(IdWorkerUtil.nextId());
             dataDO.setInstanceId(instanceId);
+            dataDO.setVersion(0);
             list.add(dataDO);
         });
         return list;
@@ -34,6 +35,7 @@ public class ProcessInstAggAdapter {
             ProcessInstOperationDO operationDO = BeanUtil.copyProperties(tmp, ProcessInstOperationDO.class);
             operationDO.setId(IdWorkerUtil.nextId());
             operationDO.setInstanceId(instanceId);
+            operationDO.setVersion(0);
             list.add(operationDO);
         });
         return list;

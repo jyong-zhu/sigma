@@ -50,9 +50,27 @@ public class CamundaQueryService implements ProcessEngineQueryAPI {
     }
 
     @Override
-    public TaskVO queryTaskById(String taskId) {
-        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+    public TaskVO queryRelateTaskById(String taskId, Long userId, Long roleId) {
+        List<String> identityList = generateIdentityList(userId, roleId);
+        Task task = taskService.createTaskQuery()
+                .taskId(taskId)
+                .taskCandidateGroupIn(identityList)
+                .singleResult();
         return ProcessInstanceAdapter.getTaskVO(task);
+    }
+
+    /**
+     * 获取 identityList
+     */
+    private List<String> generateIdentityList(Long userId, Long roleId) {
+        List<String> identityList = Lists.newArrayList();
+        if (userId != null) {
+            identityList.add(userId.toString());
+        }
+        if (roleId != null) {
+            identityList.add(roleId.toString());
+        }
+        return identityList;
     }
 
     private ProcessInstance queryInstanceById(String procInstId) {

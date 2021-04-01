@@ -12,5 +12,5 @@ public interface ProcessEngineQueryAPI {
 
     ProcessInstanceVO syncInstance(String procInstId);
 
-    TaskVO queryTaskById(String taskId);
+    TaskVO queryRelateTaskById(String taskId, Long userId, Long roleId);
 }
