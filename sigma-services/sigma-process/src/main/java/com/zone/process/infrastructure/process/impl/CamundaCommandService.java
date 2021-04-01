@@ -106,9 +106,6 @@ public class CamundaCommandService implements ProcessEngineCommandAPI {
                 identityList.forEach(identity -> taskService.addCandidateGroup(taskId, identity));
                 runtimeService.setVariables(procInstId, paramMap);
                 break;
-            case STOP:
-                stopInstance(procInstId, "");
-                break;
         }
 
     }
