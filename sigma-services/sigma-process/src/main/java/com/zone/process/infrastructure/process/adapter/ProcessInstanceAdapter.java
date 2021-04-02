@@ -32,6 +32,7 @@ public class ProcessInstanceAdapter {
             taskVO.setProcInstId(task.getProcessInstanceId());
             taskVO.setTaskId(task.getId());
             taskVO.setTaskName(task.getName());
+            return taskVO;
         }
         return null;
     }

@@ -1,5 +1,6 @@
 package com.zone.process.domain.service;
 
+import cn.hutool.core.util.StrUtil;
 import com.google.common.collect.Lists;
 import com.zone.commons.entity.LoginUser;
 import com.zone.process.domain.agg.ProcessDefAgg;
@@ -45,7 +46,8 @@ public class InstanceDataDomainService {
                                  Map<Long, Map<String, Object>> formDataMap, ProcessDefAgg defAgg, LoginUser loginUser) {
         DefNodeVO nodeVO = defAgg.getNodeByNodeId(taskVO.getCurNodeId());
         List<Long> formIdList = Arrays.asList(nodeVO.getInputFormIds().split(","))
-                .stream().map(tmp -> Long.valueOf(tmp)).collect(Collectors.toList());
+                .stream().filter(tmp -> StrUtil.isNotBlank(tmp))
+                .map(tmp -> Long.valueOf(tmp)).collect(Collectors.toList());
 
         // 只有完成任务能够保存表单数据
         if (TaskOperationTypeEnum.COMPLETE.getCode().equals(operationType)) {

@@ -1,5 +1,6 @@
 package com.zone.process.infrastructure.process.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.common.base.Preconditions;
 import com.zone.process.infrastructure.process.adapter.ProcessDefinitionAdapter;
@@ -103,7 +104,8 @@ public class CamundaCommandService implements ProcessEngineCommandAPI {
                 break;
             case UPDATE:
                 identityLinkMapper.delete(new QueryWrapper<ActRuIdentitylinkDO>().eq("TASK_ID_", taskId));
-                identityList.forEach(identity -> taskService.addCandidateGroup(taskId, identity));
+                identityList.stream().filter(identity -> StrUtil.isNotBlank(identity))
+                        .forEach(identity -> taskService.addCandidateGroup(taskId, identity));
                 break;
         }
 
