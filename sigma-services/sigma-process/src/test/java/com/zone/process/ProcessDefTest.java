@@ -115,7 +115,7 @@ public class ProcessDefTest {
         List<DefNodeVariableCommand> variableCommandList = Lists.newArrayList();
         variableCommandList.add(new DefNodeVariableCommand()
                 .setVariableName("user1")
-                .setJavaType("java.lang.String")
+                .setJavaType("String")
                 .setFormId("1")
                 .setFieldId("user")
                 .setDefaultValue(""));
@@ -130,7 +130,7 @@ public class ProcessDefTest {
         variableCommandList = Lists.newArrayList();
         variableCommandList.add(new DefNodeVariableCommand()
                 .setVariableName("user2")
-                .setJavaType("java.lang.String")
+                .setJavaType("String")
                 .setFormId("2")
                 .setFieldId("user")
                 .setDefaultValue(""));

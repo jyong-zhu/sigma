@@ -1,5 +1,7 @@
 package com.zone.process.application.service.command.cmd;
 
+import com.zone.commons.annotation.ValueValid;
+import com.zone.process.shared.enums.VariableTypeEnum;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -30,7 +32,8 @@ public class DefNodeVariableCommand {
     private String fieldId;
 
     @ApiModelProperty("变量值在Java中的类型")
-    @NotBlank(message = "类型不能为空")
+    @NotBlank(message = "变量值的类型不能为空")
+    @ValueValid(checkClass = VariableTypeEnum.class, message = "变量值的类型出错")
     private String javaType;
 
     @ApiModelProperty(value = "默认的参数值")

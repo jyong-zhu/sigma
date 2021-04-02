@@ -38,5 +38,5 @@ public class InstStartCommand {
 
     @ApiModelProperty("表单数据")
     @NotNull(message = "表单数据不能为空")
-    private Map<Long, Map<String, Object>> formDataMap;
+    private Map<Long, Map<String, String>> formDataMap;
 }

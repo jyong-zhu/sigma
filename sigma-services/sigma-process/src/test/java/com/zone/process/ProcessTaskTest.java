@@ -24,10 +24,10 @@ public class ProcessTaskTest {
         String taskId = "";
         String operationType = "complete";
         List<String> identityList = Lists.newArrayList();
-        Map<Long, Map<String, Object>> formDataMap = Maps.newHashMap();
-        Map<String, Object> dataMap = Maps.newHashMap();
+        Map<Long, Map<String, String>> formDataMap = Maps.newHashMap();
+        Map<String, String> dataMap = Maps.newHashMap();
         dataMap.put("user", "5,6,7");
-        dataMap.put("complete", false);
+        dataMap.put("complete", "false");
         formDataMap.put(2L, dataMap);
         TaskOperateCommand operateCommand = new TaskOperateCommand()
                 .setComment("处理节点1 ===> 处理节点2")
@@ -47,7 +47,7 @@ public class ProcessTaskTest {
         String taskId = "";
         String operationType = "complete";
         List<String> identityList = Lists.newArrayList();
-        Map<Long, Map<String, Object>> formDataMap = Maps.newHashMap();
+        Map<Long, Map<String, String>> formDataMap = Maps.newHashMap();
         TaskOperateCommand operateCommand = new TaskOperateCommand()
                 .setComment("处理节点2 ===> 处理节点1")
                 .setFormDataMap(formDataMap)
@@ -66,7 +66,7 @@ public class ProcessTaskTest {
         String taskId = "";
         String operationType = "update";
         List<String> identityList = Lists.newArrayList("77", "88", "99");
-        Map<Long, Map<String, Object>> formDataMap = Maps.newHashMap();
+        Map<Long, Map<String, String>> formDataMap = Maps.newHashMap();
         TaskOperateCommand operateCommand = new TaskOperateCommand()
                 .setComment("处理节点转派任务")
                 .setFormDataMap(formDataMap)
@@ -85,9 +85,9 @@ public class ProcessTaskTest {
         String taskId = "";
         String operationType = "complete";
         List<String> identityList = Lists.newArrayList();
-        Map<Long, Map<String, Object>> formDataMap = Maps.newHashMap();
-        Map<String, Object> dataMap = Maps.newHashMap();
-        dataMap.put("complete", true);
+        Map<Long, Map<String, String>> formDataMap = Maps.newHashMap();
+        Map<String, String> dataMap = Maps.newHashMap();
+        dataMap.put("complete", "true");
         formDataMap.put(2L, dataMap);
         TaskOperateCommand operateCommand = new TaskOperateCommand()
                 .setComment("处理节点1 ===> 结束节点")

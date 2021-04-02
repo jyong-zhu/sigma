@@ -20,8 +20,8 @@ public class ProcessInstTest {
     @Test
     public void start() {
 
-        Map<Long, Map<String, Object>> paramMap = Maps.newHashMap();
-        Map<String, Object> dataMap = Maps.newHashMap();
+        Map<Long, Map<String, String>> paramMap = Maps.newHashMap();
+        Map<String, String> dataMap = Maps.newHashMap();
         dataMap.put("user", "2,3,4");
         paramMap.put(1L, dataMap);
 

@@ -30,7 +30,7 @@ public class InstanceDataDomainService {
     /**
      * 发起流程时保存数据
      */
-    public void saveStartFormData(ProcessDefAgg defAgg, ProcessInstAgg instAgg, Map<Long, Map<String, Object>> formDataMap, String comment, LoginUser loginUser) {
+    public void saveStartFormData(ProcessDefAgg defAgg, ProcessInstAgg instAgg, Map<Long, Map<String, String>> formDataMap, String comment, LoginUser loginUser) {
         DefNodeVO nodeVO = defAgg.getNodeByNodeId(defAgg.getStartBpmnNodeId());
         List<Long> formIdList = Arrays.asList(nodeVO.getInputFormIds().split(","))
                 .stream().map(tmp -> Long.valueOf(tmp)).collect(Collectors.toList());
@@ -43,7 +43,7 @@ public class InstanceDataDomainService {
      * 操作任务时保存数据
      */
     public void saveUserTaskData(ProcessInstAgg instAgg, TaskVO taskVO, String operationType, String comment,
-                                 Map<Long, Map<String, Object>> formDataMap, ProcessDefAgg defAgg, LoginUser loginUser) {
+                                 Map<Long, Map<String, String>> formDataMap, ProcessDefAgg defAgg, LoginUser loginUser) {
         DefNodeVO nodeVO = defAgg.getNodeByNodeId(taskVO.getCurNodeId());
         List<Long> formIdList = Arrays.asList(nodeVO.getInputFormIds().split(","))
                 .stream().filter(tmp -> StrUtil.isNotBlank(tmp))

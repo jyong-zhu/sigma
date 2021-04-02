@@ -34,12 +34,12 @@ public class InstDataVO {
     /**
      * 获取表单数据
      */
-    public static List<InstDataVO> generateDataVOList(String nodeId, Map<Long, Map<String, Object>> formDataMap, List<Long> formIdList) {
+    public static List<InstDataVO> generateDataVOList(String nodeId, Map<Long, Map<String, String>> formDataMap, List<Long> formIdList) {
         List<InstDataVO> instDataVOList = Lists.newArrayList();
         if (CollectionUtil.isNotEmpty(formDataMap)) {
             formDataMap.forEach((key, value) -> {
                 if (formIdList.contains(key)) {
-                    Map<String, Object> dataMap = CollectionUtil.isNotEmpty(value) ? value : Maps.newHashMap();
+                    Map<String, String> dataMap = CollectionUtil.isNotEmpty(value) ? value : Maps.newHashMap();
                     instDataVOList.add(new InstDataVO().setBpmnNodeId(nodeId)
                             .setFormData(JSONUtil.toJsonStr(dataMap))
                             .setFormId(key));
