@@ -31,11 +31,22 @@ public class SigmaMetaObjectHandler implements MetaObjectHandler {
         if (loginUser == null) {
             return;
         }
-        this.strictInsertFill(metaObject, CREATE_BY, Long.class, loginUser.getUserId());
+        // 插入可能涉及create相关数据已经有值（比如对老数据的删除，然后重新插入）
+        // 所以这里要判断是否有值
+        Object createByVal = getFieldValByName(CREATE_BY, metaObject);
+        Object createName = getFieldValByName(CREATE_NAME, metaObject);
+        Object createTime = getFieldValByName(CREATE_TIME, metaObject);
+        if (createByVal == null) {
+            this.strictInsertFill(metaObject, CREATE_BY, Long.class, loginUser.getUserId());
+        }
+        if (createName == null) {
+            this.strictInsertFill(metaObject, CREATE_NAME, String.class, loginUser.getUserName());
+        }
+        if (createTime == null) {
+            this.strictInsertFill(metaObject, CREATE_TIME, LocalDateTime.class, LocalDateTime.now());
+        }
         this.strictInsertFill(metaObject, UPDATE_BY, Long.class, loginUser.getUserId());
-        this.strictInsertFill(metaObject, CREATE_NAME, String.class, loginUser.getUserName());
         this.strictInsertFill(metaObject, UPDATE_NAME, String.class, loginUser.getUserName());
-        this.strictInsertFill(metaObject, CREATE_TIME, LocalDateTime.class, LocalDateTime.now());
         this.strictInsertFill(metaObject, UPDATE_TIME, LocalDateTime.class, LocalDateTime.now());
         log.info("用户[{}]新增数据", loginUser.getUserName() + "(" + loginUser.getUserId() + ")");
     }
