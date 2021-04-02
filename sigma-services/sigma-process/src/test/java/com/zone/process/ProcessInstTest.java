@@ -26,7 +26,7 @@ public class ProcessInstTest {
         paramMap.put(1L, dataMap);
 
         InstStartCommand instStartCommand = new InstStartCommand()
-                .setDefId(1406311885439008L)
+                .setDefKey("Process_1e60ptt")
                 .setDescription("发起流程实例")
                 .setComment("这是发起流程实例的评论")
                 .setName("维修机器工单")
