@@ -162,6 +162,7 @@ CREATE TABLE `process_inst_operation`
     `comment`        varchar(255) NOT NULL DEFAULT '' COMMENT '操作备注',
     `operate_by`     bigint(20)   NOT NULL COMMENT '操作人的user_id',
     `operate_name`   varchar(45)  NOT NULL COMMENT '操作人的姓名',
+    `form_data`      text         NOT NULL COMMENT '操作时提交的表单数据',
     `ext`            varchar(255)          DEFAULT NULL COMMENT '扩展字段',
 
     `version`        int          NOT NULL DEFAULT '0' COMMENT '乐观锁版本',
@@ -194,7 +195,7 @@ CREATE TABLE `process_inst_data`
     `update_by`    bigint(20)  NULL COMMENT 'user_id',
     `update_name`  varchar(45) NULL COMMENT 'user_name',
     PRIMARY KEY (`id`) USING BTREE,
-    INDEX `index_inst_node` (`instance_id`, `bpmn_node_id`) USING BTREE
+    INDEX `index_inst_node` (`instance_id`, `bpmn_node_id`, `form_id`) USING BTREE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   ROW_FORMAT = DYNAMIC COMMENT ='流程实例的表单数据';

@@ -1,10 +1,13 @@
 package com.zone.process.domain.valueobject;
 
+import cn.hutool.json.JSONUtil;
 import com.zone.commons.entity.LoginUser;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.util.Map;
 
 /**
  * @Author: jianyong.zhu
@@ -31,16 +34,21 @@ public class InstOperationVO {
     @ApiModelProperty(value = "操作人的姓名")
     private String operateName;
 
+    @ApiModelProperty(value = "操作时提交的表单数据")
+    private String formData;
+
     @ApiModelProperty(value = "扩展字段")
     private String ext;
 
-    public static InstOperationVO generateOperationVO(String nodeId, String operationType, String comment, LoginUser loginUser, String ext) {
+    public static InstOperationVO generateOperationVO(String nodeId, String operationType, String comment,
+                                                      Map<Long, Map<String, String>> formDataMap, LoginUser loginUser, String ext) {
         return new InstOperationVO()
                 .setBpmnNodeId(nodeId)
                 .setComment(comment)
                 .setOperationType(operationType)
                 .setOperateBy(loginUser.getUserId())
                 .setOperateName(loginUser.getUserName())
+                .setFormData(JSONUtil.toJsonStr(formDataMap))
                 .setExt(ext);
     }
 }

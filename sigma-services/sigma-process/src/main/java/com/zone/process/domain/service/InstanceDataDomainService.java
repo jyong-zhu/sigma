@@ -35,8 +35,9 @@ public class InstanceDataDomainService {
         List<Long> formIdList = Arrays.asList(nodeVO.getInputFormIds().split(","))
                 .stream().map(tmp -> Long.valueOf(tmp)).collect(Collectors.toList());
 
-        instAgg.setDataVOList(InstDataVO.generateDataVOList(defAgg.getStartBpmnNodeId(), formDataMap, formIdList));
-        instAgg.setOperationVOList(Lists.newArrayList(InstOperationVO.generateOperationVO(defAgg.getStartBpmnNodeId(), InstanceOperationTypeEnum.START.getCode(), comment, loginUser, loginUser.getAccountName() + "发起流程实例")));
+        instAgg.setDataVOList(InstDataVO.generateDataVOList(defAgg.getStartBpmnNodeId(), formDataMap, Lists.newArrayList(), formIdList));
+        instAgg.setOperationVOList(Lists.newArrayList(InstOperationVO.generateOperationVO(defAgg.getStartBpmnNodeId(),
+                InstanceOperationTypeEnum.START.getCode(), comment, formDataMap, loginUser, loginUser.getAccountName() + "发起流程实例")));
     }
 
     /**
@@ -51,9 +52,9 @@ public class InstanceDataDomainService {
 
         // 只有完成任务能够保存表单数据
         if (TaskOperationTypeEnum.COMPLETE.getCode().equals(operationType)) {
-            instAgg.getDataVOList().addAll(InstDataVO.generateDataVOList(taskVO.getCurNodeId(), formDataMap, formIdList));
+            instAgg.setDataVOList(InstDataVO.generateDataVOList(taskVO.getCurNodeId(), formDataMap, instAgg.getDataVOList(), formIdList));
         }
         String ext = TaskOperationTypeEnum.COMPLETE.getCode().equals(operationType) ? loginUser.getUserName() + "提交任务" : loginUser.getUserName() + "转派任务";
-        instAgg.getOperationVOList().add(InstOperationVO.generateOperationVO(taskVO.getCurNodeId(), operationType, comment, loginUser, ext));
+        instAgg.getOperationVOList().add(InstOperationVO.generateOperationVO(taskVO.getCurNodeId(), operationType, comment, formDataMap, loginUser, ext));
     }
 }

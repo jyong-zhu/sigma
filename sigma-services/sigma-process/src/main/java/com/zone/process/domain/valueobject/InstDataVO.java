@@ -34,18 +34,30 @@ public class InstDataVO {
     /**
      * 获取表单数据
      */
-    public static List<InstDataVO> generateDataVOList(String nodeId, Map<Long, Map<String, String>> formDataMap, List<Long> formIdList) {
-        List<InstDataVO> instDataVOList = Lists.newArrayList();
+    public static List<InstDataVO> generateDataVOList(String nodeId, Map<Long, Map<String, String>> formDataMap, List<InstDataVO> oldFormDataList, List<Long> formIdList) {
+        List<InstDataVO> result = Lists.newArrayList();
+        // 多次在同一个节点提交，同一个表单只保存最新的数据
+        Map<Long, InstDataVO> curDataMap = Maps.newHashMap();
+        oldFormDataList.stream().forEach(formData -> {
+            if (formData.getBpmnNodeId().equals(nodeId)) {
+                curDataMap.put(formData.getFormId(), formData);
+            } else {
+                result.add(formData);
+            }
+        });
         if (CollectionUtil.isNotEmpty(formDataMap)) {
             formDataMap.forEach((key, value) -> {
                 if (formIdList.contains(key)) {
+                    // 将当前节点的表单覆盖成最新的数据
                     Map<String, String> dataMap = CollectionUtil.isNotEmpty(value) ? value : Maps.newHashMap();
-                    instDataVOList.add(new InstDataVO().setBpmnNodeId(nodeId)
+                    curDataMap.put(key, new InstDataVO().setBpmnNodeId(nodeId)
                             .setFormData(JSONUtil.toJsonStr(dataMap))
                             .setFormId(key));
                 }
             });
         }
-        return instDataVOList;
+        // 组装数据
+        result.addAll(curDataMap.values());
+        return result;
     }
 }

@@ -1,5 +1,6 @@
 package com.zone.process.domain.agg;
 
+import com.google.common.collect.Maps;
 import com.zone.commons.entity.LoginUser;
 import com.zone.process.domain.valueobject.DefNodeVO;
 import com.zone.process.domain.valueobject.InstDataVO;
@@ -95,7 +96,8 @@ public class ProcessInstAgg {
      */
     public void stop(String comment, String curNodeId, LoginUser loginUser) {
         this.setStatus(InstanceStatusTypeEnum.FINISHED.getCode());
-        this.getOperationVOList().add(InstOperationVO.generateOperationVO(curNodeId, InstanceOperationTypeEnum.STOP.getCode(), comment, loginUser, loginUser.getUserName() + "中止流程实例"));
+        this.getOperationVOList().add(InstOperationVO.generateOperationVO(curNodeId, InstanceOperationTypeEnum.STOP.getCode(),
+                comment, Maps.newHashMap(), loginUser, loginUser.getUserName() + "中止流程实例"));
     }
 
     /**
