@@ -1,5 +1,7 @@
 package com.zone.process.application.service.command.cmd;
 
+import com.zone.commons.annotation.ValueValid;
+import com.zone.process.shared.enums.NodePeopleTypeEnum;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -24,6 +26,7 @@ public class DefNodeCommand {
     private String bpmnNodeId;
 
     @ApiModelProperty("当前节点处理人的类型，ID/PARAM/PAR_MULTI_INSTANCE/SEQ_MULTI_INSTANCE")
+    @ValueValid(checkClass = NodePeopleTypeEnum.class, message = "节点处理人类型错误", notNull = false)
     private String nodePeopleType;
 
     @ApiModelProperty("当前节点处理人的值，具体值或变量名")

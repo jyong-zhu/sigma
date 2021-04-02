@@ -1,5 +1,7 @@
 package com.zone.process.application.service.command.cmd;
 
+import com.zone.commons.annotation.ValueValid;
+import com.zone.process.shared.enums.TaskOperationTypeEnum;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -26,6 +28,7 @@ public class TaskOperateCommand {
 
     @ApiModelProperty("操作类型")
     @NotBlank(message = "操作类型不能为空")
+    @ValueValid(checkClass = TaskOperationTypeEnum.class, message = "操作类型出错")
     private String operationType;
 
     @ApiModelProperty("评论")
