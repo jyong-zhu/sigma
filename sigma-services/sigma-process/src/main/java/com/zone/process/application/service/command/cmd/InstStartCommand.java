@@ -19,9 +19,9 @@ import java.util.Map;
 @Accessors(chain = true)
 public class InstStartCommand {
 
-    @ApiModelProperty("流程定义id")
-    @NotNull(message = "流程定义id不能为空")
-    private Long defId;
+    @ApiModelProperty("流程定义key")
+    @NotBlank(message = "流程定义的key不能为空")
+    private String defKey;
 
     @ApiModelProperty("流程实例名称")
     @NotBlank(message = "流程实例名称不能为空")

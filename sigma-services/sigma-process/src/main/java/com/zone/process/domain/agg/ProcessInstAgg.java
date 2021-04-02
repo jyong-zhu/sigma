@@ -80,8 +80,9 @@ public class ProcessInstAgg {
     /**
      * 初始化流程实例
      */
-    public void init(Long id, String procInstId, LoginUser loginUser) {
+    public void init(Long id, Long defId, String procInstId, LoginUser loginUser) {
         this.setId(id);
+        this.setDefId(defId);
         this.setSubmitBy(loginUser.getUserId());
         this.setSubmitName(loginUser.getUserName());
         this.setSubmitTime(LocalDateTime.now());

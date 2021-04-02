@@ -60,7 +60,7 @@ public class ProcessInstCmdService {
     @Transactional
     public Long start(InstStartCommand startCommand, LoginUser loginUser) {
 
-        ProcessDefAgg defAgg = defAggRepository.queryById(startCommand.getDefId());
+        ProcessDefAgg defAgg = defAggRepository.queryByKey(startCommand.getDefKey());
         Preconditions.checkNotNull(defAgg, "流程定义不存在");
 
         // 发起流程实例
@@ -70,7 +70,7 @@ public class ProcessInstCmdService {
 
         // 初始化并保存相关数据
         ProcessInstAgg instAgg = ProcessInstAggTransfer.getProcessInstAgg(startCommand);
-        instAgg.init(identityDomainService.generateInstAggId(), procInstId, loginUser);
+        instAgg.init(identityDomainService.generateInstAggId(), defAgg.getId(), procInstId, loginUser);
         dataDomainService.saveStartFormData(defAgg, instAgg, startCommand.getFormDataMap(), startCommand.getComment(), loginUser);
 
         // 同步流程实例的当前状态

@@ -108,6 +108,20 @@ public class ProcessDefAggRepositoryImpl implements ProcessDefAggRepository {
         return null;
     }
 
+    @Override
+    public ProcessDefAgg queryByKey(String defKey) {
+        ProcessDefDO processDefDO = defMapper.selectOne(
+                new QueryWrapper<ProcessDefDO>().eq("proc_def_key", defKey)
+                        .orderByDesc("proc_def_version")
+                        .last(" limit 1 "));
+        if (processDefDO != null) {
+            ProcessDefAgg defAgg = BeanUtil.copyProperties(processDefDO, ProcessDefAgg.class);
+            defAgg.setNodeVOList(queryNodeList(processDefDO.getId()));
+            return defAgg;
+        }
+        return null;
+    }
+
     private List<DefNodeVO> queryNodeList(Long defId) {
         List<DefNodeVO> result = Lists.newArrayList();
         List<ProcessDefNodeDO> nodeDOList = defNodeMapper.selectList(new QueryWrapper<ProcessDefNodeDO>()

@@ -15,4 +15,9 @@ public interface ProcessDefAggRepository {
      * repository 中的查询操作都是以聚合根的维度查出来的
      */
     ProcessDefAgg queryById(Long defId);
+
+    /**
+     * 根据key获取流程定义（最新的版本）
+     */
+    ProcessDefAgg queryByKey(String defKey);
 }
