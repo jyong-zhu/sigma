@@ -52,7 +52,6 @@ public class ProcessDefAggRepositoryImpl implements ProcessDefAggRepository {
     public void save(ProcessDefAgg processDefAgg) {
 
         ProcessDefDO defDO = BeanUtil.copyProperties(processDefAgg, ProcessDefDO.class);
-        defDO.setVersion(0);
         defMapper.insert(defDO);
 
         if (CollectionUtil.isNotEmpty(processDefAgg.getNodeVOList())) {

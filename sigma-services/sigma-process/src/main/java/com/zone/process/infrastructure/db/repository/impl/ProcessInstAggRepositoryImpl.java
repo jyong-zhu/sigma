@@ -40,7 +40,6 @@ public class ProcessInstAggRepositoryImpl implements ProcessInstAggRepository {
     @Override
     public void save(ProcessInstAgg instAgg) {
         ProcessInstDO instDO = BeanUtil.copyProperties(instAgg, ProcessInstDO.class);
-        instDO.setVersion(0);
         instMapper.insert(instDO);
 
         List<ProcessInstDataDO> dataDOList = ProcessInstAggAdapter.getInstDataDOList(instAgg.getDataVOList(), instDO.getId());

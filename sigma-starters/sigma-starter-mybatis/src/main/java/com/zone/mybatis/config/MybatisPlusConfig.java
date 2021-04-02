@@ -22,12 +22,14 @@ public class MybatisPlusConfig {
 
     /**
      * mybatis-plus 版本 since 3.4.0
-     * 新的分页插件 一缓和二缓遵循mybatis的规则
      */
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
+        // 分页插件
         interceptor.addInnerInterceptor(new PaginationInnerInterceptor(DbType.H2));
+        // 乐观锁插件
+        interceptor.addInnerInterceptor(new OptimisticLockerInnerInterceptor());
         return interceptor;
     }
 
@@ -38,14 +40,6 @@ public class MybatisPlusConfig {
     @Bean
     public ConfigurationCustomizer configurationCustomizer() {
         return configuration -> configuration.setUseDeprecatedExecutor(false);
-    }
-
-    /**
-     * 乐观锁插件
-     */
-    @Bean
-    public OptimisticLockerInnerInterceptor optimisticLockerInnerInterceptor() {
-        return new OptimisticLockerInnerInterceptor();
     }
 
     @Bean

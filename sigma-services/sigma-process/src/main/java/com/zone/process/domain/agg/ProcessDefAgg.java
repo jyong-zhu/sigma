@@ -57,6 +57,9 @@ public class ProcessDefAgg {
     @ApiModelProperty("分类展示图标")
     private String iconUrl;
 
+    @ApiModelProperty(value = "数据版本")
+    private Integer version;
+
     @ApiModelProperty("流程定义中节点的信息")
     private List<DefNodeVO> nodeVOList;
 
@@ -69,6 +72,7 @@ public class ProcessDefAgg {
         this.setProcDefKey(definitionVO.getProcDefKey());
         this.setProcDefVersion(definitionVO.getProcDefVersion());
         this.setStatus(true);
+        this.setVersion(0);
 
         // 解析 xml 文件，填充节点的信息
         this.nodeVOList = DefNodeVO.parseNodeList(this.bpmnXml, this.nodeVOList);

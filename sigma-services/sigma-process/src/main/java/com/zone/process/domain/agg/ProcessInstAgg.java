@@ -68,6 +68,9 @@ public class ProcessInstAgg {
     @ApiModelProperty(value = "描述信息")
     private String description;
 
+    @ApiModelProperty(value = "数据版本")
+    private Integer version;
+
     @ApiModelProperty("流程实例的数据列表")
     private List<InstDataVO> dataVOList;
 
@@ -83,6 +86,7 @@ public class ProcessInstAgg {
         this.setSubmitName(loginUser.getUserName());
         this.setSubmitTime(LocalDateTime.now());
         this.setProcInstId(procInstId);
+        this.setVersion(0);
     }
 
     /**
