@@ -12,6 +12,7 @@ import lombok.experimental.Accessors;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @Author: jianyong.zhu
@@ -45,20 +46,13 @@ public class InstDataVO {
      * 获取表单数据
      */
     public static List<InstDataVO> generateDataVOList(String nodeId, Map<Long, Map<String, String>> formDataMap, List<InstDataVO> oldFormDataList, List<Long> formIdList) {
-        List<InstDataVO> result = Lists.newArrayList();
-        // 多次在同一个节点提交，同一个表单只保存最新的数据
-        Map<Long, InstDataVO> curDataMap = Maps.newHashMap();
-        oldFormDataList.stream().forEach(formData -> {
-            if (formData.getBpmnNodeId().equals(nodeId)) {
-                curDataMap.put(formData.getFormId(), formData);
-            } else {
-                result.add(formData);
-            }
-        });
+        // 同一个表单只保存最新的数据
+        Map<Long, InstDataVO> curDataMap = oldFormDataList.stream()
+                .collect(Collectors.toMap(key -> key.getFormId(), value -> value));
         if (CollectionUtil.isNotEmpty(formDataMap)) {
             formDataMap.forEach((key, value) -> {
                 if (formIdList.contains(key)) {
-                    // 将当前节点的表单覆盖成最新的数据
+                    // 如果表单id相同，则覆盖成最新的表单数据
                     Map<String, String> dataMap = CollectionUtil.isNotEmpty(value) ? value : Maps.newHashMap();
                     curDataMap.put(key, new InstDataVO().setBpmnNodeId(nodeId)
                             .setFormData(JSONUtil.toJsonStr(dataMap))
@@ -66,8 +60,6 @@ public class InstDataVO {
                 }
             });
         }
-        // 组装数据
-        result.addAll(curDataMap.values());
-        return result;
+        return Lists.newArrayList(curDataMap.values());
     }
 }
