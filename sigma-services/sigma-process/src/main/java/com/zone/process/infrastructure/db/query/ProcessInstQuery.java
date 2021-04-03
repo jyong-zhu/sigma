@@ -47,6 +47,9 @@ public class ProcessInstQuery {
         return operationDOList.stream().map(tmp -> tmp.getInstanceId()).collect(Collectors.toList());
     }
 
+    /**
+     * 根据主键id进行分页查询
+     */
     public IPage<ProcessInstDO> pageInIdList(List<Long> idList, String name, Long startTime, Long endTime, Long curHandlerId, Long submitBy,
                                              String status, Integer pageNo, Integer pageSize) {
         if (CollectionUtil.isEmpty(idList)) {
@@ -56,33 +59,26 @@ public class ProcessInstQuery {
         QueryWrapper<ProcessInstDO> queryWrapper = new QueryWrapper<ProcessInstDO>()
                 .in("id", idList).orderByDesc("submit_time");
 
-        if (StrUtil.isNotBlank(name)) {
-            queryWrapper.like("name", name);
-        }
-
-        if (startTime != null) {
-            queryWrapper.ge("submit_time", LocalDateTimeUtil.of(startTime));
-        }
-
-        if (endTime != null) {
-            queryWrapper.le("end_time", LocalDateTimeUtil.of(endTime));
-        }
-
-        if (curHandlerId != null) {
-            // 虽然 cur_handler_id 中存的既可能是 userId 也可能是 roleId
-            // 但这里只根据 userId 去查，不根据 roleId 去查
-            queryWrapper.like("cur_handler_id", curHandlerId);
-        }
-
-        if (submitBy != null) {
-            queryWrapper.eq("submit_by", submitBy);
-        }
-
-        if (StrUtil.isNotBlank(status)) {
-            queryWrapper.eq("status", status);
-        }
+        assembleConditions(queryWrapper, name, startTime, endTime, curHandlerId, submitBy, status);
 
         return instMapper.selectPage(new Page<>(pageNo, pageSize), queryWrapper);
+    }
+
+    /**
+     * 根据procInstId进行分页查询
+     */
+    public List<ProcessInstDO> queryInProcInstIdList(List<String> procInstIdList, String name, Long startTime, Long endTime, Long submitBy) {
+
+        if (CollectionUtil.isEmpty(procInstIdList)) {
+            return Lists.newArrayList();
+        }
+
+        QueryWrapper<ProcessInstDO> queryWrapper = new QueryWrapper<ProcessInstDO>()
+                .in("proc_inst_id", procInstIdList);
+
+        assembleConditions(queryWrapper, name, startTime, endTime, null, submitBy, "");
+
+        return instMapper.selectList(queryWrapper);
     }
 
     /**
@@ -117,5 +113,35 @@ public class ProcessInstQuery {
             }
         }
         return result;
+    }
+
+    private void assembleConditions(QueryWrapper<ProcessInstDO> queryWrapper, String name, Long startTime, Long endTime,
+                                    Long curHandlerId, Long submitBy, String status) {
+
+        if (StrUtil.isNotBlank(name)) {
+            queryWrapper.like("name", name);
+        }
+
+        if (startTime != null) {
+            queryWrapper.ge("submit_time", LocalDateTimeUtil.of(startTime));
+        }
+
+        if (endTime != null) {
+            queryWrapper.le("end_time", LocalDateTimeUtil.of(endTime));
+        }
+
+        if (curHandlerId != null) {
+            // 虽然 cur_handler_id 中存的既可能是 userId 也可能是 roleId
+            // 但这里只根据 userId 去查，不根据 roleId 去查
+            queryWrapper.like("cur_handler_id", curHandlerId);
+        }
+
+        if (submitBy != null) {
+            queryWrapper.eq("submit_by", submitBy);
+        }
+
+        if (StrUtil.isNotBlank(status)) {
+            queryWrapper.eq("status", status);
+        }
     }
 }

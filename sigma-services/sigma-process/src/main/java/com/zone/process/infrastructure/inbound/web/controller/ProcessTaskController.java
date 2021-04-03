@@ -47,7 +47,7 @@ public class ProcessTaskController {
             @ApiParam(name = "pageNo") @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
             @ApiParam(name = "pageSize") @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
         LoginUser loginUser = CurrentContext.getUser();
-        return ResponseData.ok(null);
+        return ResponseData.ok(queryService.page(name, startTime, endTime, submitBy, pageNo, pageSize, loginUser));
     }
 
     @ApiOperation(value = "查看任务详情", notes = "返回任务详情，做权限校验")

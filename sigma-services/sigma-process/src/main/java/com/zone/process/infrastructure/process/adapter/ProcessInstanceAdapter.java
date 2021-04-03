@@ -8,6 +8,7 @@ import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Task;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @Author: jianyong.zhu
@@ -35,5 +36,13 @@ public class ProcessInstanceAdapter {
             return taskVO;
         }
         return null;
+    }
+
+    public static List<TaskVO> getTaskVOList(List<Task> taskList) {
+        if (CollectionUtil.isEmpty(taskList)) {
+            return Lists.newArrayList();
+        }
+        return taskList.stream().filter(task -> task != null)
+                .map(task -> getTaskVO(task)).collect(Collectors.toList());
     }
 }

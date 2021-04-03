@@ -3,6 +3,7 @@ package com.zone.process.infrastructure.process.impl;
 import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.common.collect.Lists;
+import com.zone.commons.entity.Page;
 import com.zone.process.infrastructure.process.adapter.ProcessInstanceAdapter;
 import com.zone.process.infrastructure.process.dataobject.ActRuIdentitylinkDO;
 import com.zone.process.infrastructure.process.mapper.ActRuIdentitylinkMapper;
@@ -57,6 +58,43 @@ public class CamundaQueryService implements ProcessEngineQueryAPI {
                 .taskCandidateGroupIn(identityList)
                 .singleResult();
         return ProcessInstanceAdapter.getTaskVO(task);
+    }
+
+    @Override
+    public List<TaskVO> queryRelateTaskList(Long userId, Long roleId) {
+        List<String> identityList = generateIdentityList(userId, roleId);
+        List<Task> taskList = taskService.createTaskQuery()
+                .taskCandidateGroupIn(identityList)
+                .list();
+        return ProcessInstanceAdapter.getTaskVOList(taskList);
+    }
+
+    /**
+     * 在内存中进行分页
+     */
+    @Override
+    public Page<TaskVO> pageTaskList(List<String> taskIdList, List<String> procInstIdList, Integer pageNo, Integer pageSize) {
+        // 所有属于 procInstIdList 的任务
+        List<Task> taskList = taskService.createTaskQuery()
+                .processInstanceIdIn(procInstIdList.toArray(new String[0]))
+                .list();
+
+        // 通过 taskIdList 进行过滤
+        taskList = taskList.stream().filter(task -> taskIdList.contains(task.getId())).collect(Collectors.toList());
+
+        Page<TaskVO> page = new Page<>();
+        page.setPageNo(Long.valueOf(pageNo));
+        page.setPageSize(Long.valueOf(pageSize));
+        page.setTotalSize(Long.valueOf(taskList.size()));
+
+        int start = (pageNo - 1) * pageSize;
+        if (start >= taskList.size()) {
+            page.setData(Lists.newArrayList());
+        } else {
+            int end = start + pageSize < taskList.size() + 1 ? start + pageSize : taskList.size();
+            page.setData(ProcessInstanceAdapter.getTaskVOList(taskList.subList(start, end)));
+        }
+        return page;
     }
 
     /**
