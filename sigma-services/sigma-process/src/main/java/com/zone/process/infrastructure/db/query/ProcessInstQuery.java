@@ -88,6 +88,15 @@ public class ProcessInstQuery {
         return instMapper.selectById(instId);
     }
 
+
+    /**
+     * 查询流程实例
+     */
+    public ProcessInstDO queryInstByProcInstId(String procInstId) {
+        return instMapper.selectOne(new QueryWrapper<ProcessInstDO>()
+                .eq("proc_inst_id", procInstId));
+    }
+
     /**
      * 查询userId作为操作人是否操作过instId这个流程实例
      */
@@ -144,4 +153,5 @@ public class ProcessInstQuery {
             queryWrapper.eq("status", status);
         }
     }
+
 }

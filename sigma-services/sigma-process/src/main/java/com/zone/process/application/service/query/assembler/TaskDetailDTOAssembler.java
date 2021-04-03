@@ -3,8 +3,11 @@ package com.zone.process.application.service.query.assembler;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.util.StrUtil;
+import com.google.common.collect.Lists;
 import com.zone.process.application.service.query.dto.TaskDetailDTO;
+import com.zone.process.infrastructure.db.dataobject.FormStructureDO;
 import com.zone.process.infrastructure.db.dataobject.ProcessInstDO;
+import com.zone.process.infrastructure.db.dataobject.ProcessInstDataDO;
 
 import java.util.Arrays;
 import java.util.List;
@@ -35,5 +38,22 @@ public class TaskDetailDTOAssembler {
             return detailDTO;
         }
         return null;
+    }
+
+    /**
+     * 获取任务详情，包含表单数据
+     */
+    public static TaskDetailDTO getTaskDetailDTO(ProcessInstDO instDO, String taskId, List<FormStructureDO> formList,
+                                                 List<ProcessInstDataDO> instDataDOList, String inputFormIds) {
+        TaskDetailDTO detailDTO = getTaskDetailDTO(instDO, taskId);
+        if (detailDTO != null) {
+            detailDTO.setDataList(InstDataDTOAssembler.getInstDataDTOList(instDataDOList, formList));
+            List<Long> formIdList = StrUtil.isBlank(inputFormIds) ? Lists.newArrayList() :
+                    Arrays.asList(inputFormIds.split(",")).stream()
+                            .filter(tmp -> StrUtil.isNotBlank(tmp))
+                            .map(tmp -> Long.valueOf(tmp)).collect(Collectors.toList());
+            detailDTO.setInputFormIdList(formIdList);
+        }
+        return detailDTO;
     }
 }

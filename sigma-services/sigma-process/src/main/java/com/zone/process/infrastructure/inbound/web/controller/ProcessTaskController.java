@@ -55,7 +55,7 @@ public class ProcessTaskController {
     public ResponseData<TaskDetailDTO> detail(
             @ApiParam(value = "任务id") @RequestParam(value = "taskId", required = false) String taskId) {
         LoginUser loginUser = CurrentContext.getUser();
-        return ResponseData.ok(null);
+        return ResponseData.ok(queryService.detail(taskId, loginUser));
     }
 
 }

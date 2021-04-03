@@ -1,10 +1,16 @@
 package com.zone.process.application.service.query;
 
+import com.google.common.base.Preconditions;
 import com.zone.commons.entity.LoginUser;
 import com.zone.commons.entity.Page;
 import com.zone.process.application.service.query.assembler.TaskDetailDTOAssembler;
 import com.zone.process.application.service.query.dto.TaskDetailDTO;
+import com.zone.process.infrastructure.db.dataobject.FormStructureDO;
+import com.zone.process.infrastructure.db.dataobject.ProcessDefNodeDO;
 import com.zone.process.infrastructure.db.dataobject.ProcessInstDO;
+import com.zone.process.infrastructure.db.dataobject.ProcessInstDataDO;
+import com.zone.process.infrastructure.db.query.FormStructureQuery;
+import com.zone.process.infrastructure.db.query.ProcessDefQuery;
 import com.zone.process.infrastructure.db.query.ProcessInstQuery;
 import com.zone.process.shared.process.ProcessEngineQueryAPI;
 import com.zone.process.shared.process.valueobject.TaskVO;
@@ -31,6 +37,12 @@ public class ProcessTaskQueryService {
     @Autowired
     private ProcessInstQuery instQuery;
 
+    @Autowired
+    private ProcessDefQuery defQuery;
+
+    @Autowired
+    private FormStructureQuery formStructureQuery;
+
     /**
      * 分页查询任务
      */
@@ -51,5 +63,25 @@ public class ProcessTaskQueryService {
                 .collect(Collectors.toMap(key -> key.getProcInstId(), value -> value));
         return taskPage.convert(task -> TaskDetailDTOAssembler.getTaskDetailDTO(
                 instDOMap.get(task.getProcInstId()), task.getTaskId()));
+    }
+
+    /**
+     * 查看任务详情
+     */
+    public TaskDetailDTO detail(String taskId, LoginUser loginUser) {
+        TaskVO taskVO = processEngineQueryAPI.queryRelateTaskById(taskId, loginUser.getUserId(), loginUser.getRoleId());
+        Preconditions.checkNotNull(taskVO, "任务不存在");
+
+        ProcessInstDO instDO = instQuery.queryInstByProcInstId(taskVO.getProcInstId());
+        Preconditions.checkNotNull(instDO, "流程实例不存在");
+
+        ProcessDefNodeDO node = defQuery.queryNodeById(instDO.getDefId(), taskVO.getCurNodeId());
+        Preconditions.checkNotNull(node, "节点不存在");
+
+        String formIds = node.getDisplayFormIds() + "," + node.getInputFormIds();
+        List<FormStructureDO> formList = formStructureQuery.queryByIds(formIds);
+        List<ProcessInstDataDO> instDataDOList = instQuery.queryDataByFormIds(instDO.getId(), formIds);
+
+        return TaskDetailDTOAssembler.getTaskDetailDTO(instDO, taskId, formList, instDataDOList, node.getInputFormIds());
     }
 }
