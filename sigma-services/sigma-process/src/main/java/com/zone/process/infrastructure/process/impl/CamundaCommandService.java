@@ -80,7 +80,7 @@ public class CamundaCommandService implements ProcessEngineCommandAPI {
             ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(processDefKey, paramMap);
             return processInstance.getProcessInstanceId();
         } catch (Exception e) {
-            log.error("发起流程实例出错：[{}]", e.getMessage());
+            log.error("发起流程实例出错: [{}]", e.getMessage());
         }
         return null;
     }
@@ -91,22 +91,32 @@ public class CamundaCommandService implements ProcessEngineCommandAPI {
                 .processInstanceId(procInstId).singleResult();
         Preconditions.checkNotNull(processInstance, "流程实例已结束");
 
-        // camunda 将 runtime 中的一些数据删除，并将 ACT_HI_PROCINST 中的流程实例状态改为 INTERNALLY_TERMINATED
-        runtimeService.deleteProcessInstance(procInstId, comment);
+        try {
+            // camunda 将 runtime 中的一些数据删除，并将 ACT_HI_PROCINST 中的流程实例状态改为 INTERNALLY_TERMINATED
+            runtimeService.deleteProcessInstance(procInstId, comment);
+        } catch (Exception e) {
+            log.error("停止流程实例出错: [{}]", e.getMessage());
+            Preconditions.checkState(false, "停止流程实例出错");
+        }
     }
 
     @Override
     public void operateTask(String taskId, String procInstId, Map<String, Object> paramMap, List<String> identityList, String operationType) {
-        TaskOperationTypeEnum type = TaskOperationTypeEnum.getByCode(operationType);
-        switch (type) {
-            case COMPLETE:
-                taskService.complete(taskId, paramMap);
-                break;
-            case UPDATE:
-                identityLinkMapper.delete(new QueryWrapper<ActRuIdentitylinkDO>().eq("TASK_ID_", taskId));
-                identityList.stream().filter(identity -> StrUtil.isNotBlank(identity))
-                        .forEach(identity -> taskService.addCandidateGroup(taskId, identity));
-                break;
+        try {
+            TaskOperationTypeEnum type = TaskOperationTypeEnum.getByCode(operationType);
+            switch (type) {
+                case COMPLETE:
+                    taskService.complete(taskId, paramMap);
+                    break;
+                case UPDATE:
+                    identityLinkMapper.delete(new QueryWrapper<ActRuIdentitylinkDO>().eq("TASK_ID_", taskId));
+                    identityList.stream().filter(identity -> StrUtil.isNotBlank(identity))
+                            .forEach(identity -> taskService.addCandidateGroup(taskId, identity));
+                    break;
+            }
+        } catch (Exception e) {
+            log.error("操作任务出错: [{}]", e.getMessage());
+            Preconditions.checkState(false, "操作任务出错");
         }
 
     }

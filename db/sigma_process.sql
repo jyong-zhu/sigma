@@ -159,6 +159,7 @@ CREATE TABLE `process_inst_operation`
     `instance_id`    bigint(20)   NOT NULL COMMENT '流程实例id',
     `operation_type` varchar(45)  NOT NULL COMMENT '操作类型（start/complete/update/insert/stop）',
     `bpmn_node_id`   varchar(45)  NOT NULL COMMENT '操作所处的节点id',
+    `task_id`        varchar(45)  NOT NULL DEFAULT '' COMMENT '操作的任务id',
     `comment`        varchar(255) NOT NULL DEFAULT '' COMMENT '操作备注',
     `operate_by`     bigint(20)   NOT NULL COMMENT '操作人的user_id',
     `operate_name`   varchar(45)  NOT NULL COMMENT '操作人的姓名',

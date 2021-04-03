@@ -22,6 +22,9 @@ public class InstOperationVO {
     @ApiModelProperty(value = "操作所处的节点id")
     private String bpmnNodeId;
 
+    @ApiModelProperty(value = "操作的任务id")
+    private String taskId;
+
     @ApiModelProperty(value = "操作备注")
     private String comment;
 
@@ -40,10 +43,11 @@ public class InstOperationVO {
     @ApiModelProperty(value = "扩展字段")
     private String ext;
 
-    public static InstOperationVO generateOperationVO(String nodeId, String operationType, String comment,
+    public static InstOperationVO generateOperationVO(String nodeId, String taskId, String operationType, String comment,
                                                       Map<Long, Map<String, String>> formDataMap, LoginUser loginUser, String ext) {
         return new InstOperationVO()
                 .setBpmnNodeId(nodeId)
+                .setTaskId(taskId)
                 .setComment(comment)
                 .setOperationType(operationType)
                 .setOperateBy(loginUser.getUserId())

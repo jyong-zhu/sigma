@@ -46,7 +46,6 @@ public class InstanceParamDomainService {
 
             } catch (Exception e) {
                 log.error("填充流程实例的变量值出错: [{}]", e.getMessage());
-                Preconditions.checkState(false, "填充流程实例的变量值出错");
             }
         });
 

@@ -40,6 +40,9 @@ public class ProcessInstOperationDO implements Serializable {
     @ApiModelProperty(value = "操作所处的节点id")
     private String bpmnNodeId;
 
+    @ApiModelProperty(value = "操作的任务id")
+    private String taskId;
+
     @ApiModelProperty(value = "操作备注")
     private String comment;
 
