@@ -10,6 +10,7 @@ import com.zone.process.application.service.command.cmd.InstStartCommand;
 import com.zone.process.application.service.command.cmd.InstStopCommand;
 import com.zone.process.application.service.query.ProcessInstQueryService;
 import com.zone.process.application.service.query.dto.InstDetailDTO;
+import com.zone.process.application.service.query.dto.InstNodeDataDTO;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,18 +50,20 @@ public class ProcessInstController {
         return ResponseData.ok(cmdService.stop(stopCommand, loginUser));
     }
 
-    @ApiOperation(value = "流程实例列表", notes = "返回当前用户操作过或者发起的流程实例列表")
+    @ApiOperation(value = "流程实例列表", notes = "返回当前用户操作过的流程实例列表（包含我发起的以及我处理的）")
     @GetMapping("/page")
     public ResponseData<Page<InstDetailDTO>> page(
             @ApiParam(value = "流程实例的名称") @RequestParam(value = "name", required = false) String name,
             @ApiParam(value = "创建区间的开始时间") @RequestParam(value = "startTime", required = false) Long startTime,
             @ApiParam(value = "创建区间的结束时间") @RequestParam(value = "endTime", required = false) Long endTime,
-            @ApiParam(value = "处理人userId") @RequestParam(value = "userId", required = false) Long curHandlerId,
+            @ApiParam(value = "处理人userId") @RequestParam(value = "curHandlerId", required = false) Long curHandlerId,
+            @ApiParam(value = "发起人userId") @RequestParam(value = "submitBy", required = false) Long submitBy,
             @ApiParam(value = "状态，进行中-active，已结束-finished") @RequestParam(value = "status", required = false) String status,
             @ApiParam(name = "pageNo") @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
             @ApiParam(name = "pageSize") @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
         LoginUser loginUser = CurrentContext.getUser();
-        return ResponseData.ok(null);
+        return ResponseData.ok(queryService.page(name, startTime, endTime, curHandlerId, submitBy, status,
+                pageNo, pageSize, loginUser));
     }
 
     @ApiOperation(value = "流程实例详情")
@@ -68,7 +71,15 @@ public class ProcessInstController {
     public ResponseData<InstDetailDTO> detail(
             @ApiParam(value = "流程实例id") @RequestParam(value = "instId") Long instId) {
         LoginUser loginUser = CurrentContext.getUser();
-        return ResponseData.ok(null);
+        return ResponseData.ok(queryService.detail(instId, loginUser));
     }
 
+    @ApiOperation(value = "获取指定节点上的流程实例的表单数据")
+    @GetMapping("/inst-node-detail")
+    public ResponseData<InstNodeDataDTO> queryInstDataByNodeId(
+            @ApiParam(value = "流程实例id") @RequestParam(value = "instId") Long instId,
+            @ApiParam(value = "节点id") @RequestParam(value = "bpmnNodeId") String bpmnNodeId) {
+        LoginUser loginUser = CurrentContext.getUser();
+        return ResponseData.ok(queryService.queryInstDataByNodeId(instId, bpmnNodeId, loginUser));
+    }
 }

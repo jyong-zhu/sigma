@@ -43,6 +43,7 @@ public class ProcessTaskController {
             @ApiParam(value = "流程实例的名称") @RequestParam(value = "name", required = false) String name,
             @ApiParam(value = "创建区间的开始时间") @RequestParam(value = "startTime", required = false) Long startTime,
             @ApiParam(value = "创建区间的结束时间") @RequestParam(value = "endTime", required = false) Long endTime,
+            @ApiParam(value = "发起人userId") @RequestParam(value = "submitBy", required = false) Long submitBy,
             @ApiParam(name = "pageNo") @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
             @ApiParam(name = "pageSize") @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
         LoginUser loginUser = CurrentContext.getUser();
