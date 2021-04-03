@@ -13,6 +13,7 @@ import lombok.experimental.Accessors;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -56,6 +57,15 @@ public class DefNodeVO {
 
     @ApiModelProperty("节点的变量信息")
     private List<DefNodeVariableVO> variableVOList;
+
+    @ApiModelProperty(value = "创建时间")
+    private LocalDateTime createTime;
+
+    @ApiModelProperty(value = "user_id")
+    private Long createBy;
+
+    @ApiModelProperty(value = "user_name")
+    private String createName;
 
     /**
      * 解析 xml 文件，并封装节点的信息

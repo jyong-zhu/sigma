@@ -1,8 +1,11 @@
 package com.zone.process.domain.agg;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.time.LocalDateTime;
 
 /**
  * @Author: jianyong.zhu
@@ -13,4 +16,13 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 public class FormStructureAgg {
+
+    @ApiModelProperty(value = "创建时间")
+    private LocalDateTime createTime;
+
+    @ApiModelProperty(value = "user_id")
+    private Long createBy;
+
+    @ApiModelProperty(value = "user_name")
+    private String createName;
 }

@@ -78,6 +78,15 @@ public class ProcessInstAgg {
     @ApiModelProperty("流程实例的操作列表")
     private List<InstOperationVO> operationVOList;
 
+    @ApiModelProperty(value = "创建时间")
+    private LocalDateTime createTime;
+
+    @ApiModelProperty(value = "user_id")
+    private Long createBy;
+
+    @ApiModelProperty(value = "user_name")
+    private String createName;
+
     /**
      * 初始化流程实例
      */

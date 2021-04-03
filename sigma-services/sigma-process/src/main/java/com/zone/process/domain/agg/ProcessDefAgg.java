@@ -11,6 +11,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -62,6 +63,15 @@ public class ProcessDefAgg {
 
     @ApiModelProperty("流程定义中节点的信息")
     private List<DefNodeVO> nodeVOList;
+
+    @ApiModelProperty(value = "创建时间")
+    private LocalDateTime createTime;
+
+    @ApiModelProperty(value = "user_id")
+    private Long createBy;
+
+    @ApiModelProperty(value = "user_name")
+    private String createName;
 
     /**
      * 初始化流程定义的数据，包括聚合根的id、版本信息等

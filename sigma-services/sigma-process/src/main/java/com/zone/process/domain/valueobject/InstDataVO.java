@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -30,6 +31,15 @@ public class InstDataVO {
 
     @ApiModelProperty(value = "流程实例在表单中对应的数据")
     private String formData;
+
+    @ApiModelProperty(value = "创建时间")
+    private LocalDateTime createTime;
+
+    @ApiModelProperty(value = "user_id")
+    private Long createBy;
+
+    @ApiModelProperty(value = "user_name")
+    private String createName;
 
     /**
      * 获取表单数据

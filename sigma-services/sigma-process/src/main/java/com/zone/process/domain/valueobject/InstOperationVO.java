@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 
 /**
@@ -42,6 +43,15 @@ public class InstOperationVO {
 
     @ApiModelProperty(value = "扩展字段")
     private String ext;
+
+    @ApiModelProperty(value = "创建时间")
+    private LocalDateTime createTime;
+
+    @ApiModelProperty(value = "user_id")
+    private Long createBy;
+
+    @ApiModelProperty(value = "user_name")
+    private String createName;
 
     public static InstOperationVO generateOperationVO(String nodeId, String taskId, String operationType, String comment,
                                                       Map<Long, Map<String, String>> formDataMap, LoginUser loginUser, String ext) {

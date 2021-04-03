@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import java.time.LocalDateTime;
+
 /**
  * @Author: jianyong.zhu
  * @Date: 2021/3/27 5:55 下午
@@ -29,4 +31,13 @@ public class DefNodeVariableVO {
 
     @ApiModelProperty(value = "默认的参数值")
     private String defaultValue;
+
+    @ApiModelProperty(value = "创建时间")
+    private LocalDateTime createTime;
+
+    @ApiModelProperty(value = "user_id")
+    private Long createBy;
+
+    @ApiModelProperty(value = "user_name")
+    private String createName;
 }
