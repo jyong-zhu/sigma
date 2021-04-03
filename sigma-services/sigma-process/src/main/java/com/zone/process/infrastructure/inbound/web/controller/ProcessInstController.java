@@ -11,12 +11,14 @@ import com.zone.process.application.service.command.cmd.InstStopCommand;
 import com.zone.process.application.service.query.ProcessInstQueryService;
 import com.zone.process.application.service.query.dto.InstDetailDTO;
 import com.zone.process.application.service.query.dto.InstNodeDataDTO;
+import com.zone.process.application.service.query.dto.InstTransferDTO;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * <p>
@@ -75,15 +77,19 @@ public class ProcessInstController {
     }
 
     @ApiOperation(value = "获取指定节点上的流程实例的表单数据")
-    @GetMapping("/inst-node-detail")
-    public ResponseData<InstNodeDataDTO> queryInstDataByNodeId(
+    @GetMapping("/node-data")
+    public ResponseData<InstNodeDataDTO> queryInstNodeData(
             @ApiParam(value = "流程实例id") @RequestParam(value = "instId") Long instId,
             @ApiParam(value = "节点id") @RequestParam(value = "bpmnNodeId") String bpmnNodeId) {
         LoginUser loginUser = CurrentContext.getUser();
-        return ResponseData.ok(queryService.queryInstDataByNodeId(instId, bpmnNodeId, loginUser));
+        return ResponseData.ok(queryService.queryInstNodeData(instId, bpmnNodeId, loginUser));
     }
 
-    // todo 流转记录
-
+    @ApiOperation(value = "获取指定节点上的流程实例的表单数据")
+    @GetMapping("/transfer")
+    public ResponseData<List<InstTransferDTO>> queryInstTransfer(
+            @ApiParam(value = "流程实例id") @RequestParam(value = "instId") Long instId) {
+        return ResponseData.ok(queryService.queryInstTransfer(instId));
+    }
 
 }

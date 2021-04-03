@@ -6,8 +6,10 @@ import com.zone.commons.entity.Page;
 import com.zone.mybatis.util.PlusPageConverter;
 import com.zone.process.application.service.query.assembler.InstDetailDTOAssembler;
 import com.zone.process.application.service.query.assembler.InstNodeDataDTOAssembler;
+import com.zone.process.application.service.query.assembler.InstTransferDTOAssembler;
 import com.zone.process.application.service.query.dto.InstDetailDTO;
 import com.zone.process.application.service.query.dto.InstNodeDataDTO;
+import com.zone.process.application.service.query.dto.InstTransferDTO;
 import com.zone.process.infrastructure.db.dataobject.*;
 import com.zone.process.infrastructure.db.query.FormStructureQuery;
 import com.zone.process.infrastructure.db.query.ProcessDefQuery;
@@ -17,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @Author: jianyong.zhu
@@ -58,7 +61,7 @@ public class ProcessInstQueryService {
     public InstDetailDTO detail(Long instId, LoginUser loginUser) {
 
         ProcessInstDO instDO = instQuery.queryInstById(instId);
-        ProcessInstOperationDO operationDO = instQuery.queryOperation(instId, loginUser.getUserId());
+        ProcessInstOperationDO operationDO = instQuery.queryRelateOperation(instId, loginUser.getUserId());
         Preconditions.checkState(instDO != null && operationDO != null, "流程实例不存在");
 
         // 详情中只返回开始节点的表单数据，要查看其他节点上的表单需要调接口进行切换
@@ -75,10 +78,10 @@ public class ProcessInstQueryService {
     /**
      * 查询指定节点上流程实例的数据
      */
-    public InstNodeDataDTO queryInstDataByNodeId(Long instId, String bpmnNodeId, LoginUser loginUser) {
+    public InstNodeDataDTO queryInstNodeData(Long instId, String bpmnNodeId, LoginUser loginUser) {
 
         ProcessInstDO instDO = instQuery.queryInstById(instId);
-        ProcessInstOperationDO operationDO = instQuery.queryOperation(instId, loginUser.getUserId());
+        ProcessInstOperationDO operationDO = instQuery.queryRelateOperation(instId, loginUser.getUserId());
         Preconditions.checkState(instDO != null && operationDO != null, "流程实例不存在");
 
         // 查询指定节点的信息
@@ -90,5 +93,18 @@ public class ProcessInstQueryService {
         List<ProcessInstDataDO> instDataDOList = instQuery.queryDataByFormIds(instId, formIds);
 
         return InstNodeDataDTOAssembler.getInstNodeDataDTO(instId, bpmnNodeId, instDataDOList, formList);
+    }
+
+    /**
+     * 获取流程实例的流转记录
+     */
+    public List<InstTransferDTO> queryInstTransfer(Long instId) {
+
+        ProcessInstDO instDO = instQuery.queryInstById(instId);
+        Preconditions.checkNotNull(instDO, "流程实例不存在");
+
+        List<ProcessInstOperationDO> operationDOList = instQuery.queryOperationList(instId);
+
+        return operationDOList.stream().map(tmp -> InstTransferDTOAssembler.getInstTransferDTO(tmp)).collect(Collectors.toList());
     }
 }

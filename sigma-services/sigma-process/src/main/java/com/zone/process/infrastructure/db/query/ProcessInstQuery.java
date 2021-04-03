@@ -100,7 +100,7 @@ public class ProcessInstQuery {
     /**
      * 查询userId作为操作人是否操作过instId这个流程实例
      */
-    public ProcessInstOperationDO queryOperation(Long instId, Long userId) {
+    public ProcessInstOperationDO queryRelateOperation(Long instId, Long userId) {
         return instOperationMapper.selectOne(
                 new QueryWrapper<ProcessInstOperationDO>().eq("instance_id", instId)
                         .eq("operate_by", userId).last(" limit 1 "));
@@ -154,4 +154,10 @@ public class ProcessInstQuery {
         }
     }
 
+    public List<ProcessInstOperationDO> queryOperationList(Long instId) {
+        return instOperationMapper.selectList(
+                new QueryWrapper<ProcessInstOperationDO>()
+                        .eq("instance_id", instId)
+                        .orderByDesc("create_time"));
+    }
 }

@@ -34,7 +34,7 @@ public class ProcessInstOperationDO implements Serializable {
     @ApiModelProperty(value = "流程实例id")
     private Long instanceId;
 
-    @ApiModelProperty(value = "操作类型（start/complete/update/insert/stop）")
+    @ApiModelProperty(value = "操作类型（start/complete/update/stop）")
     private String operationType;
 
     @ApiModelProperty(value = "操作所处的节点id")
