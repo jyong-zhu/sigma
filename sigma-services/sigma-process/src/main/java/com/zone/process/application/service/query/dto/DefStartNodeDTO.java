@@ -6,13 +6,11 @@ import lombok.experimental.Accessors;
 
 /**
  * @Author: jianyong.zhu
- * @Date: 2021/3/27 11:17 上午
+ * @Date: 2021/4/4 12:28 上午
  * @Description:
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class DefDetailDTO {
-
-
+public class DefStartNodeDTO {
 }

@@ -1,8 +1,6 @@
 package com.zone.process.infrastructure.inbound.web.controller;
 
 
-import com.zone.commons.context.CurrentContext;
-import com.zone.commons.entity.LoginUser;
 import com.zone.commons.entity.Page;
 import com.zone.commons.entity.ResponseData;
 import com.zone.process.application.service.command.ProcessDefCmdService;
@@ -10,12 +8,14 @@ import com.zone.process.application.service.command.cmd.DefDeployCommand;
 import com.zone.process.application.service.query.ProcessDefQueryService;
 import com.zone.process.application.service.query.dto.DefDetailDTO;
 import com.zone.process.application.service.query.dto.DefNodeDetailDTO;
+import com.zone.process.application.service.query.dto.DefStartNodeDTO;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * <p>
@@ -48,34 +48,28 @@ public class ProcessDefController {
             @ApiParam(value = "流程定义的名称") @RequestParam(value = "name", required = false) String name,
             @ApiParam(name = "pageNo") @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
             @ApiParam(name = "pageSize") @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
-        LoginUser loginUser = CurrentContext.getUser();
-        return ResponseData.ok(null);
+        return ResponseData.ok(queryService.page(categoryId, name, pageNo, pageSize));
     }
 
     @ApiOperation(value = "查询流程定义的详情", notes = "若有多个版本，则返回最新版本")
     @GetMapping("/detail-by-key")
     public ResponseData<DefDetailDTO> queryDetailByKey(
             @ApiParam(value = "流程定义的key", required = true) @RequestParam("procDefKey") String procDefKey) {
-        LoginUser loginUser = CurrentContext.getUser();
-        return ResponseData.ok(null);
+        return ResponseData.ok(queryService.queryDetailByKey(procDefKey));
     }
 
-    @ApiOperation(value = "查询流程定义的详情", notes = "根据defId查询特定的流程定义，可以是老版本")
-    @GetMapping("/detail-by-id")
-    public ResponseData<DefDetailDTO> queryDetailById(
+    @ApiOperation(value = "查询流程定义的开始节点详情", notes = "用proDefKey来查，是最新的版本, 用于发起流程实例")
+    @GetMapping("/start-node")
+    public ResponseData<DefStartNodeDTO> queryStartNodeDetail(
+            @ApiParam(value = "流程定义的key", required = true) @RequestParam("procDefKey") String procDefKey) {
+        return ResponseData.ok(queryService.queryStartNodeDetail(procDefKey));
+    }
+
+    @ApiOperation(value = "查询流程定义的节点列表", notes = "用defId来查，指定到某一个版本，用于切换节点")
+    @GetMapping("/node-list")
+    public ResponseData<List<DefNodeDetailDTO>> queryNodeList(
             @ApiParam(value = "流程定义的id", required = true) @RequestParam("defId") Long defId) {
-        LoginUser loginUser = CurrentContext.getUser();
-        return ResponseData.ok(null);
+        return ResponseData.ok(queryService.queryNodeList(defId));
     }
 
-    @ApiOperation(value = "查询流程定义的节点详情", notes = "涉及历史版本的节点信息，故用defId+bpmnNodeId来查询")
-    @GetMapping("/node-detail")
-    public ResponseData<DefNodeDetailDTO> queryNodeDetail(
-            @ApiParam(value = "流程定义的id", required = true) @RequestParam("defId") Long defId,
-            @ApiParam(value = "bpmn中的节点id", required = true) @RequestParam("bpmnNodeId") String bpmnNodeId) {
-        LoginUser loginUser = CurrentContext.getUser();
-        return ResponseData.ok(null);
-    }
-
-    // todo 节点列表
 }
