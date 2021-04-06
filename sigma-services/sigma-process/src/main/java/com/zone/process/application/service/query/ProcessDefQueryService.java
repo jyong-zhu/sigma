@@ -1,18 +1,26 @@
 package com.zone.process.application.service.query;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.zone.commons.entity.Page;
 import com.zone.mybatis.util.PlusPageConverter;
+import com.zone.process.application.service.query.assembler.DefDetailDTOAssembler;
+import com.zone.process.application.service.query.assembler.DefNodeDetailDTOAssembler;
 import com.zone.process.application.service.query.dto.DefDetailDTO;
 import com.zone.process.application.service.query.dto.DefNodeDetailDTO;
 import com.zone.process.application.service.query.dto.DefStartNodeDTO;
 import com.zone.process.infrastructure.db.dataobject.ProcessDefDO;
+import com.zone.process.infrastructure.db.dataobject.ProcessDefNodeDO;
+import com.zone.process.infrastructure.db.dataobject.ProcessDefNodePropertyDO;
+import com.zone.process.infrastructure.db.dataobject.ProcessDefNodeVariableDO;
 import com.zone.process.infrastructure.db.query.ProcessDefQuery;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @Author: jianyong.zhu
@@ -39,9 +47,16 @@ public class ProcessDefQueryService {
      * 含有完整的节点的信息，包括节点变量与节点属性
      */
     public DefDetailDTO queryDetailByKey(String procDefKey) {
+        ProcessDefDO def = defQuery.queryDefByProcKey(procDefKey);
+        Preconditions.checkNotNull(def, "流程定义不存在");
 
+        List<ProcessDefNodeDO> nodeList = defQuery.queryNodeListByDefId(def.getId());
+        List<Long> nodeIdList = nodeList.stream().map(tmp -> tmp.getId()).collect(Collectors.toList());
 
-        return null;
+        List<ProcessDefNodeVariableDO> variableList = defQuery.queryNodeVariableList(nodeIdList);
+        List<ProcessDefNodePropertyDO> propertyList = defQuery.queryNodePropertyList(nodeIdList);
+
+        return DefDetailDTOAssembler.getDefDetailDTO(def, nodeList, variableList, propertyList);
     }
 
     /**
@@ -55,6 +70,9 @@ public class ProcessDefQueryService {
      * 只有节点的信息
      */
     public List<DefNodeDetailDTO> queryNodeList(Long defId) {
-        return null;
+        List<ProcessDefNodeDO> nodeDOList = defQuery.queryNodeListByDefId(defId);
+        return DefNodeDetailDTOAssembler.getDefNodeDetailDTOList(nodeDOList, Lists.newArrayList(), Lists.newArrayList());
     }
+
+    //todo 禁用流程定义
 }

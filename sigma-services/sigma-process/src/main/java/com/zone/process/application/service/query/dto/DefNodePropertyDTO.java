@@ -16,7 +16,7 @@ import lombok.experimental.Accessors;
 public class DefNodePropertyDTO {
 
     @ApiModelProperty("属性id")
-    private Long propertyId;
+    private Long id;
 
     @ApiModelProperty("节点id")
     private Long nodeId;
@@ -29,5 +29,8 @@ public class DefNodePropertyDTO {
 
     @ApiModelProperty("属性值")
     private String propertyValue;
+
+    @ApiModelProperty("描述")
+    private String description;
 
 }
