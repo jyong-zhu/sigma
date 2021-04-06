@@ -1,4 +1,4 @@
-<center><h1>Sigma</h1></center>
+<p align="center"><h1>Sigma</h1></p>
 
 ## 项目功能点
 
@@ -84,7 +84,7 @@
 
 ```latex
 ├── sigma-parent       // 整个项目依赖版本管理 
-├── sigma-rpc			     // 服务间调用的 feign 接口定义以及相关的 DTO
+├── sigma-rpc		   // 服务间调用的 feign 接口定义以及相关的 DTO
 ├── sigma-services     // 该 module 下包含所有的微服务
 │   ├── sigma-auth     // 用户中心
 │   ├── sigma-gateway  // 网关
@@ -92,7 +92,7 @@
 │   └── sigma-registry // 注册中心，nacos
 └── sigma-starters     // 封装的一些本项目通用的 starters
     ├── sigma-starter-commons     // 通用的类或方法
-    ├── sigma-starter-feign				// feign 相关的配置，如 feign 调用的拦截器
+    ├── sigma-starter-feign	      // feign 相关的配置，如 feign 调用的拦截器
     ├── sigma-starter-generator   // mybatis-plus 代码生成器
     ├── sigma-starter-mybatis     // mybatis 相关的配置，如日志打印、sql 注入等
     ├── sigma-starter-web         // spring-boot-starter-web 相关的依赖以及一些拦截器、过滤器等
