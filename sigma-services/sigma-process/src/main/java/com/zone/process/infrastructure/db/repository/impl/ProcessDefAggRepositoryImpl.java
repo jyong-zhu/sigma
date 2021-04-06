@@ -53,15 +53,14 @@ public class ProcessDefAggRepositoryImpl implements ProcessDefAggRepository {
     public void save(ProcessDefAgg processDefAgg) {
 
         // 保存流程定义的时候，要把老版本的流程定义的 isLatest 字段更新掉
-        List<ProcessDefDO> oldDefDOList = defMapper.selectList(new QueryWrapper<ProcessDefDO>()
-                .eq("proc_def_key", processDefAgg.getProcDefKey()));
-        int total = 0;
-        // 这里使用乐观锁，考虑到数据量也不大，所以用 for 循环去调用
-        for (ProcessDefDO tmp : oldDefDOList) {
-            tmp.setIsLatest(false);
-            total += defMapper.updateById(tmp);
+        ProcessDefDO oldDefDO = defMapper.selectOne(new QueryWrapper<ProcessDefDO>()
+                .eq("proc_def_key", processDefAgg.getProcDefKey()).eq("is_latest", 1));
+        // 使用乐观锁
+        if (oldDefDO != null) {
+            oldDefDO.setIsLatest(false);
+            int num = defMapper.updateById(oldDefDO);
+            Preconditions.checkState(num > 0, "更新旧版本流程实例失败");
         }
-        Preconditions.checkState(total == oldDefDOList.size(), "更新旧版本流程实例失败");
 
         ProcessDefDO defDO = BeanUtil.copyProperties(processDefAgg, ProcessDefDO.class);
         defMapper.insert(defDO);

@@ -8,6 +8,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
  * @Author: jianyong.zhu
@@ -24,7 +25,7 @@ public class DefNodeVariableCommand {
     private String variableName;
 
     @ApiModelProperty(value = "当前节点上挂靠的表单id")
-    @NotBlank(message = "表单id不能为空")
+    @NotNull(message = "表单id不能为空")
     private Long formId;
 
     @ApiModelProperty(value = "该表单中的字段id")

@@ -116,7 +116,7 @@ public class ProcessDefTest {
         variableCommandList.add(new DefNodeVariableCommand()
                 .setVariableName("user1")
                 .setJavaType("String")
-                .setFormId("1")
+                .setFormId(1L)
                 .setFieldId("user")
                 .setDefaultValue(""));
         DefNodeCommand startNode = new DefNodeCommand()
@@ -131,13 +131,13 @@ public class ProcessDefTest {
         variableCommandList.add(new DefNodeVariableCommand()
                 .setVariableName("user2")
                 .setJavaType("String")
-                .setFormId("2")
+                .setFormId(2L)
                 .setFieldId("user")
                 .setDefaultValue(""));
         variableCommandList.add(new DefNodeVariableCommand()
                 .setVariableName("isComplete")
                 .setJavaType("java.lang.Boolean")
-                .setFormId("2")
+                .setFormId(2L)
                 .setFieldId("complete")
                 .setDefaultValue("true"));
         DefNodeCommand node1 = new DefNodeCommand()
