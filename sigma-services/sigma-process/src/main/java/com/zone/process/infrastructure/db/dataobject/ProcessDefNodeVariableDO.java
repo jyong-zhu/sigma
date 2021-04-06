@@ -44,7 +44,7 @@ public class ProcessDefNodeVariableDO implements Serializable {
     private String javaType;
 
     @ApiModelProperty(value = "当前节点上挂靠的表单id")
-    private String formId;
+    private Long formId;
 
     @ApiModelProperty(value = "该表单中的字段id")
     private String fieldId;

@@ -28,6 +28,7 @@ CREATE TABLE `process_def`
     `proc_def_id`        varchar(200) NOT NULL COMMENT 'camunda中的流程定义id，关联到ACT_RE_PROCDEF',
     `proc_def_key`       varchar(200) NOT NULL COMMENT 'camunda中的流程定义key，关联到ACT_RE_PROCDEF的key',
     `proc_def_version`   int          NOT NULL DEFAULT '1' COMMENT 'camunda中的流程定义版本，关联到ACT_RE_PROCDEF的version',
+    `is_latest`          tinyint(1)   NOT NULL DEFAULT '1' COMMENT '是否是最新版本的流程定义',
     `name`               varchar(45)  NOT NULL COMMENT '流程定义名称',
     `status`             tinyint(1)   NOT NULL DEFAULT '1' COMMENT '流程定义的状态，0-禁用 1-启用',
     `bpmn_xml`           text         NULL COMMENT '当前流程的bpmn2.0的xml定义',
@@ -84,7 +85,7 @@ CREATE TABLE `process_def_node_variable`
     `bpmn_node_id`  varchar(45) NOT NULL COMMENT 'bpmn中的流程节点id(冗余)',
     `variable_name` varchar(45) NOT NULL COMMENT '流程节点的变量名称，这个参数可以在后续的节点中被引用',
     `java_type`     varchar(45) NOT NULL DEFAULT 'java.lang.String' COMMENT '流程节点变量的类型',
-    `form_id`       varchar(45) NOT NULL COMMENT '当前节点上挂靠的表单id',
+    `form_id`       bigint(20)  NOT NULL COMMENT '当前节点上挂靠的表单id',
     `field_id`      varchar(45) NOT NULL COMMENT '该表单中的字段id',
     `default_value` varchar(255)         DEFAULT NULL COMMENT '默认的参数值',
 

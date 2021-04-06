@@ -1,9 +1,12 @@
 package com.zone.process.application.service.query;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.zone.commons.entity.Page;
+import com.zone.mybatis.util.PlusPageConverter;
 import com.zone.process.application.service.query.dto.DefDetailDTO;
 import com.zone.process.application.service.query.dto.DefNodeDetailDTO;
 import com.zone.process.application.service.query.dto.DefStartNodeDTO;
+import com.zone.process.infrastructure.db.dataobject.ProcessDefDO;
 import com.zone.process.infrastructure.db.query.ProcessDefQuery;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,14 +30,17 @@ public class ProcessDefQueryService {
      * 分页查询流程定义，不含节点的信息
      */
     public Page<DefDetailDTO> page(Long categoryId, String name, Integer pageNo, Integer pageSize) {
+        Page<ProcessDefDO> page = PlusPageConverter.convert(defQuery.page(categoryId, name, pageNo, pageSize));
 
-        return null;
+        return page.convert(processDefDO -> BeanUtil.copyProperties(processDefDO, DefDetailDTO.class));
     }
 
     /**
      * 含有完整的节点的信息，包括节点变量与节点属性
      */
     public DefDetailDTO queryDetailByKey(String procDefKey) {
+
+
         return null;
     }
 

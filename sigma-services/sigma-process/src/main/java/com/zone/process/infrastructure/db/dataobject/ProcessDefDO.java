@@ -43,6 +43,9 @@ public class ProcessDefDO implements Serializable {
     @ApiModelProperty(value = "camunda中的流程定义版本，关联到ACT_RE_PROCDEF的version")
     private Integer procDefVersion;
 
+    @ApiModelProperty(value = "是否是最新版本的流程定义")
+    private Boolean isLatest;
+
     @ApiModelProperty(value = "流程定义名称")
     private String name;
 

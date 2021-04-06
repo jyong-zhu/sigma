@@ -25,7 +25,7 @@ public class DefNodeVariableCommand {
 
     @ApiModelProperty(value = "当前节点上挂靠的表单id")
     @NotBlank(message = "表单id不能为空")
-    private String formId;
+    private Long formId;
 
     @ApiModelProperty(value = "该表单中的字段id")
     @NotBlank(message = "字段id不能为空")

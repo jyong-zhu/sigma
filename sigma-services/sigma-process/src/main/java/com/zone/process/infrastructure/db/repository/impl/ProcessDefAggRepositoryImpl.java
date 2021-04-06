@@ -3,6 +3,7 @@ package com.zone.process.infrastructure.db.repository.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.zone.commons.util.IdWorkerUtil;
@@ -50,6 +51,17 @@ public class ProcessDefAggRepositoryImpl implements ProcessDefAggRepository {
 
     @Override
     public void save(ProcessDefAgg processDefAgg) {
+
+        // 保存流程定义的时候，要把老版本的流程定义的 isLatest 字段更新掉
+        List<ProcessDefDO> oldDefDOList = defMapper.selectList(new QueryWrapper<ProcessDefDO>()
+                .eq("proc_def_key", processDefAgg.getProcDefKey()));
+        int total = 0;
+        // 这里使用乐观锁，考虑到数据量也不大，所以用 for 循环去调用
+        for (ProcessDefDO tmp : oldDefDOList) {
+            tmp.setIsLatest(false);
+            total += defMapper.updateById(tmp);
+        }
+        Preconditions.checkState(total == oldDefDOList.size(), "更新旧版本流程实例失败");
 
         ProcessDefDO defDO = BeanUtil.copyProperties(processDefAgg, ProcessDefDO.class);
         defMapper.insert(defDO);
@@ -112,8 +124,7 @@ public class ProcessDefAggRepositoryImpl implements ProcessDefAggRepository {
     public ProcessDefAgg queryByKey(String defKey) {
         ProcessDefDO processDefDO = defMapper.selectOne(
                 new QueryWrapper<ProcessDefDO>().eq("proc_def_key", defKey)
-                        .orderByDesc("proc_def_version")
-                        .last(" limit 1 "));
+                        .eq("is_latest", true));
         if (processDefDO != null) {
             ProcessDefAgg defAgg = BeanUtil.copyProperties(processDefDO, ProcessDefAgg.class);
             defAgg.setNodeVOList(queryNodeList(processDefDO.getId()));

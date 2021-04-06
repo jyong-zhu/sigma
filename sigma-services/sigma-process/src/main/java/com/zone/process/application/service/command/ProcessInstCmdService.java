@@ -62,6 +62,7 @@ public class ProcessInstCmdService {
 
         ProcessDefAgg defAgg = defAggRepository.queryByKey(startCommand.getDefKey());
         Preconditions.checkNotNull(defAgg, "流程定义不存在");
+        Preconditions.checkState(defAgg.getStatus(), "流程定义被禁用");
 
         // 发起流程实例
         Map<String, Object> paramMap = paramDomainService.generateParamMap(startCommand.getFormDataMap(), defAgg.getStartBpmnNodeId(), defAgg);
