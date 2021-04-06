@@ -1,5 +1,6 @@
 package com.zone.web.interceptor;
 
+import com.zone.commons.consts.GatewayConstants;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
@@ -11,7 +12,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.Enumeration;
 
 /**
  * @Author: jianyong.zhu
@@ -25,27 +25,19 @@ public class RestClientHttpRequestInterceptor implements ClientHttpRequestInterc
     @Override
     public ClientHttpResponse intercept(HttpRequest httpRequest, byte[] bytes, ClientHttpRequestExecution execution) throws IOException {
 
+        // 获取当前请求
+        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletRequest servletRequest = requestAttributes.getRequest();
+
         // 获取RestTemplate要发出去的请求头
         HttpHeaders headers = httpRequest.getHeaders();
 
-        // 获取当前请求
-        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        if (requestAttributes != null) {
-            HttpServletRequest servletRequest = requestAttributes.getRequest();
-            // 塞入当前请求的上下文的信息
-            Enumeration<String> headerNames = servletRequest.getHeaderNames();
-            if (headerNames != null) {
-                String headerName;
-                while (headerNames.hasMoreElements()) {
-                    headerName = headerNames.nextElement();
-                    String value = servletRequest.getHeader(headerName);
-                    if (headerName.equalsIgnoreCase(HttpHeaders.CONTENT_TYPE)) {
-                        continue;
-                    }
-                    headers.add(headerName, value);
-                }
-            }
-        }
+        // 塞入当前请求的上下文的信息
+        headers.add(GatewayConstants.AUTHORIZATION, servletRequest.getHeader(GatewayConstants.AUTHORIZATION));
+        headers.add(GatewayConstants.ACCOUNT_NAME, servletRequest.getHeader(GatewayConstants.ACCOUNT_NAME));
+        headers.add(GatewayConstants.USER_NAME, servletRequest.getHeader(GatewayConstants.USER_NAME));
+        headers.add(GatewayConstants.ROLE_ID, servletRequest.getHeader(GatewayConstants.ROLE_ID));
+        headers.add(GatewayConstants.USER_ID, servletRequest.getHeader(GatewayConstants.USER_ID));
 
         // 执行RestTemplate请求
         return execution.execute(httpRequest, bytes);

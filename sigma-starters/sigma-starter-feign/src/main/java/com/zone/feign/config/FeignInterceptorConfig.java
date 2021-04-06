@@ -1,14 +1,13 @@
 package com.zone.feign.config;
 
+import com.zone.commons.consts.GatewayConstants;
 import feign.RequestInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpHeaders;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Enumeration;
 
 /**
  * @Author: jianyong.zhu
@@ -23,22 +22,14 @@ public class FeignInterceptorConfig {
         return requestTemplate -> {
             // 获取当前请求
             ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-            if (requestAttributes != null) {
-                HttpServletRequest servletRequest = requestAttributes.getRequest();
-                // 塞入当前请求的上下文的信息
-                Enumeration<String> headerNames = servletRequest.getHeaderNames();
-                if (headerNames != null) {
-                    String headerName;
-                    while (headerNames.hasMoreElements()) {
-                        headerName = headerNames.nextElement();
-                        String value = servletRequest.getHeader(headerName);
-                        if (headerName.equalsIgnoreCase(HttpHeaders.CONTENT_TYPE)) {
-                            continue;
-                        }
-                        requestTemplate.header(headerName, value);
-                    }
-                }
-            }
+            HttpServletRequest servletRequest = requestAttributes.getRequest();
+
+            // 塞入当前请求的上下文的信息
+            requestTemplate.header(GatewayConstants.AUTHORIZATION, servletRequest.getHeader(GatewayConstants.AUTHORIZATION));
+            requestTemplate.header(GatewayConstants.ACCOUNT_NAME, servletRequest.getHeader(GatewayConstants.ACCOUNT_NAME));
+            requestTemplate.header(GatewayConstants.USER_NAME, servletRequest.getHeader(GatewayConstants.USER_NAME));
+            requestTemplate.header(GatewayConstants.ROLE_ID, servletRequest.getHeader(GatewayConstants.ROLE_ID));
+            requestTemplate.header(GatewayConstants.USER_ID, servletRequest.getHeader(GatewayConstants.USER_ID));
         };
     }
 }
