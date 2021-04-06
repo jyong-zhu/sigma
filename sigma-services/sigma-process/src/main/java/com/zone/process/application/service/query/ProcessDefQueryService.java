@@ -7,13 +7,12 @@ import com.zone.commons.entity.Page;
 import com.zone.mybatis.util.PlusPageConverter;
 import com.zone.process.application.service.query.assembler.DefDetailDTOAssembler;
 import com.zone.process.application.service.query.assembler.DefNodeDetailDTOAssembler;
+import com.zone.process.application.service.query.assembler.StartNodeDTOAssembler;
 import com.zone.process.application.service.query.dto.DefDetailDTO;
 import com.zone.process.application.service.query.dto.DefNodeDetailDTO;
-import com.zone.process.application.service.query.dto.DefStartNodeDTO;
-import com.zone.process.infrastructure.db.dataobject.ProcessDefDO;
-import com.zone.process.infrastructure.db.dataobject.ProcessDefNodeDO;
-import com.zone.process.infrastructure.db.dataobject.ProcessDefNodePropertyDO;
-import com.zone.process.infrastructure.db.dataobject.ProcessDefNodeVariableDO;
+import com.zone.process.application.service.query.dto.StartNodeDTO;
+import com.zone.process.infrastructure.db.dataobject.*;
+import com.zone.process.infrastructure.db.query.FormStructureQuery;
 import com.zone.process.infrastructure.db.query.ProcessDefQuery;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +32,9 @@ public class ProcessDefQueryService {
 
     @Autowired
     private ProcessDefQuery defQuery;
+
+    @Autowired
+    private FormStructureQuery formQuery;
 
     /**
      * 分页查询流程定义，不含节点的信息
@@ -62,8 +64,15 @@ public class ProcessDefQueryService {
     /**
      * 开始节点的信息，主要是开始节点的表单信息
      */
-    public DefStartNodeDTO queryStartNodeDetail(String procDefKey) {
-        return null;
+    public StartNodeDTO queryStartNodeDetail(String procDefKey) {
+        ProcessDefDO def = defQuery.queryDefByProcKey(procDefKey);
+        Preconditions.checkNotNull(def, "流程定义不存在");
+
+        ProcessDefNodeDO startNode = defQuery.queryStartNode(def.getId());
+
+        List<FormStructureDO> formDOList = formQuery.queryByIds(startNode.getInputFormIds());
+
+        return StartNodeDTOAssembler.getStartNodeDTO(def, formDOList);
     }
 
     /**
@@ -74,5 +83,4 @@ public class ProcessDefQueryService {
         return DefNodeDetailDTOAssembler.getDefNodeDetailDTOList(nodeDOList, Lists.newArrayList(), Lists.newArrayList());
     }
 
-    //todo 禁用流程定义
 }

@@ -16,13 +16,13 @@ import lombok.experimental.Accessors;
 public class FormStructureDTO {
 
     @ApiModelProperty("表单id")
-    private Long formId;
+    private Long id;
 
     @ApiModelProperty("表单结构")
     private String formJson;
 
     @ApiModelProperty(value = "表单名称")
-    private String formName;
+    private String name;
 
     @ApiModelProperty(value = "表单的key")
     private String formKey;

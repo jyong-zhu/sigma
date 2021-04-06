@@ -8,7 +8,7 @@ import com.zone.process.application.service.command.cmd.DefDeployCommand;
 import com.zone.process.application.service.query.ProcessDefQueryService;
 import com.zone.process.application.service.query.dto.DefDetailDTO;
 import com.zone.process.application.service.query.dto.DefNodeDetailDTO;
-import com.zone.process.application.service.query.dto.DefStartNodeDTO;
+import com.zone.process.application.service.query.dto.StartNodeDTO;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +60,7 @@ public class ProcessDefController {
 
     @ApiOperation(value = "查询流程定义的开始节点详情", notes = "用proDefKey来查，是最新的版本, 用于发起流程实例")
     @GetMapping("/start-node")
-    public ResponseData<DefStartNodeDTO> queryStartNodeDetail(
+    public ResponseData<StartNodeDTO> queryStartNodeDetail(
             @ApiParam(value = "流程定义的key", required = true) @RequestParam("procDefKey") String procDefKey) {
         return ResponseData.ok(queryService.queryStartNodeDetail(procDefKey));
     }
