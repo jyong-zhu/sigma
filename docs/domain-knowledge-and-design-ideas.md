@@ -222,7 +222,7 @@ default_value varchar(255) not null default '' comment '默认的参数值'
 
 表单和流程定义一样，也存在版本的概念，表单版本的升级不会影响使用旧版本表单的流程实例提交数据与流转流程。在 form_structure 这张表中，通过 form_key 和 version 这两个字段唯一确定一张表单。
 
-## 五、领域模型
+## 五、数据表设计
 
 ### 流程分类
 

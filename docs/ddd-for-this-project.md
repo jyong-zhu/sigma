@@ -36,7 +36,7 @@
 
 ## 本项目的 DDD 分包
 
-本项目的 ddd 分包主要参考了[这篇文章](https://mp.weixin.qq.com/s/R-jBnPhWJHs7J-4CETV88A)，采用的也是六边形架构，由外到内的层级关系如下：
+本项目的 ddd 分包采用的是六边形架构，整体的设计思想基于[这篇文章](https://mp.weixin.qq.com/s/R-jBnPhWJHs7J-4CETV88A)进行了优化与改进，整个代码结构由外到内的层级关系如下：
 
 <img src="assets/层级关系.png" alt="层级关系" style="zoom:50%;" />
 
@@ -62,6 +62,7 @@
 │   │   ├── adapter
 │   │   ├── dataobject
 │   │   ├── mapper
+│   │   ├── query
 │   │   └── repository.impl
 │   ├── inbound
 │   │   ├── job.controller
@@ -108,4 +109,4 @@
 
 7. domain 中的目录并没有按照聚合的维度去划分，而是打平之后按不同的类型去管理，其中包括聚合/领域事件/值对象/仓储接口/领域服务 这几种类型。
 
-8. 为了简单起见，查询这块操作我违反了 DIP 原则，但这样写起代码来更加简洁不累赘，不用做一些无意义的转化操作。而且查询本身并没有领域的概念，故无需强制遵循 ddd 这套标准，不然反而会增加无意义的复杂度。详见[这篇文章](https://mp.weixin.qq.com/s/R-jBnPhWJHs7J-4CETV88A)。
+8. 为了简单起见，查询操作中的 applicaiton.service.query 中的 QueryService 能够直接调用 db.query 中的查询方法，相当于应用服务层反过来调用了基础设施层，违反了 DIP 原则。但这样写起代码来更加简洁不累赘，不用做一些无意义的转化操作。而且查询本身并没有领域的概念，故无需强制遵循 ddd 这套标准，不然反而会增加无意义的复杂度，详见[这篇文章](https://mp.weixin.qq.com/s/R-jBnPhWJHs7J-4CETV88A)。
