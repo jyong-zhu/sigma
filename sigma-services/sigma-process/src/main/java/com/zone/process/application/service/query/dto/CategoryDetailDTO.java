@@ -1,21 +1,19 @@
-package com.zone.process.domain.agg;
+package com.zone.process.application.service.query.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import java.time.LocalDateTime;
-
 /**
  * @Author: jianyong.zhu
- * @Date: 2021/3/29 2:59 下午
- * @Description: 流程分类的聚合
+ * @Date: 2021/4/7 10:17 上午
+ * @Description:
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class ProcessCategoryAgg {
+public class CategoryDetailDTO {
 
     @ApiModelProperty(value = "主键ID")
     private Long id;
@@ -26,11 +24,8 @@ public class ProcessCategoryAgg {
     @ApiModelProperty(value = "分类展示图标")
     private String iconUrl;
 
-    @ApiModelProperty(value = "数据版本")
-    private Integer version;
-
     @ApiModelProperty(value = "创建时间")
-    private LocalDateTime createTime;
+    private Long createTime;
 
     @ApiModelProperty(value = "user_id")
     private Long createBy;
@@ -38,18 +33,12 @@ public class ProcessCategoryAgg {
     @ApiModelProperty(value = "user_name")
     private String createName;
 
-    /**
-     * 初始化
-     */
-    public void init(Long id) {
-        this.setId(id);
-    }
+    @ApiModelProperty(value = "更新时间")
+    private Long updateTime;
 
-    /**
-     * 编辑
-     */
-    public void edit(String name, String iconUrl) {
-        this.setName(name);
-        this.setIconUrl(iconUrl);
-    }
+    @ApiModelProperty(value = "user_id")
+    private Long updateBy;
+
+    @ApiModelProperty(value = "user_name")
+    private String updateName;
 }

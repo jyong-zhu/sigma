@@ -13,8 +13,10 @@ public class ProcessCategoryAggAdapter {
 
 
     public static ProcessCategoryAgg getCategoryAgg(ProcessCategoryDO categoryDO) {
-        ProcessCategoryAgg categoryAgg = new ProcessCategoryAgg();
-        BeanUtil.copyProperties(categoryDO, categoryAgg);
-        return categoryAgg;
+        return BeanUtil.copyProperties(categoryDO, ProcessCategoryAgg.class);
+    }
+
+    public static ProcessCategoryDO getCategoryDO(ProcessCategoryAgg categoryAgg) {
+        return BeanUtil.copyProperties(categoryAgg, ProcessCategoryDO.class);
     }
 }

@@ -24,4 +24,16 @@ public class ProcessCategoryAggRepositoryImpl implements ProcessCategoryAggRepos
         ProcessCategoryDO categoryDO = categoryMapper.selectById(categoryId);
         return categoryDO == null ? null : ProcessCategoryAggAdapter.getCategoryAgg(categoryDO);
     }
+
+    @Override
+    public void save(ProcessCategoryAgg categoryAgg) {
+        ProcessCategoryDO categoryDO = ProcessCategoryAggAdapter.getCategoryDO(categoryAgg);
+        categoryMapper.insert(categoryDO);
+    }
+
+    @Override
+    public void update(ProcessCategoryAgg categoryAgg) {
+        ProcessCategoryDO categoryDO = ProcessCategoryAggAdapter.getCategoryDO(categoryAgg);
+        categoryMapper.updateById(categoryDO);
+    }
 }

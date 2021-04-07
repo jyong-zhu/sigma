@@ -1,11 +1,18 @@
 package com.zone.process.infrastructure.inbound.web.controller;
 
 
+import com.zone.commons.entity.Page;
+import com.zone.commons.entity.ResponseData;
 import com.zone.process.application.service.command.ProcessCategoryCmdService;
+import com.zone.process.application.service.command.cmd.CategoryCommand;
 import com.zone.process.application.service.query.ProcessCategoryQueryService;
+import com.zone.process.application.service.query.dto.CategoryDetailDTO;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 /**
  * <p>
@@ -25,5 +32,25 @@ public class ProcessCategoryController {
     @Autowired
     private ProcessCategoryCmdService cmdService;
 
-    // 新增/编辑/列表/详情
+    @ApiOperation(value = "新增流程分类", notes = "返回分类id")
+    @PostMapping("/add")
+    public ResponseData<Long> add(@Valid @RequestBody CategoryCommand categoryCommand) {
+        return ResponseData.ok(cmdService.add(categoryCommand));
+    }
+
+    @ApiOperation(value = "编辑流程分类", notes = "返回分类id")
+    @PostMapping("/edit")
+    public ResponseData<Long> edit(@Valid @RequestBody CategoryCommand categoryCommand) {
+        return ResponseData.ok(cmdService.edit(categoryCommand));
+    }
+
+    @ApiOperation(value = "分页查询流程分类", notes = "返回分类列表")
+    @PostMapping("/page")
+    public ResponseData<Page<CategoryDetailDTO>> page(
+            @ApiParam(value = "流程分类的名称") @RequestParam(value = "name", required = false) String name,
+            @ApiParam(name = "pageNo") @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
+            @ApiParam(name = "pageSize") @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
+        return ResponseData.ok(queryService.page(name, pageNo, pageSize));
+    }
+
 }
