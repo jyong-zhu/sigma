@@ -17,6 +17,27 @@ import java.time.LocalDateTime;
 @Accessors(chain = true)
 public class FormStructureAgg {
 
+    @ApiModelProperty(value = "主键ID")
+    private Long id;
+
+    @ApiModelProperty(value = "表单名称")
+    private String name;
+
+    @ApiModelProperty(value = "表单的key")
+    private String formKey;
+
+    @ApiModelProperty(value = "表单的版本")
+    private Integer formVersion;
+
+    @ApiModelProperty(value = "表单的json串")
+    private String formJson;
+
+    @ApiModelProperty(value = "描述")
+    private String description;
+
+    @ApiModelProperty(value = "数据版本")
+    private Integer version;
+
     @ApiModelProperty(value = "创建时间")
     private LocalDateTime createTime;
 
@@ -25,4 +46,12 @@ public class FormStructureAgg {
 
     @ApiModelProperty(value = "user_name")
     private String createName;
+
+    /**
+     * 初始化id和版本号
+     */
+    public void init(Long id, FormStructureAgg oldFormAgg) {
+        this.setId(id);
+        this.setFormVersion(oldFormAgg == null ? 0 : oldFormAgg.getVersion() + 1);
+    }
 }

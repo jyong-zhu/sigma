@@ -40,6 +40,9 @@ public class FormStructureDO implements Serializable {
     @ApiModelProperty(value = "表单的版本")
     private Integer formVersion;
 
+    @ApiModelProperty(value = "是否是最新版本的表单")
+    private Boolean isLatest;
+
     @ApiModelProperty(value = "表单的json串")
     private String formJson;
 

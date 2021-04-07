@@ -208,6 +208,7 @@ CREATE TABLE `form_structure`
     `name`         varchar(45)  NOT NULL COMMENT '表单名称',
     `form_key`     varchar(45)  NOT NULL COMMENT '表单的key',
     `form_version` int          NOT NULL DEFAULT '1' COMMENT '表单的版本',
+    `is_latest`    tinyint(1)   NOT NULL DEFAULT '1' COMMENT '是否是最新版本的表单',
     `form_json`    text         NOT NULL COMMENT '表单的json串',
     `description`  varchar(255) NOT NULL DEFAULT '' COMMENT '描述',
 
