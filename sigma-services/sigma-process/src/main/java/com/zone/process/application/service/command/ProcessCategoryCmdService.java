@@ -9,6 +9,7 @@ import com.zone.process.domain.service.AggIdentityDomainService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @Author: jianyong.zhu
@@ -28,6 +29,7 @@ public class ProcessCategoryCmdService {
     /**
      * 新增流程分类
      */
+    @Transactional
     public Long add(CategoryCommand categoryCommand) {
 
         ProcessCategoryAgg categoryAgg = ProcessCategoryAggTransfer.getProcessCategoryAgg(categoryCommand);
@@ -42,6 +44,7 @@ public class ProcessCategoryCmdService {
     /**
      * 编辑流程分类
      */
+    @Transactional
     public Long edit(CategoryCommand categoryCommand) {
 
         ProcessCategoryAgg categoryAgg = categoryAggRepository.queryById(categoryCommand.getId());

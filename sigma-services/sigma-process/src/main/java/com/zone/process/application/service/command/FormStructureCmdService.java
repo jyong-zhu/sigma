@@ -8,6 +8,7 @@ import com.zone.process.domain.service.AggIdentityDomainService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @Author: jianyong.zhu
@@ -27,6 +28,7 @@ public class FormStructureCmdService {
     /**
      * 保存表单
      */
+    @Transactional
     public Long save(FormCommand categoryCommand) {
 
         FormStructureAgg oldFormAgg = formAggRepository.queryByKey(categoryCommand.getFormKey());
