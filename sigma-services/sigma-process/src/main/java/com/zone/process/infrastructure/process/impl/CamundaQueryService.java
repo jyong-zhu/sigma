@@ -43,7 +43,8 @@ public class CamundaQueryService implements ProcessEngineQueryAPI {
 
         ProcessInstance processInstance = queryInstanceById(procInstId);
         List<String> activityList = processInstance == null ? Lists.newArrayList() :
-                runtimeService.getActiveActivityIds(processInstance.getId());
+                runtimeService.getActiveActivityIds(processInstance.getId())
+                        .stream().distinct().collect(Collectors.toList());
         List<String> curHandlerList = queryIdentityOfInstance(procInstId);
 
         return ProcessInstanceAdapter.getProcessInstanceVO(procInstId, processInstance,
