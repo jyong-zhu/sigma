@@ -71,7 +71,7 @@ public class ProcessInstCmdService {
 
         // 初始化并保存相关数据
         ProcessInstAgg instAgg = ProcessInstAggTransfer.getProcessInstAgg(startCommand);
-        instAgg.init(identityDomainService.generateInstAggId(), defAgg.getId(), procInstId, loginUser);
+        instAgg.init(identityDomainService.generateInstAggId(), defAgg.getId(), defAgg.getProcDefKey(), procInstId, loginUser);
         dataDomainService.saveStartFormData(defAgg, instAgg, startCommand.getFormDataMap(), startCommand.getComment(), loginUser);
 
         // 同步流程实例的当前状态

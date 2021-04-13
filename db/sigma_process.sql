@@ -129,6 +129,7 @@ CREATE TABLE `process_inst`
     `id`             bigint(20)   NOT NULL COMMENT '主键ID',
     `proc_inst_id`   varchar(45)  NOT NULL COMMENT 'camunda中的流程实例id',
     `def_id`         bigint(20)   NOT NULL COMMENT '流程定义id',
+    `proc_def_key`   bigint(20)   NOT NULL COMMENT '流程定义key',
     `name`           varchar(45)  NOT NULL COMMENT '流程实例名称',
     `status`         varchar(45)  NOT NULL COMMENT '流程实例的状态，进行中/已结束',
     `cur_node_id`    varchar(512) NOT NULL COMMENT '当前流程停留的节点id, 多个用,隔开',
