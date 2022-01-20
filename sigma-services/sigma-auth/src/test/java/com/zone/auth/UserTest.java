@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.google.common.collect.Lists;
 import com.zone.auth.application.service.command.UserCmdService;
-import com.zone.auth.application.service.command.cmd.UserLoginCommand;
+import com.zone.auth.application.service.command.cmd.AccountLoginCommand;
 import com.zone.auth.application.service.command.cmd.UserRegisterCommand;
 import com.zone.auth.application.service.query.UserQueryService;
 import com.zone.auth.application.service.query.dto.UserBasicDTO;
@@ -70,8 +70,8 @@ public class UserTest {
     @Test
     public void login() {
         registerUser();
-        UserLoginCommand loginCommand = new UserLoginCommand()
-                .setAccountName("jone")
+        AccountLoginCommand loginCommand = new AccountLoginCommand()
+                .setPhone("jone")
                 .setPassword(SecurityUtil.rsaEncrypt("123456"));
         String jwtToken = userCmdService.login(loginCommand);
         Assert.assertTrue(StrUtil.isNotBlank(jwtToken));

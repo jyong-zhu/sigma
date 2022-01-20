@@ -1,7 +1,7 @@
 package com.zone.auth.application.service.command;
 
 import com.google.common.base.Preconditions;
-import com.zone.auth.application.service.command.cmd.UserLoginCommand;
+import com.zone.auth.application.service.command.cmd.AccountLoginCommand;
 import com.zone.auth.application.service.command.cmd.UserRegisterCommand;
 import com.zone.auth.domain.agg.User;
 import com.zone.auth.domain.repository.UserAggRepository;
@@ -27,8 +27,8 @@ public class UserCmdService {
     /**
      * 用户登陆校验并返回token
      */
-    public String login(UserLoginCommand loginCommand) {
-        User user = userAggRepository.queryByAccountName(loginCommand.getAccountName());
+    public String login(AccountLoginCommand loginCommand) {
+        User user = userAggRepository.queryByAccountName(loginCommand.getPhone());
         Preconditions.checkNotNull(user.getUserBasic(), "用户名或者密码错误");
 
         // 关于密码的加密与解密：

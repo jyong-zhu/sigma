@@ -2,7 +2,7 @@ package com.zone.auth.inbound.web.controller;
 
 
 import com.zone.auth.application.service.command.UserCmdService;
-import com.zone.auth.application.service.command.cmd.UserLoginCommand;
+import com.zone.auth.application.service.command.cmd.AccountLoginCommand;
 import com.zone.auth.application.service.command.cmd.UserRegisterCommand;
 import com.zone.auth.application.service.query.UserQueryService;
 import com.zone.auth.application.service.query.dto.UserBasicDTO;
@@ -15,10 +15,14 @@ import com.zone.mybatis.util.PlusPageConverter;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
@@ -41,7 +45,7 @@ public class UserController {
 
     @ApiOperation("用户登陆接口")
     @PostMapping("/login")
-    public ResponseData<String> login(@Valid @RequestBody UserLoginCommand loginCommand) {
+    public ResponseData<String> login(@Valid @RequestBody AccountLoginCommand loginCommand) {
         return ResponseData.ok(userCmdService.login(loginCommand));
     }
 
