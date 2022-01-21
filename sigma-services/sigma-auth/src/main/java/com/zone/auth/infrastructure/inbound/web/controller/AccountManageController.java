@@ -6,6 +6,8 @@ import com.zone.auth.application.service.command.cmd.AccountCreateCommand;
 import com.zone.auth.application.service.command.cmd.AccountUpdateCommand;
 import com.zone.auth.application.service.query.AccountQueryService;
 import com.zone.auth.application.service.query.dto.AccountDetailDTO;
+import com.zone.commons.context.CurrentContext;
+import com.zone.commons.entity.LoginUser;
 import com.zone.commons.entity.ResponseData;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -39,27 +41,23 @@ public class AccountManageController {
   @ApiOperation(value = "创建账号", notes = "返回账号id")
   @PostMapping("/create")
   public ResponseData<Long> create(@Valid @RequestBody AccountCreateCommand createCommand) {
-    return ResponseData.ok(accountCmdService.create(createCommand));
+    LoginUser loginUser = CurrentContext.getUser();
+    return ResponseData.ok(accountCmdService.create(createCommand, loginUser));
   }
 
   @ApiOperation(value = "更新账号", notes = "返回账号id")
   @PostMapping("/update")
   public ResponseData<Long> update(@Valid @RequestBody AccountUpdateCommand updateCommand) {
-    return ResponseData.ok(accountCmdService.update(updateCommand));
+    LoginUser loginUser = CurrentContext.getUser();
+    return ResponseData.ok(accountCmdService.update(updateCommand, loginUser));
   }
 
-  @ApiOperation(value = "停用/启用账号", notes = "返回boolean")
-  @GetMapping("/enable")
-  public ResponseData<Boolean> enable(
-      @ApiParam(value = "账号id") @RequestParam(value = "accountId") Long accountId) {
-    return ResponseData.ok(accountCmdService.enable(accountId));
-  }
-
-  @ApiOperation(value = "删除账号", notes = "返回boolean")
+  @ApiOperation(value = "删除账号", notes = "返回账号id")
   @GetMapping("/delete")
-  public ResponseData<Boolean> delete(
+  public ResponseData<Long> delete(
       @ApiParam(value = "账号id") @RequestParam(value = "accountId") Long accountId) {
-    return ResponseData.ok(accountCmdService.delete(accountId));
+    LoginUser loginUser = CurrentContext.getUser();
+    return ResponseData.ok(accountCmdService.delete(accountId, loginUser));
   }
 
   @ApiOperation(value = "获取账号详情", notes = "返回详情")

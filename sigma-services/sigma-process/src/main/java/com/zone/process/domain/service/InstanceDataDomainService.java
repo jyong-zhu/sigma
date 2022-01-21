@@ -11,12 +11,11 @@ import com.zone.process.domain.valueobject.InstOperationVO;
 import com.zone.process.shared.enums.InstanceOperationTypeEnum;
 import com.zone.process.shared.enums.TaskOperationTypeEnum;
 import com.zone.process.shared.process.valueobject.TaskVO;
-import org.springframework.stereotype.Service;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.springframework.stereotype.Service;
 
 /**
  * @Author: jianyong.zhu
@@ -37,7 +36,7 @@ public class InstanceDataDomainService {
 
         instAgg.setDataVOList(InstDataVO.generateDataVOList(defAgg.getStartBpmnNodeId(), formDataMap, Lists.newArrayList(), formIdList));
         instAgg.setOperationVOList(Lists.newArrayList(InstOperationVO.generateOperationVO(defAgg.getStartBpmnNodeId(), InstanceOperationTypeEnum.START.getCode(),
-                InstanceOperationTypeEnum.START.getCode(), comment, formDataMap, loginUser, loginUser.getAccountName() + "发起流程实例")));
+                InstanceOperationTypeEnum.START.getCode(), comment, formDataMap, loginUser, loginUser.getUserName() + "发起流程实例")));
     }
 
     /**

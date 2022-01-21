@@ -5,12 +5,11 @@ import com.zone.commons.consts.GatewayConstants;
 import com.zone.commons.context.CurrentContext;
 import com.zone.commons.entity.LoginUser;
 import com.zone.commons.util.JWTUtil;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * @Author: jianyong.zhu
@@ -48,8 +47,8 @@ public class ContextInterceptor implements HandlerInterceptor {
             CurrentContext.setUser(loginUser);
         }
 
-        // 默认放行
-        return true;
+        // 默认不放行
+        return false;
     }
 
     @Override

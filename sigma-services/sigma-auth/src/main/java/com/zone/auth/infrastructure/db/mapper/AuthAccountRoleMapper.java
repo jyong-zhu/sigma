@@ -2,6 +2,8 @@ package com.zone.auth.infrastructure.db.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.zone.auth.infrastructure.db.dataobject.AuthAccountRoleDO;
+import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * <p>
@@ -13,4 +15,5 @@ import com.zone.auth.infrastructure.db.dataobject.AuthAccountRoleDO;
  */
 public interface AuthAccountRoleMapper extends BaseMapper<AuthAccountRoleDO> {
 
+  void insertBatch(@Param("entityList") List<AuthAccountRoleDO> accountRoleList);
 }

@@ -24,9 +24,9 @@ public class AccountUpdateCommand {
   @NotBlank(message = "账户名不能为空")
   private String name;
 
-  @ApiModelProperty("手机号")
-  @NotBlank(message = "手机号不能为空")
-  private String phone;
+  @ApiModelProperty("账号状态")
+  @NotNull(message = "账号状态不能为空")
+  private Boolean status;
 
   @ApiModelProperty("邮箱")
   @NotBlank(message = "邮箱不能为空")

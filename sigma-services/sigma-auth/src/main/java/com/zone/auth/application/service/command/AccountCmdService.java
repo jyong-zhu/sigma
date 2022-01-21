@@ -1,9 +1,16 @@
 package com.zone.auth.application.service.command;
 
+import com.google.common.base.Preconditions;
 import com.zone.auth.application.service.command.cmd.AccountCreateCommand;
 import com.zone.auth.application.service.command.cmd.AccountUpdateCommand;
+import com.zone.auth.domain.agg.AccountAgg;
+import com.zone.auth.domain.repository.AccountAggRepository;
+import com.zone.auth.shared.enums.AccountTypeEnum;
+import com.zone.commons.entity.LoginUser;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @Author: jianyong.zhu
@@ -14,31 +21,55 @@ import org.springframework.stereotype.Service;
 @Service
 public class AccountCmdService {
 
+  @Autowired
+  private AccountAggRepository accountAggRepository;
+
   /**
    * 创建账号
    */
-  public Long create(AccountCreateCommand createCommand) {
-    return null;
+  @Transactional
+  public Long create(AccountCreateCommand createCommand, LoginUser loginUser) {
+
+    // 0. 校验账号类型
+    Preconditions.checkState(AccountTypeEnum.isAdmin(loginUser.getAccountType()), "非管理员不能创建账号");
+
+    // 1. 创建账号聚合根
+    AccountAgg accountAgg = AccountAgg.create(createCommand, loginUser);
+
+    // 2. 落地账号数据
+    return accountAggRepository.save(accountAgg);
   }
 
   /**
    * 更新账号
    */
-  public Long update(AccountUpdateCommand updateCommand) {
-    return null;
-  }
+  @Transactional
+  public Long update(AccountUpdateCommand updateCommand, LoginUser loginUser) {
 
-  /**
-   * 禁用/启用账号
-   */
-  public Boolean enable(Long accountId) {
-    return null;
+    // 0. 校验账号类型
+    Preconditions.checkState(AccountTypeEnum.isAdmin(loginUser.getAccountType()), "非管理员不能创建账号");
+
+    // 1. 获取账号信息
+    AccountAgg oldAccount = accountAggRepository.queryById(updateCommand.getAccountId());
+    Preconditions.checkNotNull(oldAccount, "账号不存在");
+
+    // 2. 更新账号
+    oldAccount.update(updateCommand, loginUser);
+
+    // 3. 落地数据
+    return accountAggRepository.update(oldAccount);
   }
 
   /**
    * 删除账号
    */
-  public Boolean delete(Long accountId) {
-    return null;
+  @Transactional
+  public Long delete(Long accountId, LoginUser loginUser) {
+
+    // 0. 校验账号类型
+    Preconditions.checkState(AccountTypeEnum.isAdmin(loginUser.getAccountType()), "非管理员不能创建账号");
+
+    // 1. 删除账号
+    return accountAggRepository.delete(accountId);
   }
 }

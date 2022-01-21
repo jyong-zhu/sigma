@@ -20,6 +20,8 @@ public class LoginUser {
 
     private String userName;
 
+    private Integer accountType;
+
     private Long roleId;
 
 }
