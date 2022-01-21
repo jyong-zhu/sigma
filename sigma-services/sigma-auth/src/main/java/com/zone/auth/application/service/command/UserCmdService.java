@@ -50,9 +50,7 @@ public class UserCmdService {
         String jwtToken = JWTUtil.createToken(
                 new LoginUser()
                         .setUserName(user.getUserBasic().getUserName())
-                        .setUserId(user.getUserBasic().getId())
-                        .setRoleId(user.getUserBasic().getRoleId() == null ?
-                                0 : user.getUserBasic().getRoleId()));
+                        .setUserId(user.getUserBasic().getId()));
         return jwtToken;
     }
 

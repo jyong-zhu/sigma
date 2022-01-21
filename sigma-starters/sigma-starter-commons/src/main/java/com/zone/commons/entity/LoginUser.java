@@ -15,26 +15,24 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class LoginUser {
 
-    /**
-     * 用户id
-     */
-    private Long userId;
+  /**
+   * 用户id
+   */
+  private Long userId;
 
-    /**
-     * 用户名称
-     */
-    private String userName;
+  /**
+   * 用户名称
+   */
+  private String userName;
 
-    /**
-     * 账号类型
-     */
-    private Integer accountType;
+  /**
+   * 账号类型
+   */
+  private Integer accountType;
 
-    private Long roleId;
-
-    /**
-     * 角色列表
-     */
-    private List<Long> roleIdList;
+  /**
+   * 角色列表
+   */
+  private List<Long> roleIdList;
 
 }
