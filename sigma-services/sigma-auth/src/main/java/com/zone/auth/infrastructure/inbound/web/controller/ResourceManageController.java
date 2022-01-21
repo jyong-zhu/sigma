@@ -48,7 +48,7 @@ public class ResourceManageController {
     return ResponseData.ok(resourceCmdService.update(updateCommand, loginUser));
   }
 
-  @ApiOperation(value = "删除资源点", notes = "返回boolean")
+  @ApiOperation(value = "删除资源点", notes = "返回资源点id")
   @GetMapping("/delete")
   public ResponseData<Long> delete(
       @ApiParam(value = "资源id") @RequestParam(value = "resourceId") Long resourceId) {

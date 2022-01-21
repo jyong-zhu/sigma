@@ -6,6 +6,8 @@ import com.zone.auth.application.service.command.cmd.RoleCreateCommand;
 import com.zone.auth.application.service.command.cmd.RoleUpdateCommand;
 import com.zone.auth.application.service.query.RoleQueryService;
 import com.zone.auth.application.service.query.dto.RoleDetailDTO;
+import com.zone.commons.context.CurrentContext;
+import com.zone.commons.entity.LoginUser;
 import com.zone.commons.entity.ResponseData;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -39,20 +41,23 @@ public class RoleManageController {
   @ApiOperation(value = "创建角色", notes = "返回角色id")
   @PostMapping("/create")
   public ResponseData<Long> create(@Valid @RequestBody RoleCreateCommand createCommand) {
-    return ResponseData.ok(roleCmdService.create(createCommand));
+    LoginUser loginUser = CurrentContext.getUser();
+    return ResponseData.ok(roleCmdService.create(createCommand, loginUser));
   }
 
   @ApiOperation(value = "更新角色", notes = "返回角色id")
   @PostMapping("/update")
   public ResponseData<Long> update(@Valid @RequestBody RoleUpdateCommand updateCommand) {
-    return ResponseData.ok(roleCmdService.update(updateCommand));
+    LoginUser loginUser = CurrentContext.getUser();
+    return ResponseData.ok(roleCmdService.update(updateCommand, loginUser));
   }
 
-  @ApiOperation(value = "删除角色", notes = "返回boolean")
+  @ApiOperation(value = "删除角色", notes = "返回角色id")
   @GetMapping("/delete")
-  public ResponseData<Boolean> delete(
+  public ResponseData<Long> delete(
       @ApiParam(value = "角色id") @RequestParam(value = "roleId") Long roleId) {
-    return ResponseData.ok(roleCmdService.delete(roleId));
+    LoginUser loginUser = CurrentContext.getUser();
+    return ResponseData.ok(roleCmdService.delete(roleId, loginUser));
   }
 
   @ApiOperation(value = "获取角色详情", notes = "返回详情")
