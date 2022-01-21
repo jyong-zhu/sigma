@@ -6,6 +6,8 @@ import com.zone.commons.consts.GatewayConstants;
 import com.zone.commons.entity.LoginUser;
 import com.zone.commons.entity.ResponseData;
 import com.zone.commons.util.JWTUtil;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
@@ -17,9 +19,6 @@ import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 
 /**
  * @Author: jianyong.zhu
@@ -56,10 +55,8 @@ public class AuthorizationFilter implements GlobalFilter, Ordered {
             }
 
             ServerHttpRequest request = exchange.getRequest().mutate()
-                    .header(GatewayConstants.ACCOUNT_NAME, URLEncoder.encode(loginUser.getAccountName(), "UTF-8"))
                     .header(GatewayConstants.USER_NAME, URLEncoder.encode(loginUser.getUserName(), "UTF-8"))
                     .header(GatewayConstants.USER_ID, URLEncoder.encode(String.valueOf(loginUser.getUserId()), "UTF-8"))
-                    .header(GatewayConstants.ROLE_ID, URLEncoder.encode(String.valueOf(loginUser.getRoleId()), "UTF-8"))
                     .build();
             return chain.filter(exchange.mutate().request(request).build());
         } catch (UnsupportedEncodingException e) {

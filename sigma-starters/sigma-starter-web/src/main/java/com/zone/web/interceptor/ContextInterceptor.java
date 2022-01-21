@@ -35,9 +35,7 @@ public class ContextInterceptor implements HandlerInterceptor {
                 && StrUtil.isNotBlank(accountName) && StrUtil.isNotBlank(roleId)) {
             CurrentContext.setUser(new LoginUser()
                     .setUserId(Long.valueOf(userId))
-                    .setUserName(userName)
-                    .setAccountName(accountName)
-                    .setRoleId(Long.valueOf(roleId)));
+                    .setUserName(userName));
             return true;
         }
 

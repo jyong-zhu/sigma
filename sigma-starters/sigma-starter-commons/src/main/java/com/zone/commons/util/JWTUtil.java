@@ -8,10 +8,9 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.google.common.collect.Maps;
 import com.zone.commons.consts.GatewayConstants;
 import com.zone.commons.entity.LoginUser;
-import lombok.extern.slf4j.Slf4j;
-
 import java.util.Date;
 import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @Author: jianyong.zhu
@@ -41,10 +40,8 @@ public final class JWTUtil {
         headerMap.put("alg", "HS256");
 
         Map<String, Object> claimMap = Maps.newHashMap();
-        claimMap.put(GatewayConstants.ACCOUNT_NAME, loginUser.getAccountName());
         claimMap.put(GatewayConstants.USER_ID, loginUser.getUserId());
         claimMap.put(GatewayConstants.USER_NAME, loginUser.getUserName());
-        claimMap.put(GatewayConstants.ROLE_ID, loginUser.getRoleId());
 
         return JWT.create()
                 .withHeader(headerMap)
@@ -75,11 +72,8 @@ public final class JWTUtil {
             Map<String, Object> claimMap = jwt.getClaim("userInfo").asMap();
             LoginUser loginUser = new LoginUser()
                     .setUserId(claimMap.get(GatewayConstants.USER_ID) == null ? null : Long.valueOf(claimMap.get(GatewayConstants.USER_ID).toString()))
-                    .setUserName(claimMap.getOrDefault(GatewayConstants.USER_NAME, "").toString())
-                    .setAccountName(claimMap.getOrDefault(GatewayConstants.ACCOUNT_NAME, "").toString())
-                    .setRoleId(claimMap.get(GatewayConstants.ROLE_ID) == null ? null : Long.valueOf(claimMap.get(GatewayConstants.ROLE_ID).toString()));
+                    .setUserName(claimMap.getOrDefault(GatewayConstants.USER_NAME, "").toString());
             return loginUser.getUserId() == null
-                    || StrUtil.isBlank(loginUser.getAccountName())
                     || StrUtil.isBlank(loginUser.getUserName()) ? null : loginUser;
         } catch (Exception e) {
             log.error("验证 " + token + " 时出错");

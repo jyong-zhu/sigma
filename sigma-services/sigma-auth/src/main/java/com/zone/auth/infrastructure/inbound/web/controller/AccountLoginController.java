@@ -3,6 +3,8 @@ package com.zone.auth.infrastructure.inbound.web.controller;
 import com.zone.auth.application.service.command.AccountLoginCmdService;
 import com.zone.auth.application.service.command.cmd.AccountChangeCommand;
 import com.zone.auth.application.service.command.cmd.AccountLoginCommand;
+import com.zone.commons.context.CurrentContext;
+import com.zone.commons.entity.LoginUser;
 import com.zone.commons.entity.ResponseData;
 import com.zone.commons.util.SecurityUtil;
 import io.swagger.annotations.ApiOperation;
@@ -39,8 +41,9 @@ public class AccountLoginController {
 
   @ApiOperation(value = "登陆用户更改个人信息",notes = "返回boolean")
   @PostMapping("/change")
-  public ResponseData<Boolean> change(@Valid @RequestBody AccountChangeCommand changeCommand) {
-    return ResponseData.ok(accountLoginCmdService.change(changeCommand));
+  public ResponseData<Long> change(@Valid @RequestBody AccountChangeCommand changeCommand) {
+    LoginUser loginUser = CurrentContext.getUser();
+    return ResponseData.ok(accountLoginCmdService.change(changeCommand, loginUser));
   }
 
   // todo 鉴权接口

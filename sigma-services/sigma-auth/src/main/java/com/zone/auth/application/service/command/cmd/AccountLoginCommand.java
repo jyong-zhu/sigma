@@ -16,11 +16,11 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class AccountLoginCommand {
 
-    @ApiModelProperty("手机号")
+    @ApiModelProperty("手机号, 用公钥加密")
     @NotBlank(message = "手机号不能为空")
     private String phone;
 
-    @ApiModelProperty("密码")
+    @ApiModelProperty("密码, 用公钥加密")
     @NotBlank(message = "密码不能为空，非对称加密")
     private String password;
 }

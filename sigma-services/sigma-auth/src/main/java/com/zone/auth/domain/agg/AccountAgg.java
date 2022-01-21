@@ -1,5 +1,7 @@
 package com.zone.auth.domain.agg;
 
+import com.google.common.base.Preconditions;
+import com.zone.auth.application.service.command.cmd.AccountChangeCommand;
 import com.zone.auth.application.service.command.cmd.AccountCreateCommand;
 import com.zone.auth.application.service.command.cmd.AccountUpdateCommand;
 import com.zone.auth.shared.enums.AccountTypeEnum;
@@ -88,6 +90,21 @@ public class AccountAgg {
     this.setEmail(updateCommand.getEmail());
     this.setName(updateCommand.getName());
     this.setStatus(updateCommand.getStatus());
+    this.setUpdateName(loginUser.getUserName());
+    this.setUpdateBy(loginUser.getUserId());
+  }
+
+  /**
+   * 修改个人信息
+   */
+  public void change(AccountChangeCommand changeCommand, LoginUser loginUser) {
+    String oldPwd = SecurityUtil.digestSha1(SecurityUtil.rsaDecrypt(changeCommand.getOldPwd()));
+    String newPwd = SecurityUtil.digestSha1(SecurityUtil.rsaDecrypt(changeCommand.getNewPwd()));
+
+    Preconditions.checkState(this.getPassword().equals(oldPwd),"旧密码不正确");
+    this.setPassword(newPwd);
+    this.setName(changeCommand.getName());
+    this.setEmail(changeCommand.getEmail());
     this.setUpdateName(loginUser.getUserName());
     this.setUpdateBy(loginUser.getUserId());
   }

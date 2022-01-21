@@ -29,4 +29,8 @@ public interface AccountAggRepository {
    */
   AccountAgg queryById(Long accountId);
 
+  /**
+   * 根据手机号获取账号
+   */
+  AccountAgg queryByPhone(String phone);
 }

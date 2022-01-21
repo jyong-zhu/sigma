@@ -48,7 +48,7 @@ public class UserCmdService {
         // signature 由私钥签，用于验证 header 与 payload 是否被修改
         // 【私钥签名，公钥验签】存在数据泄露的问题
         String jwtToken = JWTUtil.createToken(
-                new LoginUser().setAccountName(user.getUserBasic().getAccountName())
+                new LoginUser()
                         .setUserName(user.getUserBasic().getUserName())
                         .setUserId(user.getUserBasic().getId())
                         .setRoleId(user.getUserBasic().getRoleId() == null ?

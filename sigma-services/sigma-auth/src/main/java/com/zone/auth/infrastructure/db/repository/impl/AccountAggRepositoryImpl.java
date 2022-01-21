@@ -96,4 +96,20 @@ public class AccountAggRepositoryImpl implements AccountAggRepository {
 
     return AccountAggAdapter.getAccountAgg(authAccountDO, accountRoleDOList);
   }
+
+  @Override
+  public AccountAgg queryByPhone(String phone) {
+    QueryWrapper<AuthAccountDO> accountWrapper = new QueryWrapper<>();
+    accountWrapper.lambda().eq(AuthAccountDO::getPhone, phone);
+    AuthAccountDO authAccountDO = authAccountMapper.selectOne(accountWrapper);
+    if (authAccountDO == null) {
+      return null;
+    }
+
+    QueryWrapper<AuthAccountRoleDO> wrapper = new QueryWrapper<>();
+    wrapper.lambda().eq(AuthAccountRoleDO::getAccountId, authAccountDO.getId());
+    List<AuthAccountRoleDO> accountRoleDOList = authAccountRoleMapper.selectList(wrapper);
+
+    return AccountAggAdapter.getAccountAgg(authAccountDO, accountRoleDOList);
+  }
 }

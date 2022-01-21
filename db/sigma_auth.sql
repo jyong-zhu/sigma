@@ -20,8 +20,7 @@ CREATE TABLE `auth_account`
     `update_by`    bigint(20)          NOT NULL DEFAULT '0' COMMENT 'user_id',
     `update_name`  varchar(45)         NOT NULL DEFAULT '' COMMENT 'user_name',
     PRIMARY KEY (`id`),
-    UNIQUE KEY `uniq_phone` (`phone`),
-    UNIQUE KEY `uniq_email` (`email`)
+    UNIQUE KEY `uniq_phone` (`phone`)
 ) ENGINE = InnoDB
   CHARSET = utf8mb4
   COLLATE = utf8mb4_bin COMMENT ='账号表';
