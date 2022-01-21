@@ -26,10 +26,8 @@ public class AccountAggAdapter {
     authAccountDO.setAccountType(accountAgg.getAccountType().getCode());
     authAccountDO.setEmail(accountAgg.getEmail());
     authAccountDO.setStatus(accountAgg.getStatus());
-    authAccountDO.setCreateTime(accountAgg.getCreateTime());
     authAccountDO.setCreateBy(accountAgg.getCreateBy());
     authAccountDO.setCreateName(accountAgg.getCreateName());
-    authAccountDO.setUpdateTime(accountAgg.getUpdateTime());
     authAccountDO.setUpdateBy(accountAgg.getUpdateBy());
     authAccountDO.setUpdateName(accountAgg.getUpdateName());
     return authAccountDO;
@@ -45,6 +43,9 @@ public class AccountAggAdapter {
   }
 
   public static AccountAgg getAccountAgg(AuthAccountDO authAccountDO, List<AuthAccountRoleDO> accountRoleDOList) {
+    if (authAccountDO == null) {
+      return null;
+    }
     AccountAgg accountAgg = new AccountAgg();
     accountAgg.setId(authAccountDO.getId());
     accountAgg.setName(authAccountDO.getName());
@@ -54,10 +55,8 @@ public class AccountAggAdapter {
     accountAgg.setEmail(authAccountDO.getEmail());
     accountAgg.setRoleIdList(accountRoleDOList.stream().map(tmp -> tmp.getRoleId()).collect(Collectors.toList()));
     accountAgg.setStatus(authAccountDO.getStatus());
-    accountAgg.setCreateTime(authAccountDO.getCreateTime());
     accountAgg.setCreateBy(authAccountDO.getCreateBy());
     accountAgg.setCreateName(authAccountDO.getCreateName());
-    accountAgg.setUpdateTime(authAccountDO.getUpdateTime());
     accountAgg.setUpdateBy(authAccountDO.getUpdateBy());
     accountAgg.setUpdateName(authAccountDO.getUpdateName());
     return accountAgg;

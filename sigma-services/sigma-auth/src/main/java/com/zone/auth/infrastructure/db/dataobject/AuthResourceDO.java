@@ -34,10 +34,10 @@ public class AuthResourceDO implements Serializable {
     private Integer type;
 
     @ApiModelProperty(value = "key")
-    private String name;
+    private String key;
 
-    @ApiModelProperty(value = "菜单名称")
-    private String nameZh;
+    @ApiModelProperty(value = "资源点名称")
+    private String name;
 
     @ApiModelProperty(value = "资源点对应的url")
     private String resourceUrl;
@@ -47,6 +47,9 @@ public class AuthResourceDO implements Serializable {
 
     @ApiModelProperty(value = "功能权限对应菜单的id")
     private Long parentId;
+
+    @ApiModelProperty(value = "是否可见 0-隐藏 1-可见")
+    private Boolean visible;
 
     @ApiModelProperty(value = "0-停用 1-正常")
     private Boolean status;

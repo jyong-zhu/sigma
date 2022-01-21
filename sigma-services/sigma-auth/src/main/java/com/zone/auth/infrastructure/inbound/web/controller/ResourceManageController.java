@@ -5,6 +5,8 @@ import com.zone.auth.application.service.command.cmd.ResourceCreateCommand;
 import com.zone.auth.application.service.command.cmd.ResourceUpdateCommand;
 import com.zone.auth.application.service.query.ResourceQueryService;
 import com.zone.auth.application.service.query.dto.ResourceDetailDTO;
+import com.zone.commons.context.CurrentContext;
+import com.zone.commons.entity.LoginUser;
 import com.zone.commons.entity.ResponseData;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -35,20 +37,23 @@ public class ResourceManageController {
   @ApiOperation(value = "创建资源点", notes = "返回资源点id")
   @PostMapping("/create")
   public ResponseData<Long> create(@Valid @RequestBody ResourceCreateCommand createCommand) {
-    return ResponseData.ok(resourceCmdService.create(createCommand));
+    LoginUser loginUser = CurrentContext.getUser();
+    return ResponseData.ok(resourceCmdService.create(createCommand, loginUser));
   }
 
   @ApiOperation(value = "更新资源点", notes = "返回资源点id")
   @PostMapping("/update")
   public ResponseData<Long> update(@Valid @RequestBody ResourceUpdateCommand updateCommand) {
-    return ResponseData.ok(resourceCmdService.update(updateCommand));
+    LoginUser loginUser = CurrentContext.getUser();
+    return ResponseData.ok(resourceCmdService.update(updateCommand, loginUser));
   }
 
   @ApiOperation(value = "删除资源点", notes = "返回boolean")
   @GetMapping("/delete")
-  public ResponseData<Boolean> delete(
+  public ResponseData<Long> delete(
       @ApiParam(value = "资源id") @RequestParam(value = "resourceId") Long resourceId) {
-    return ResponseData.ok(resourceCmdService.delete(resourceId));
+    LoginUser loginUser = CurrentContext.getUser();
+    return ResponseData.ok(resourceCmdService.delete(resourceId, loginUser));
   }
 
   @ApiOperation(value = "获取资源点详情", notes = "返回详情")
@@ -57,6 +62,9 @@ public class ResourceManageController {
       @ApiParam(value = "资源id") @RequestParam(value = "resourceId") Long resourceId) {
     return ResponseData.ok(resourceQueryService.detail(resourceId));
   }
+
+  // todo 获取树
+  // todo 分页查询
 
 
 }

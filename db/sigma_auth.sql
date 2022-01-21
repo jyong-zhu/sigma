@@ -63,11 +63,12 @@ CREATE TABLE `auth_resource`
 (
     `id`           bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
     `type`         tinyint(2)          NOT NULL DEFAULT '0' COMMENT '权限类型 1-菜单权限 2-功能权限',
-    `name`         varchar(255)        NOT NULL DEFAULT '' COMMENT 'key',
-    `name_zh`      varchar(255)        NOT NULL DEFAULT '' COMMENT '菜单名称',
+    `key`          varchar(255)        NOT NULL DEFAULT '' COMMENT 'key',
+    `name`         varchar(255)        NOT NULL DEFAULT '' COMMENT '菜单名称',
     `resource_url` varchar(255)        NOT NULL DEFAULT '' COMMENT '资源点对应的url',
     `icon_url`     varchar(255)        NOT NULL DEFAULT '' COMMENT 'icon图标地址',
     `parent_id`    bigint(20)          NOT NULL DEFAULT '0' COMMENT '功能权限对应菜单的id',
+    `visible`      tinyint(1)          NOT NULL DEFAULT '1' COMMENT '是否可见 0-隐藏 1-可见',
     `status`       tinyint(1)          NOT NULL DEFAULT '0' COMMENT '0-停用 1-正常',
     `sort_num`     int(11)             NOT NULL DEFAULT '0' COMMENT '排序值',
 

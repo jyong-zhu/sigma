@@ -1,8 +1,6 @@
 package com.zone.auth.domain.agg;
 
-import com.zone.auth.domain.valueobject.ResourceVO;
 import io.swagger.annotations.ApiModelProperty;
-import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -23,22 +21,16 @@ public class RoleAgg {
   private String roleName;
 
   @ApiModelProperty(value = "角色的资源列表")
-  private List<ResourceVO> resourceList;
+  private List<Long> resourceIdList;
 
   @ApiModelProperty(value = "0-停用 1-正常")
   private Boolean status;
-
-  @ApiModelProperty(value = "创建时间")
-  private LocalDateTime createTime;
 
   @ApiModelProperty(value = "user_id")
   private Long createBy;
 
   @ApiModelProperty(value = "user_name")
   private String createName;
-
-  @ApiModelProperty(value = "更新时间")
-  private LocalDateTime updateTime;
 
   @ApiModelProperty(value = "user_id")
   private Long updateBy;

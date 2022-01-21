@@ -34,6 +34,10 @@ public class AccountAggRepositoryImpl implements AccountAggRepository {
 
     // 插入账号信息
     AuthAccountDO accountDO = AccountAggAdapter.getAccountDO(accountAgg);
+    if (accountDO == null) {
+      return null;
+    }
+
     authAccountMapper.insert(accountDO);
 
     // 插入账号-角色表信息
@@ -49,6 +53,10 @@ public class AccountAggRepositoryImpl implements AccountAggRepository {
   public Long update(AccountAgg accountAgg) {
 
     AuthAccountDO accountDO = AccountAggAdapter.getAccountDO(accountAgg);
+    if (accountDO == null) {
+      return null;
+    }
+
     int num = authAccountMapper.updateById(accountDO);
 
     List<AuthAccountRoleDO> accountRoleDOList = AccountAggAdapter.getAccountRoleDOList(accountAgg.getRoleIdList(), accountDO.getId());
@@ -81,9 +89,6 @@ public class AccountAggRepositoryImpl implements AccountAggRepository {
   @Override
   public AccountAgg queryById(Long accountId) {
     AuthAccountDO authAccountDO = authAccountMapper.selectById(accountId);
-    if (authAccountDO == null) {
-      return null;
-    }
 
     QueryWrapper<AuthAccountRoleDO> wrapper = new QueryWrapper<>();
     wrapper.lambda().eq(AuthAccountRoleDO::getAccountId, accountId);

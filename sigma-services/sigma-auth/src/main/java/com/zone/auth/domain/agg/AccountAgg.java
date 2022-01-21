@@ -6,7 +6,6 @@ import com.zone.auth.shared.enums.AccountTypeEnum;
 import com.zone.commons.entity.LoginUser;
 import com.zone.commons.util.SecurityUtil;
 import io.swagger.annotations.ApiModelProperty;
-import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -44,17 +43,11 @@ public class AccountAgg {
   @ApiModelProperty(value = "0-停用 1-正常")
   private Boolean status;
 
-  @ApiModelProperty(value = "创建时间")
-  private LocalDateTime createTime;
-
   @ApiModelProperty(value = "user_id")
   private Long createBy;
 
   @ApiModelProperty(value = "user_name")
   private String createName;
-
-  @ApiModelProperty(value = "更新时间")
-  private LocalDateTime updateTime;
 
   @ApiModelProperty(value = "user_id")
   private Long updateBy;
