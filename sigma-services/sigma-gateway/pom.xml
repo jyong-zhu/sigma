@@ -19,24 +19,12 @@
 
     <dependency>
       <groupId>com.zone</groupId>
-      <artifactId>sigma-starter-commons</artifactId>
+      <artifactId>sigma-rpc</artifactId>
     </dependency>
 
     <dependency>
       <groupId>com.zone</groupId>
-      <artifactId>sigma-rpc</artifactId>
-    </dependency>
-
-    <!-- nacos 配置相关-->
-    <dependency>
-      <groupId>com.alibaba.cloud</groupId>
-      <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
-    </dependency>
-
-    <!-- nacos 服务发现相关-->
-    <dependency>
-      <groupId>com.alibaba.cloud</groupId>
-      <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+      <artifactId>sigma-starter-web</artifactId>
     </dependency>
   </dependencies>
 

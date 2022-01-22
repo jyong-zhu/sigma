@@ -5,11 +5,16 @@ import com.zone.auth.application.service.command.cmd.ResourceCreateCommand;
 import com.zone.auth.application.service.command.cmd.ResourceUpdateCommand;
 import com.zone.auth.application.service.query.ResourceQueryService;
 import com.zone.auth.application.service.query.dto.ResourceDetailDTO;
+import com.zone.auth.application.service.query.dto.ResourceTreeDTO;
 import com.zone.commons.context.CurrentContext;
 import com.zone.commons.entity.LoginUser;
+import com.zone.commons.entity.Page;
 import com.zone.commons.entity.ResponseData;
+import com.zone.mybatis.util.PlusPageConverter;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @Date: 2022/1/20 7:38 下午
  * @Description: 资源相关的 controller
  */
+@Api("资源点相关")
 @RestController
 @RequestMapping("/resource")
 public class ResourceManageController {
@@ -63,8 +69,22 @@ public class ResourceManageController {
     return ResponseData.ok(resourceQueryService.detail(resourceId));
   }
 
-  // todo 获取树
-  // todo 分页查询
+  @ApiOperation("资源点列表")
+  @GetMapping("/page")
+  public ResponseData<Page<ResourceDetailDTO>> page(
+      @ApiParam("资源点名称") @RequestParam(value = "name", required = false) String name,
+      @ApiParam("资源点Url") @RequestParam(value = "resourceUrl", required = false) String resourceUrl,
+      @ApiParam("是否可见") @RequestParam(value = "visible", required = false) Boolean visible,
+      @ApiParam("pageNo") @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
+      @ApiParam("pageSize") @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
+    return ResponseData.ok(PlusPageConverter.convert(resourceQueryService.page(name, resourceUrl, visible, pageNo, pageSize)));
+  }
+
+  @ApiOperation("资源点列表")
+  @GetMapping("/page")
+  public ResponseData<List<ResourceTreeDTO>> tree() {
+    return ResponseData.ok(resourceQueryService.tree());
+  }
 
 
 }

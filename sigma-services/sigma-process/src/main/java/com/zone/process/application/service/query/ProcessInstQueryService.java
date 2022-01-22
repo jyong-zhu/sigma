@@ -10,16 +10,19 @@ import com.zone.process.application.service.query.assembler.InstTransferDTOAssem
 import com.zone.process.application.service.query.dto.InstDetailDTO;
 import com.zone.process.application.service.query.dto.InstNodeDataDTO;
 import com.zone.process.application.service.query.dto.InstTransferDTO;
-import com.zone.process.infrastructure.db.dataobject.*;
+import com.zone.process.infrastructure.db.dataobject.FormStructureDO;
+import com.zone.process.infrastructure.db.dataobject.ProcessDefNodeDO;
+import com.zone.process.infrastructure.db.dataobject.ProcessInstDO;
+import com.zone.process.infrastructure.db.dataobject.ProcessInstDataDO;
+import com.zone.process.infrastructure.db.dataobject.ProcessInstOperationDO;
 import com.zone.process.infrastructure.db.query.FormStructureQuery;
 import com.zone.process.infrastructure.db.query.ProcessDefQuery;
 import com.zone.process.infrastructure.db.query.ProcessInstQuery;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @Author: jianyong.zhu
@@ -45,7 +48,7 @@ public class ProcessInstQueryService {
     public Page<InstDetailDTO> page(String name, Long startTime, Long endTime, Long curHandlerId, Long submitBy, String status,
                                     Integer pageNo, Integer pageSize, LoginUser loginUser) {
         // 查询当前用户操作过的流程实例
-        List<Long> instIdList = instQuery.queryRelateInstIdList(loginUser.getUserId());
+        List<Long> instIdList = instQuery.queryRelateInstIdList(loginUser.getAccountId());
 
         // 分页查询
         Page<ProcessInstDO> instPage = PlusPageConverter.convert(instQuery.pageInIdList(instIdList, name, startTime, endTime, curHandlerId,
@@ -61,7 +64,7 @@ public class ProcessInstQueryService {
     public InstDetailDTO detail(Long instId, LoginUser loginUser) {
 
         ProcessInstDO instDO = instQuery.queryInstById(instId);
-        ProcessInstOperationDO operationDO = instQuery.queryRelateOperation(instId, loginUser.getUserId());
+        ProcessInstOperationDO operationDO = instQuery.queryRelateOperation(instId, loginUser.getAccountId());
         Preconditions.checkState(instDO != null && operationDO != null, "流程实例不存在");
 
         // 详情中只返回开始节点的表单数据，要查看其他节点上的表单需要调接口进行切换
@@ -81,7 +84,7 @@ public class ProcessInstQueryService {
     public InstNodeDataDTO queryInstNodeData(Long instId, String bpmnNodeId, LoginUser loginUser) {
 
         ProcessInstDO instDO = instQuery.queryInstById(instId);
-        ProcessInstOperationDO operationDO = instQuery.queryRelateOperation(instId, loginUser.getUserId());
+        ProcessInstOperationDO operationDO = instQuery.queryRelateOperation(instId, loginUser.getAccountId());
         Preconditions.checkState(instDO != null && operationDO != null, "流程实例不存在");
 
         // 查询指定节点的信息

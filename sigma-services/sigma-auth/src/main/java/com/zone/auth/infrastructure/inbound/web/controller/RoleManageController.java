@@ -8,7 +8,10 @@ import com.zone.auth.application.service.query.RoleQueryService;
 import com.zone.auth.application.service.query.dto.RoleDetailDTO;
 import com.zone.commons.context.CurrentContext;
 import com.zone.commons.entity.LoginUser;
+import com.zone.commons.entity.Page;
 import com.zone.commons.entity.ResponseData;
+import com.zone.mybatis.util.PlusPageConverter;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import javax.validation.Valid;
@@ -28,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Jone
  * @since 2022-01-20
  */
+@Api("角色相关")
 @RestController
 @RequestMapping("/role")
 public class RoleManageController {
@@ -65,6 +69,16 @@ public class RoleManageController {
   public ResponseData<RoleDetailDTO> detail(
       @ApiParam(value = "角色id") @RequestParam(value = "roleId") Long roleId) {
     return ResponseData.ok(roleQueryService.detail(roleId));
+  }
+
+  @ApiOperation("角色列表")
+  @GetMapping("/page")
+  public ResponseData<Page<RoleDetailDTO>> page(
+      @ApiParam("角色名称") @RequestParam(value = "name", required = false) String name,
+      @ApiParam("资源点Url") @RequestParam(value = "resourceUrl", required = false) String resourceUrl,
+      @ApiParam(name = "pageNo") @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
+      @ApiParam(name = "pageSize") @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
+    return ResponseData.ok(PlusPageConverter.convert(roleQueryService.page(name, resourceUrl, pageNo, pageSize)));
   }
 
 }

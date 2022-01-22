@@ -8,7 +8,10 @@ import com.zone.auth.application.service.query.AccountQueryService;
 import com.zone.auth.application.service.query.dto.AccountDetailDTO;
 import com.zone.commons.context.CurrentContext;
 import com.zone.commons.entity.LoginUser;
+import com.zone.commons.entity.Page;
 import com.zone.commons.entity.ResponseData;
+import com.zone.mybatis.util.PlusPageConverter;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import javax.validation.Valid;
@@ -28,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Jone
  * @since 2022-01-20
  */
+@Api("账号相关")
 @RestController
 @RequestMapping("/account")
 public class AccountManageController {
@@ -67,7 +71,16 @@ public class AccountManageController {
     return ResponseData.ok(accountQueryService.detail(accountId));
   }
 
-  // todo 分页查询
+  @ApiOperation("用户列表")
+  @GetMapping("/page")
+  public ResponseData<Page<AccountDetailDTO>> page(
+      @ApiParam("姓名") @RequestParam(value = "name", required = false) String name,
+      @ApiParam("邮箱") @RequestParam(value = "email", required = false) String email,
+      @ApiParam("手机号") @RequestParam(value = "phone", required = false) String phone,
+      @ApiParam(name = "pageNo") @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
+      @ApiParam(name = "pageSize") @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
+    return ResponseData.ok(PlusPageConverter.convert(accountQueryService.page(name, email, phone, pageNo, pageSize)));
+  }
 
 
 }

@@ -1,14 +1,16 @@
 package com.zone.gateway;
 
+import com.zone.feign.annotation.SigmaFeignClient;
+import com.zone.web.annotation.SigmaSpringBootApplication;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
  * @Author: jianyong.zhu
  * @Date: 2021/1/15 4:55 下午
  * @Description:
  */
-@SpringBootApplication
+@SigmaFeignClient
+@SigmaSpringBootApplication
 public class SigmaGatewayApplication {
 
   public static void main(String[] args) {

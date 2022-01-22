@@ -7,6 +7,7 @@ import com.zone.commons.context.CurrentContext;
 import com.zone.commons.entity.LoginUser;
 import com.zone.commons.entity.ResponseData;
 import com.zone.commons.util.SecurityUtil;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @Date: 2022/1/20 5:53 下午
  * @Description: 登陆用户相关的controller
  */
+@Api("登陆用户相关")
 @RestController
 @RequestMapping("/account")
 public class AccountLoginController {

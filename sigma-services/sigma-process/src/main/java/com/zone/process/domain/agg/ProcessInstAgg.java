@@ -9,13 +9,12 @@ import com.zone.process.shared.enums.InstanceOperationTypeEnum;
 import com.zone.process.shared.enums.InstanceStatusTypeEnum;
 import com.zone.process.shared.process.valueobject.ProcessInstanceVO;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 /**
  * @Author: jianyong.zhu
@@ -97,8 +96,8 @@ public class ProcessInstAgg {
         this.setId(id);
         this.setDefId(defId);
         this.setProcDefKey(procDefKey);
-        this.setSubmitBy(loginUser.getUserId());
-        this.setSubmitName(loginUser.getUserName());
+        this.setSubmitBy(loginUser.getAccountId());
+        this.setSubmitName(loginUser.getAccountName());
         this.setSubmitTime(LocalDateTime.now());
         this.setProcInstId(procInstId);
         this.setVersion(0);
@@ -111,7 +110,7 @@ public class ProcessInstAgg {
         this.setComment(comment);
         this.setStatus(InstanceStatusTypeEnum.FINISHED.getCode());
         this.getOperationVOList().add(InstOperationVO.generateOperationVO(curNodeId, InstanceOperationTypeEnum.STOP.getCode(), InstanceOperationTypeEnum.STOP.getCode(),
-                comment, Maps.newHashMap(), loginUser, loginUser.getUserName() + "中止流程实例"));
+                comment, Maps.newHashMap(), loginUser, loginUser.getAccountName() + "中止流程实例"));
     }
 
     /**

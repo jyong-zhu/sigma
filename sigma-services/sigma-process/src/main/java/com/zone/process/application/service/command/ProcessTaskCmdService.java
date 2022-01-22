@@ -54,7 +54,7 @@ public class ProcessTaskCmdService {
   @Transactional
   public Long operate(TaskOperateCommand operateCommand, LoginUser loginUser) {
 
-    TaskVO taskVO = processEngineQueryAPI.queryRelateTaskById(operateCommand.getTaskId(), loginUser.getUserId(), loginUser.getRoleIdList());
+    TaskVO taskVO = processEngineQueryAPI.queryRelateTaskById(operateCommand.getTaskId(), loginUser.getAccountId(), loginUser.getRoleIdList());
     Preconditions.checkNotNull(taskVO, "任务不存在");
 
     ProcessInstAgg instAgg = instAggRepository.queryByInstId(taskVO.getProcInstId());

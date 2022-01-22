@@ -18,12 +18,12 @@ public class LoginUser {
   /**
    * 用户id
    */
-  private Long userId;
+  private Long accountId;
 
   /**
    * 用户名称
    */
-  private String userName;
+  private String accountName;
 
   /**
    * 账号类型
@@ -34,5 +34,10 @@ public class LoginUser {
    * 角色列表
    */
   private List<Long> roleIdList;
+
+  /**
+   * 手机号
+   */
+  private String phone;
 
 }

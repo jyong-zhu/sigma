@@ -47,7 +47,7 @@ public class ProcessTaskQueryService {
    */
   public Page<TaskDetailDTO> page(String name, Long startTime, Long endTime, Long submitBy, Integer pageNo, Integer pageSize, LoginUser loginUser) {
 
-    List<TaskVO> taskList = processEngineQueryAPI.queryRelateTaskList(loginUser.getUserId(), loginUser.getRoleIdList());
+    List<TaskVO> taskList = processEngineQueryAPI.queryRelateTaskList(loginUser.getAccountId(), loginUser.getRoleIdList());
     List<String> taskIdList = taskList.stream().map(task -> task.getTaskId()).collect(Collectors.toList());
     List<String> procInstIdList = taskList.stream().map(task -> task.getProcInstId()).collect(Collectors.toList());
 
@@ -68,7 +68,7 @@ public class ProcessTaskQueryService {
    * 查看任务详情
    */
   public TaskDetailDTO detail(String taskId, LoginUser loginUser) {
-    TaskVO taskVO = processEngineQueryAPI.queryRelateTaskById(taskId, loginUser.getUserId(), loginUser.getRoleIdList());
+    TaskVO taskVO = processEngineQueryAPI.queryRelateTaskById(taskId, loginUser.getAccountId(), loginUser.getRoleIdList());
     Preconditions.checkNotNull(taskVO, "任务不存在");
 
     ProcessInstDO instDO = instQuery.queryInstByProcInstId(taskVO.getProcInstId());

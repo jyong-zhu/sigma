@@ -1,7 +1,6 @@
 package com.zone.commons.consts;
 
 import com.google.common.collect.Lists;
-
 import java.util.List;
 
 /**
@@ -12,7 +11,9 @@ import java.util.List;
 public class GatewayConstants {
 
     public static final List<String> whiteList = Lists.newArrayList(
-            "/user/login",
+        "/rpc/auth/check",
+            "/sigma-auth/account/login",
+            "/sigma-auth/account/public-key",
             "/swagger/api-docs",
             "/swagger-ui.html",
             "/swagger-resources/**",
@@ -23,12 +24,14 @@ public class GatewayConstants {
 
     public static final String JSON_CHARSET_UTF_8 = "application/json;charset=UTF-8";
 
-    public static final String USER_NAME = "userName";
+    public static final String ACCOUNT_ID = "accountId";
 
     public static final String ACCOUNT_NAME = "accountName";
 
-    public static final String USER_ID = "userId";
+    public static final String ACCOUNT_TYPE = "accountType";
 
-    public static final String ROLE_ID = "roleId";
+    public static final String ROLE_ID_LIST = "roleIdList";
+
+    public static final String PHONE = "phone";
 
 }

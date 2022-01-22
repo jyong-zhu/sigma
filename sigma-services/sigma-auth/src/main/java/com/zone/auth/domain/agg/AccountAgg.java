@@ -70,10 +70,10 @@ public class AccountAgg {
         .setEmail(createCommand.getEmail())
         .setRoleIdList(createCommand.getRoleIdList())
         .setStatus(true)
-        .setCreateBy(loginUser.getUserId())
-        .setCreateName(loginUser.getUserName())
-        .setUpdateBy(loginUser.getUserId())
-        .setUpdateName(loginUser.getUserName());
+        .setCreateBy(loginUser.getAccountId())
+        .setCreateName(loginUser.getAccountName())
+        .setUpdateBy(loginUser.getAccountId())
+        .setUpdateName(loginUser.getAccountName());
   }
 
   /**
@@ -90,8 +90,8 @@ public class AccountAgg {
     this.setEmail(updateCommand.getEmail());
     this.setName(updateCommand.getName());
     this.setStatus(updateCommand.getStatus());
-    this.setUpdateName(loginUser.getUserName());
-    this.setUpdateBy(loginUser.getUserId());
+    this.setUpdateName(loginUser.getAccountName());
+    this.setUpdateBy(loginUser.getAccountId());
   }
 
   /**
@@ -105,7 +105,7 @@ public class AccountAgg {
     this.setPassword(newPwd);
     this.setName(changeCommand.getName());
     this.setEmail(changeCommand.getEmail());
-    this.setUpdateName(loginUser.getUserName());
-    this.setUpdateBy(loginUser.getUserId());
+    this.setUpdateName(loginUser.getAccountName());
+    this.setUpdateBy(loginUser.getAccountId());
   }
 }

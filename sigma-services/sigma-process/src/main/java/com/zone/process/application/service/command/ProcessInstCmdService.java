@@ -16,12 +16,11 @@ import com.zone.process.domain.service.InstanceParamDomainService;
 import com.zone.process.shared.process.ProcessEngineCommandAPI;
 import com.zone.process.shared.process.ProcessEngineQueryAPI;
 import com.zone.process.shared.process.valueobject.ProcessInstanceVO;
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Map;
 
 /**
  * @Author: jianyong.zhu
@@ -91,7 +90,7 @@ public class ProcessInstCmdService {
 
         ProcessInstAgg instAgg = instAggRepository.queryById(stopCommand.getId());
         Preconditions.checkState(instAgg != null
-                && instAgg.getSubmitBy().equals(loginUser.getUserId()), "流程实例不存在");
+                && instAgg.getSubmitBy().equals(loginUser.getAccountId()), "流程实例不存在");
 
         ProcessDefAgg defAgg = defAggRepository.queryById(instAgg.getDefId());
         Preconditions.checkNotNull(defAgg, "流程定义不存在");

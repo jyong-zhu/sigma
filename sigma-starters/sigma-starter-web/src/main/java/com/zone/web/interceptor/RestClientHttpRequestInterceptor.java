@@ -1,6 +1,8 @@
 package com.zone.web.interceptor;
 
 import com.zone.commons.consts.GatewayConstants;
+import java.io.IOException;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
@@ -9,9 +11,6 @@ import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 
 /**
  * @Author: jianyong.zhu
@@ -35,9 +34,10 @@ public class RestClientHttpRequestInterceptor implements ClientHttpRequestInterc
         // 塞入当前请求的上下文的信息
         headers.add(GatewayConstants.AUTHORIZATION, servletRequest.getHeader(GatewayConstants.AUTHORIZATION));
         headers.add(GatewayConstants.ACCOUNT_NAME, servletRequest.getHeader(GatewayConstants.ACCOUNT_NAME));
-        headers.add(GatewayConstants.USER_NAME, servletRequest.getHeader(GatewayConstants.USER_NAME));
-        headers.add(GatewayConstants.ROLE_ID, servletRequest.getHeader(GatewayConstants.ROLE_ID));
-        headers.add(GatewayConstants.USER_ID, servletRequest.getHeader(GatewayConstants.USER_ID));
+        headers.add(GatewayConstants.ACCOUNT_ID, servletRequest.getHeader(GatewayConstants.ACCOUNT_ID));
+        headers.add(GatewayConstants.ACCOUNT_TYPE, servletRequest.getHeader(GatewayConstants.ACCOUNT_TYPE));
+        headers.add(GatewayConstants.ROLE_ID_LIST, servletRequest.getHeader(GatewayConstants.ROLE_ID_LIST));
+        headers.add(GatewayConstants.PHONE, servletRequest.getHeader(GatewayConstants.PHONE));
 
         // 执行RestTemplate请求
         return execution.execute(httpRequest, bytes);

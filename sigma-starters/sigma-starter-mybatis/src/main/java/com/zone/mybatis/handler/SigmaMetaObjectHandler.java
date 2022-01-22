@@ -3,10 +3,9 @@ package com.zone.mybatis.handler;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.zone.commons.context.CurrentContext;
 import com.zone.commons.entity.LoginUser;
+import java.time.LocalDateTime;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
-
-import java.time.LocalDateTime;
 
 /**
  * @Author: jianyong.zhu
@@ -37,18 +36,18 @@ public class SigmaMetaObjectHandler implements MetaObjectHandler {
         Object createName = getFieldValByName(CREATE_NAME, metaObject);
         Object createTime = getFieldValByName(CREATE_TIME, metaObject);
         if (createByVal == null) {
-            this.strictInsertFill(metaObject, CREATE_BY, Long.class, loginUser.getUserId());
+            this.strictInsertFill(metaObject, CREATE_BY, Long.class, loginUser.getAccountId());
         }
         if (createName == null) {
-            this.strictInsertFill(metaObject, CREATE_NAME, String.class, loginUser.getUserName());
+            this.strictInsertFill(metaObject, CREATE_NAME, String.class, loginUser.getAccountName());
         }
         if (createTime == null) {
             this.strictInsertFill(metaObject, CREATE_TIME, LocalDateTime.class, LocalDateTime.now());
         }
-        this.strictInsertFill(metaObject, UPDATE_BY, Long.class, loginUser.getUserId());
-        this.strictInsertFill(metaObject, UPDATE_NAME, String.class, loginUser.getUserName());
+        this.strictInsertFill(metaObject, UPDATE_BY, Long.class, loginUser.getAccountId());
+        this.strictInsertFill(metaObject, UPDATE_NAME, String.class, loginUser.getAccountName());
         this.strictInsertFill(metaObject, UPDATE_TIME, LocalDateTime.class, LocalDateTime.now());
-        log.info("用户[{}]新增数据", loginUser.getUserName() + "(" + loginUser.getUserId() + ")");
+        log.info("用户[{}]新增数据", loginUser.getAccountName() + "(" + loginUser.getAccountId() + ")");
     }
 
     @Override
@@ -57,9 +56,9 @@ public class SigmaMetaObjectHandler implements MetaObjectHandler {
         if (loginUser == null) {
             return;
         }
-        this.strictUpdateFill(metaObject, UPDATE_BY, Long.class, loginUser.getUserId());
-        this.strictUpdateFill(metaObject, UPDATE_NAME, String.class, loginUser.getUserName());
+        this.strictUpdateFill(metaObject, UPDATE_BY, Long.class, loginUser.getAccountId());
+        this.strictUpdateFill(metaObject, UPDATE_NAME, String.class, loginUser.getAccountName());
         this.strictUpdateFill(metaObject, UPDATE_TIME, LocalDateTime.class, LocalDateTime.now());
-        log.info("用户[{}]更新数据", loginUser.getUserName() + "(" + loginUser.getUserId() + ")");
+        log.info("用户[{}]更新数据", loginUser.getAccountName() + "(" + loginUser.getAccountId() + ")");
     }
 }

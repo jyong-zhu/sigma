@@ -36,7 +36,7 @@ public class InstanceDataDomainService {
 
         instAgg.setDataVOList(InstDataVO.generateDataVOList(defAgg.getStartBpmnNodeId(), formDataMap, Lists.newArrayList(), formIdList));
         instAgg.setOperationVOList(Lists.newArrayList(InstOperationVO.generateOperationVO(defAgg.getStartBpmnNodeId(), InstanceOperationTypeEnum.START.getCode(),
-                InstanceOperationTypeEnum.START.getCode(), comment, formDataMap, loginUser, loginUser.getUserName() + "发起流程实例")));
+                InstanceOperationTypeEnum.START.getCode(), comment, formDataMap, loginUser, loginUser.getAccountName() + "发起流程实例")));
     }
 
     /**
@@ -53,7 +53,7 @@ public class InstanceDataDomainService {
         if (TaskOperationTypeEnum.COMPLETE.getCode().equals(operationType)) {
             instAgg.setDataVOList(InstDataVO.generateDataVOList(taskVO.getCurNodeId(), formDataMap, instAgg.getDataVOList(), formIdList));
         }
-        String ext = TaskOperationTypeEnum.COMPLETE.getCode().equals(operationType) ? loginUser.getUserName() + "提交任务" : loginUser.getUserName() + "转派任务";
+        String ext = TaskOperationTypeEnum.COMPLETE.getCode().equals(operationType) ? loginUser.getAccountName() + "提交任务" : loginUser.getAccountName() + "转派任务";
         instAgg.getOperationVOList().add(InstOperationVO.generateOperationVO(taskVO.getCurNodeId(), taskVO.getTaskId(), operationType, comment, formDataMap, loginUser, ext));
     }
 }

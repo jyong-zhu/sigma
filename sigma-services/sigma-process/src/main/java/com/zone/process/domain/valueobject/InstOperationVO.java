@@ -3,12 +3,11 @@ package com.zone.process.domain.valueobject;
 import cn.hutool.json.JSONUtil;
 import com.zone.commons.entity.LoginUser;
 import io.swagger.annotations.ApiModelProperty;
+import java.time.LocalDateTime;
+import java.util.Map;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-
-import java.time.LocalDateTime;
-import java.util.Map;
 
 /**
  * @Author: jianyong.zhu
@@ -60,8 +59,8 @@ public class InstOperationVO {
                 .setTaskId(taskId)
                 .setComment(comment)
                 .setOperationType(operationType)
-                .setOperateBy(loginUser.getUserId())
-                .setOperateName(loginUser.getUserName())
+                .setOperateBy(loginUser.getAccountId())
+                .setOperateName(loginUser.getAccountName())
                 .setFormData(JSONUtil.toJsonStr(formDataMap))
                 .setExt(ext);
     }

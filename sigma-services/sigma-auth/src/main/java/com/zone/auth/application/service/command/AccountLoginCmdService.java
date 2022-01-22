@@ -54,8 +54,8 @@ public class AccountLoginCmdService {
 
     // 2. 登陆成功返回 JWT
     return JWTUtil.createToken(new LoginUser()
-        .setUserName(accountAgg.getName())
-        .setUserId(accountAgg.getId()));
+        .setAccountName(accountAgg.getName())
+        .setAccountId(accountAgg.getId()));
   }
 
   /**
@@ -64,7 +64,7 @@ public class AccountLoginCmdService {
   public Long change(AccountChangeCommand changeCommand, LoginUser loginUser) {
 
     // 0. 校验用户信息
-    AccountAgg accountAgg = accountAggRepository.queryById(loginUser.getUserId());
+    AccountAgg accountAgg = accountAggRepository.queryById(loginUser.getAccountId());
     Preconditions.checkNotNull(accountAgg, "用户名不存在");
 
     // 1. 修改个人信息

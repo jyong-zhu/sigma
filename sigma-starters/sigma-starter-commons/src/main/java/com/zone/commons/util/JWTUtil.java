@@ -40,8 +40,8 @@ public final class JWTUtil {
         headerMap.put("alg", "HS256");
 
         Map<String, Object> claimMap = Maps.newHashMap();
-        claimMap.put(GatewayConstants.USER_ID, loginUser.getUserId());
-        claimMap.put(GatewayConstants.USER_NAME, loginUser.getUserName());
+        claimMap.put(GatewayConstants.ACCOUNT_ID, loginUser.getAccountId());
+        claimMap.put(GatewayConstants.ACCOUNT_NAME, loginUser.getAccountName());
 
         return JWT.create()
                 .withHeader(headerMap)
@@ -71,10 +71,10 @@ public final class JWTUtil {
             DecodedJWT jwt = verifier.verify(token);
             Map<String, Object> claimMap = jwt.getClaim("userInfo").asMap();
             LoginUser loginUser = new LoginUser()
-                    .setUserId(claimMap.get(GatewayConstants.USER_ID) == null ? null : Long.valueOf(claimMap.get(GatewayConstants.USER_ID).toString()))
-                    .setUserName(claimMap.getOrDefault(GatewayConstants.USER_NAME, "").toString());
-            return loginUser.getUserId() == null
-                    || StrUtil.isBlank(loginUser.getUserName()) ? null : loginUser;
+                    .setAccountId(claimMap.get(GatewayConstants.ACCOUNT_ID) == null ? null : Long.valueOf(claimMap.get(GatewayConstants.ACCOUNT_ID).toString()))
+                    .setAccountName(claimMap.getOrDefault(GatewayConstants.ACCOUNT_NAME, "").toString());
+            return loginUser.getAccountId() == null
+                    || StrUtil.isBlank(loginUser.getAccountName()) ? null : loginUser;
         } catch (Exception e) {
             log.error("验证 " + token + " 时出错");
             return null;
