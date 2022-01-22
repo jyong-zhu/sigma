@@ -48,7 +48,4 @@ public class AccountLoginController {
     return ResponseData.ok(accountLoginCmdService.change(changeCommand, loginUser));
   }
 
-  // todo 鉴权接口
-
-
 }
