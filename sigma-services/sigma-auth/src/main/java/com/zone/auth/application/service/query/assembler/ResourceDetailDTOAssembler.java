@@ -1,7 +1,11 @@
 package com.zone.auth.application.service.query.assembler;
 
+import cn.hutool.core.collection.CollectionUtil;
+import com.google.common.collect.Lists;
 import com.zone.auth.application.service.query.dto.ResourceDetailDTO;
 import com.zone.auth.infrastructure.db.dataobject.AuthResourceDO;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @Author: jianyong.zhu
@@ -11,6 +15,9 @@ import com.zone.auth.infrastructure.db.dataobject.AuthResourceDO;
 public class ResourceDetailDTOAssembler {
 
   public static ResourceDetailDTO getResourceDetailDTO(AuthResourceDO resourceDO) {
+    if (resourceDO == null) {
+      return null;
+    }
     ResourceDetailDTO resourceDetailDTO = new ResourceDetailDTO();
     resourceDetailDTO.setId(resourceDO.getId());
     resourceDetailDTO.setType(resourceDO.getType());
@@ -27,5 +34,15 @@ public class ResourceDetailDTOAssembler {
     resourceDetailDTO.setUpdateTime(resourceDO.getUpdateTime());
     resourceDetailDTO.setUpdateName(resourceDO.getUpdateName());
     return resourceDetailDTO;
+  }
+
+  public static List<ResourceDetailDTO> getResourceDetailDTOList(List<AuthResourceDO> resourceList) {
+    if (CollectionUtil.isEmpty(resourceList)) {
+      return Lists.newArrayList();
+    }
+    return resourceList.stream()
+        .filter(tmp -> tmp != null)
+        .map(ResourceDetailDTOAssembler::getResourceDetailDTO)
+        .collect(Collectors.toList());
   }
 }

@@ -75,10 +75,9 @@ public class RoleManageController {
   @GetMapping("/page")
   public ResponseData<Page<RoleDetailDTO>> page(
       @ApiParam("角色名称") @RequestParam(value = "name", required = false) String name,
-      @ApiParam("资源点Url") @RequestParam(value = "resourceUrl", required = false) String resourceUrl,
       @ApiParam(name = "pageNo") @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
       @ApiParam(name = "pageSize") @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize) {
-    return ResponseData.ok(PlusPageConverter.convert(roleQueryService.page(name, resourceUrl, pageNo, pageSize)));
+    return ResponseData.ok(PlusPageConverter.convert(roleQueryService.page(name, pageNo, pageSize)));
   }
 
 }
