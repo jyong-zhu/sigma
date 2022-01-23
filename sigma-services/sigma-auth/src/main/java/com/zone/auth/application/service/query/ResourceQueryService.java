@@ -40,7 +40,7 @@ public class ResourceQueryService {
     AuthResourceDO resourceDO = authResourceMapper.selectById(resourceId);
     Preconditions.checkNotNull(resourceDO, "资源点不存在");
 
-    return ResourceDetailDTOAssembler.getResourceDetailDTO(resourceDO);
+    return ResourceDetailDTOAssembler.toResourceDetailDTO(resourceDO);
   }
 
   /**
@@ -63,7 +63,7 @@ public class ResourceQueryService {
 
     Page<AuthResourceDO> authResourceDOPage = authResourceMapper.selectPage(new Page<>(pageNo, pageSize), wrapper);
 
-    return authResourceDOPage.convert(ResourceDetailDTOAssembler::getResourceDetailDTO);
+    return authResourceDOPage.convert(ResourceDetailDTOAssembler::toResourceDetailDTO);
   }
 
   /**
@@ -85,7 +85,7 @@ public class ResourceQueryService {
     List<AuthResourceDO> resourceDOList = resourceMap.getOrDefault(finalParentId, Lists.newArrayList());
 
     resourceDOList.forEach(resourceDO -> {
-      ResourceDetailDTO detailDTO = ResourceDetailDTOAssembler.getResourceDetailDTO(resourceDO);
+      ResourceDetailDTO detailDTO = ResourceDetailDTOAssembler.toResourceDetailDTO(resourceDO);
       List<ResourceTreeDTO> nextList = generateTree(resourceMap, resourceDO.getId());
       result.add(new ResourceTreeDTO()
           .setCurNode(detailDTO)

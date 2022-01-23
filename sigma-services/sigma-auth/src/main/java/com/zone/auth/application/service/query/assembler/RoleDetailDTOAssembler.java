@@ -19,7 +19,7 @@ public class RoleDetailDTOAssembler {
     RoleDetailDTO roleDetailDTO = new RoleDetailDTO();
     roleDetailDTO.setId(roleDO.getId());
     roleDetailDTO.setRoleName(roleDO.getRoleName());
-    roleDetailDTO.setResourceList(ResourceDetailDTOAssembler.getResourceDetailDTOList(resourceList));
+    roleDetailDTO.setResourceList(ResourceDetailDTOAssembler.toResourceDetailDTOList(resourceList));
     roleDetailDTO.setStatus(roleDO.getStatus());
     roleDetailDTO.setCreateTime(roleDO.getCreateTime());
     roleDetailDTO.setCreateName(roleDO.getCreateName());

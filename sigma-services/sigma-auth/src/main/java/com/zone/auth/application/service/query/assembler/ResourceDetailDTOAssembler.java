@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
  */
 public class ResourceDetailDTOAssembler {
 
-  public static ResourceDetailDTO getResourceDetailDTO(AuthResourceDO resourceDO) {
+  public static ResourceDetailDTO toResourceDetailDTO(AuthResourceDO resourceDO) {
     if (resourceDO == null) {
       return null;
     }
@@ -36,13 +36,13 @@ public class ResourceDetailDTOAssembler {
     return resourceDetailDTO;
   }
 
-  public static List<ResourceDetailDTO> getResourceDetailDTOList(List<AuthResourceDO> resourceList) {
+  public static List<ResourceDetailDTO> toResourceDetailDTOList(List<AuthResourceDO> resourceList) {
     if (CollectionUtil.isEmpty(resourceList)) {
       return Lists.newArrayList();
     }
     return resourceList.stream()
         .filter(tmp -> tmp != null)
-        .map(ResourceDetailDTOAssembler::getResourceDetailDTO)
+        .map(ResourceDetailDTOAssembler::toResourceDetailDTO)
         .collect(Collectors.toList());
   }
 }
