@@ -5,7 +5,6 @@ import cn.hutool.json.JSONUtil;
 import com.zone.commons.consts.GatewayConstants;
 import com.zone.commons.context.CurrentContext;
 import com.zone.commons.entity.LoginUser;
-import com.zone.commons.util.JWTUtil;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -24,14 +23,14 @@ public class ContextInterceptor implements HandlerInterceptor {
   @Override
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
+    log.info("=================拦截器设置ThreadLocal<LoginUser>=================");
+
     String path = request.getRequestURI();
     if (GatewayConstants.whiteList.contains(path)) {
       log.info("请求url位于白名单中，放行");
       return true;
     }
 
-    log.info("=================拦截器设置ThreadLocal<LoginUser>=================");
-    String authorization = request.getHeader(GatewayConstants.AUTHORIZATION);
     String accountId = request.getHeader(GatewayConstants.ACCOUNT_ID);
     String accountName = request.getHeader(GatewayConstants.ACCOUNT_NAME);
     String accountType = request.getHeader(GatewayConstants.ACCOUNT_TYPE);
@@ -41,6 +40,7 @@ public class ContextInterceptor implements HandlerInterceptor {
     // 如果request中存在这些header，则从这些header中封装loginUser
     if (StrUtil.isNotBlank(accountId) && StrUtil.isNotBlank(accountName) && StrUtil.isNotBlank(accountType)
         && StrUtil.isNotBlank(roleIdList) && StrUtil.isNotBlank(phone)) {
+      // 上下文中写入用户信息，并放行
       CurrentContext.setUser(new LoginUser()
           .setAccountId(Long.valueOf(accountId))
           .setAccountName(accountName)
@@ -50,15 +50,13 @@ public class ContextInterceptor implements HandlerInterceptor {
       return true;
     }
 
-    // 否则解析JWT
-    LoginUser loginUser = JWTUtil.verifyToken(authorization);
-    if (loginUser != null) {
+    // 写回错误信息，不放行
+//    response.setStatus(HttpStatus.BAD_REQUEST.value());
+//    response.setContentType(GatewayConstants.JSON_CHARSET_UTF_8);
+//    response.getWriter().write(JSONUtil.toJsonStr(ResponseData.error("系统错误")));
+//    response.getWriter().flush();
 
-      CurrentContext.setUser(loginUser);
-    }
-
-    // 默认不放行
-    return false;
+    return true;
   }
 
   @Override

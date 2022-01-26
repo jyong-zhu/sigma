@@ -12,6 +12,8 @@ spring:
           # 所以网关能够自动根据服务名进行转发，如果没有匹配的服务名，则报404
           enabled: true
           lower-case-service-id: true # 路由的路径为小写的service id
+          filters:
+            - StripPrefix=0
 
     nacos:
       config:

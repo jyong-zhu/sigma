@@ -2,6 +2,7 @@ package com.zone.auth.application.service.query;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.google.common.collect.Lists;
 import com.zone.auth.infrastructure.db.dataobject.AuthAccountDO;
 import com.zone.auth.infrastructure.db.dataobject.AuthAccountRoleDO;
 import com.zone.auth.infrastructure.db.dataobject.AuthResourceDO;
@@ -10,6 +11,7 @@ import com.zone.auth.infrastructure.db.mapper.AuthAccountMapper;
 import com.zone.auth.infrastructure.db.mapper.AuthAccountRoleMapper;
 import com.zone.auth.infrastructure.db.mapper.AuthResourceMapper;
 import com.zone.auth.infrastructure.db.mapper.AuthRoleMapper;
+import com.zone.auth.shared.enums.AccountTypeEnum;
 import com.zone.rpc.dto.auth.AccountCheckDTO;
 import com.zone.rpc.req.auth.AccountCheckReq;
 import java.util.Arrays;
@@ -48,6 +50,16 @@ public class AccountLoginQueryService {
     if (accountDO == null || !accountDO.getStatus()) {
       log.warn("鉴权失败，账号不存在或被禁用：accountDO=[{}]", accountDO);
       return null;
+    }
+
+    // 2. 判断是否为超级管理员
+    if (AccountTypeEnum.isAdmin(accountDO.getAccountType())) {
+      return new AccountCheckDTO()
+          .setAccountId(accountDO.getId())
+          .setAccountName(accountDO.getName())
+          .setAccountType(accountDO.getAccountType())
+          .setPhone(accountDO.getPhone())
+          .setRoleIdList(Lists.newArrayList());
     }
 
     // 2. 获取角色列表

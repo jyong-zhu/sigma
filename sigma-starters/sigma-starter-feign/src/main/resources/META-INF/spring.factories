@@ -1,2 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.zone.feign.config.FeignInterceptorConfig
+  com.zone.feign.config.FeignInterceptorConfig,\
+  com.zone.feign.config.FeignBeanConfig
