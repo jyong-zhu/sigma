@@ -12,7 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-cd `dirname $0`/../target
+cd `dirname $0`/../server
 target_dir=`pwd`
 
 pid=`ps ax | grep -i 'nacos.nacos' | grep ${target_dir} | grep java | grep -v grep | awk '{print $1}'`
