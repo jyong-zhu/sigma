@@ -1,8 +1,8 @@
 package com.zone.gateway;
 
 import com.zone.feign.annotation.SigmaFeignClient;
-import com.zone.web.annotation.SigmaSpringBootApplication;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
  * @Author: jianyong.zhu
@@ -10,7 +10,7 @@ import org.springframework.boot.SpringApplication;
  * @Description:
  */
 @SigmaFeignClient
-@SigmaSpringBootApplication
+@SpringBootApplication
 public class SigmaGatewayApplication {
 
   public static void main(String[] args) {

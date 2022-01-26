@@ -81,7 +81,7 @@ public class ResourceManageController {
   }
 
   @ApiOperation("资源点列表")
-  @GetMapping("/page")
+  @GetMapping("/tree")
   public ResponseData<List<ResourceTreeDTO>> tree() {
     return ResponseData.ok(resourceQueryService.tree());
   }
