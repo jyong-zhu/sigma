@@ -1,10 +1,14 @@
 package com.zone.web.annotation;
 
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
-
-import java.lang.annotation.*;
+import springfox.documentation.oas.annotations.EnableOpenApi;
 
 /**
  * @Author: jianyong.zhu
@@ -16,7 +20,9 @@ import java.lang.annotation.*;
 @Documented
 @ComponentScan(basePackages = {"com.zone.*"})
 @MapperScan(basePackages = "com.zone.*.infrastructure")
+@EnableOpenApi
 @SpringBootApplication
 public @interface SigmaSpringBootApplication {
-    String value() default "";
+
+  String value() default "";
 }

@@ -1,5 +1,6 @@
 package com.zone.web.interceptor;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.zone.commons.consts.GatewayConstants;
@@ -7,11 +8,13 @@ import com.zone.commons.context.CurrentContext;
 import com.zone.commons.entity.LoginUser;
 import com.zone.commons.entity.ResponseData;
 import java.net.URLDecoder;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 /**
@@ -29,20 +32,29 @@ public class ContextInterceptor implements HandlerInterceptor {
     log.info("=================拦截器设置ThreadLocal<LoginUser>=================");
 
     String path = request.getRequestURI();
-    if (GatewayConstants.whiteList.contains(path)) {
+    // swagger相关的路径也要放行
+    String simplePath = removeServiceName(path);
+    if (pathMatch(GatewayConstants.whiteList, path) || pathMatch(GatewayConstants.whiteList, simplePath)) {
       log.info("请求url位于白名单中，放行");
       return true;
     }
 
-    String accountId = URLDecoder.decode(request.getHeader(GatewayConstants.ACCOUNT_ID), GatewayConstants.UTF_8);
-    String accountName = URLDecoder.decode(request.getHeader(GatewayConstants.ACCOUNT_NAME), GatewayConstants.UTF_8);
-    String accountType = URLDecoder.decode(request.getHeader(GatewayConstants.ACCOUNT_TYPE), GatewayConstants.UTF_8);
-    String roleIdList = URLDecoder.decode(request.getHeader(GatewayConstants.ROLE_ID_LIST), GatewayConstants.UTF_8);
-    String phone = URLDecoder.decode(request.getHeader(GatewayConstants.PHONE), GatewayConstants.UTF_8);
+    String accountId = request.getHeader(GatewayConstants.ACCOUNT_ID);
+    String accountName = request.getHeader(GatewayConstants.ACCOUNT_NAME);
+    String accountType = request.getHeader(GatewayConstants.ACCOUNT_TYPE);
+    String roleIdList = request.getHeader(GatewayConstants.ROLE_ID_LIST);
+    String phone = request.getHeader(GatewayConstants.PHONE);
 
     // 如果request中存在这些header，则从这些header中封装loginUser
     if (StrUtil.isNotBlank(accountId) && StrUtil.isNotBlank(accountName) && StrUtil.isNotBlank(accountType)
         && StrUtil.isNotBlank(roleIdList) && StrUtil.isNotBlank(phone)) {
+
+      accountId = URLDecoder.decode(request.getHeader(GatewayConstants.ACCOUNT_ID), GatewayConstants.UTF_8);
+      accountName = URLDecoder.decode(request.getHeader(GatewayConstants.ACCOUNT_NAME), GatewayConstants.UTF_8);
+      accountType = URLDecoder.decode(request.getHeader(GatewayConstants.ACCOUNT_TYPE), GatewayConstants.UTF_8);
+      roleIdList = URLDecoder.decode(request.getHeader(GatewayConstants.ROLE_ID_LIST), GatewayConstants.UTF_8);
+      phone = URLDecoder.decode(request.getHeader(GatewayConstants.PHONE), GatewayConstants.UTF_8);
+
       // 上下文中写入用户信息，并放行
       CurrentContext.setUser(new LoginUser()
           .setAccountId(Long.valueOf(accountId))
@@ -67,5 +79,26 @@ public class ContextInterceptor implements HandlerInterceptor {
     // 清除 ThreadLocal 中的 loginUser 信息
     CurrentContext.remove();
     log.info("=================拦截器清除ThreadLocal<LoginUser>=================");
+  }
+
+  /**
+   * 移除服务名
+   */
+  private static String removeServiceName(String path) {
+    if (StrUtil.isBlank(path)) {
+      return "";
+    }
+    return path.substring(path.indexOf("/", 1));
+  }
+
+  /**
+   * 路径匹配
+   */
+  private boolean pathMatch(List<String> patternList, String path) {
+    if (CollectionUtil.isEmpty(patternList)) {
+      return false;
+    }
+    AntPathMatcher matcher = new AntPathMatcher();
+    return patternList.stream().anyMatch(pattern -> matcher.match(pattern, path));
   }
 }
