@@ -19,6 +19,11 @@ spring:
         group: DEFAULT_GROUP
       discovery:
         server-addr: 127.0.0.1:8848
+  # 以下配置项用于屏蔽
+  mvc:
+    throw-exception-if-no-handler-found: true
+  resources:
+    add-mappings: false
 
 server:
   port: 9090
