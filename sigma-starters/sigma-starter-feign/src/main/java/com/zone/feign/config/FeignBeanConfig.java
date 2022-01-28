@@ -2,27 +2,32 @@ package com.zone.feign.config;
 
 import feign.codec.Decoder;
 import feign.codec.Encoder;
-import feign.jackson.JacksonDecoder;
-import feign.jackson.JacksonEncoder;
+import org.springframework.beans.factory.ObjectFactory;
+import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
+import org.springframework.cloud.openfeign.support.SpringDecoder;
+import org.springframework.cloud.openfeign.support.SpringEncoder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
  * @Author: jianyong.zhu
  * @Date: 2022/1/26 4:23 下午
- * @Description:
+ * @Description: https://github.com/spring-cloud/spring-cloud-openfeign/issues/235
  */
 @Configuration
 public class FeignBeanConfig {
 
+
+  private ObjectFactory<HttpMessageConverters> messageConverters = HttpMessageConverters::new;
+
   @Bean
-  public Decoder decoder() {
-    return new JacksonDecoder();
+  Encoder feignEncoder() {
+    return new SpringEncoder(messageConverters);
   }
 
   @Bean
-  public Encoder encoder() {
-    return new JacksonEncoder();
+  Decoder feignDecoder() {
+    return new SpringDecoder(messageConverters);
   }
 
 }

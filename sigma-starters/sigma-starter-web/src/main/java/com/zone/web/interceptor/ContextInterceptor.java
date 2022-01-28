@@ -5,9 +5,12 @@ import cn.hutool.json.JSONUtil;
 import com.zone.commons.consts.GatewayConstants;
 import com.zone.commons.context.CurrentContext;
 import com.zone.commons.entity.LoginUser;
+import com.zone.commons.entity.ResponseData;
+import java.net.URLDecoder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -31,11 +34,11 @@ public class ContextInterceptor implements HandlerInterceptor {
       return true;
     }
 
-    String accountId = request.getHeader(GatewayConstants.ACCOUNT_ID);
-    String accountName = request.getHeader(GatewayConstants.ACCOUNT_NAME);
-    String accountType = request.getHeader(GatewayConstants.ACCOUNT_TYPE);
-    String roleIdList = request.getHeader(GatewayConstants.ROLE_ID_LIST);
-    String phone = request.getHeader(GatewayConstants.PHONE);
+    String accountId = URLDecoder.decode(request.getHeader(GatewayConstants.ACCOUNT_ID), GatewayConstants.UTF_8);
+    String accountName = URLDecoder.decode(request.getHeader(GatewayConstants.ACCOUNT_NAME), GatewayConstants.UTF_8);
+    String accountType = URLDecoder.decode(request.getHeader(GatewayConstants.ACCOUNT_TYPE), GatewayConstants.UTF_8);
+    String roleIdList = URLDecoder.decode(request.getHeader(GatewayConstants.ROLE_ID_LIST), GatewayConstants.UTF_8);
+    String phone = URLDecoder.decode(request.getHeader(GatewayConstants.PHONE), GatewayConstants.UTF_8);
 
     // 如果request中存在这些header，则从这些header中封装loginUser
     if (StrUtil.isNotBlank(accountId) && StrUtil.isNotBlank(accountName) && StrUtil.isNotBlank(accountType)
@@ -51,12 +54,12 @@ public class ContextInterceptor implements HandlerInterceptor {
     }
 
     // 写回错误信息，不放行
-//    response.setStatus(HttpStatus.BAD_REQUEST.value());
-//    response.setContentType(GatewayConstants.JSON_CHARSET_UTF_8);
-//    response.getWriter().write(JSONUtil.toJsonStr(ResponseData.error("系统错误")));
-//    response.getWriter().flush();
+    response.setStatus(HttpStatus.BAD_REQUEST.value());
+    response.setContentType(GatewayConstants.JSON_CHARSET_UTF_8);
+    response.getWriter().write(JSONUtil.toJsonStr(ResponseData.error("系统错误")));
+    response.getWriter().flush();
 
-    return true;
+    return false;
   }
 
   @Override

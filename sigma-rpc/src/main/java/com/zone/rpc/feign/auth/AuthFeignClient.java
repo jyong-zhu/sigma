@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
  * @Date: 2022/1/22 2:23 下午
  * @Description:
  */
-@FeignClient(value = "sigma-auth", fallbackFactory = AuthFeignClientFallback.class)
+@FeignClient(value = "sigma-auth", path = "/sigma-auth", fallbackFactory = AuthFeignClientFallback.class)
 public interface AuthFeignClient {
 
   @ApiOperation("用户登陆接口")

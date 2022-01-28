@@ -1,6 +1,7 @@
 package com.zone.rpc.dto.auth;
 
 import io.swagger.annotations.ApiModelProperty;
+import java.io.Serializable;
 import java.util.List;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -12,7 +13,9 @@ import lombok.experimental.Accessors;
  */
 @Data
 @Accessors(chain = true)
-public class AccountCheckDTO {
+public class AccountCheckDTO implements Serializable {
+
+  private static final long serialVersionUID = -9119281396199298843L;
 
   @ApiModelProperty("账号id")
   private Long accountId;

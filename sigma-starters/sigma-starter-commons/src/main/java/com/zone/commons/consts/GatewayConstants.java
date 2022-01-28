@@ -11,7 +11,7 @@ import java.util.List;
 public class GatewayConstants {
 
     public static final List<String> whiteList = Lists.newArrayList(
-        "/rpc/auth/check",
+        "/sigma-auth/rpc/auth/check",
             "/sigma-auth/account/login",
             "/sigma-auth/account/public-key",
             "/swagger/api-docs",
@@ -23,6 +23,8 @@ public class GatewayConstants {
     public static final String AUTHORIZATION = "Authorization";
 
     public static final String JSON_CHARSET_UTF_8 = "application/json;charset=UTF-8";
+
+    public static final String UTF_8 = "UTF-8";
 
     public static final String ACCOUNT_ID = "accountId";
 
