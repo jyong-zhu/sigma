@@ -3,6 +3,7 @@ package com.zone.web.interceptor;
 import com.zone.commons.entity.ResponseData;
 import java.sql.SQLIntegrityConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -50,6 +51,6 @@ public class GlobalExceptionInterceptor {
   @ExceptionHandler(NoHandlerFoundException.class)
   public ResponseData<Object> noHandlerException(NoHandlerFoundException e) {
     log.error("404错误: [{}]", e.getMessage(), e);
-    return ResponseData.error(404, e.getMessage());
+    return ResponseData.error(HttpStatus.NOT_FOUND.value(), e.getMessage());
   }
 }
