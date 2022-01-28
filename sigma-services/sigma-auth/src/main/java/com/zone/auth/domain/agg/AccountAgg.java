@@ -80,7 +80,7 @@ public class AccountAgg {
    * 获取默认密码
    */
   private static String getDefaultPwd() {
-    return "12345678";
+    return "123456";
   }
 
   /**

@@ -80,6 +80,10 @@ public class AccountLoginQueryService {
         .flatMap(tmp -> Arrays.stream(tmp.getResources().split(",")))
         .map(Long::valueOf)
         .distinct().collect(Collectors.toList());
+    if (CollectionUtil.isEmpty(resourceIdList)) {
+      log.warn("鉴权失败，资源为空：accountDO=[{}], roleIdList=[{}]", accountDO, roleIdList);
+      return null;
+    }
 
     // 4. 判断url是否存在
     QueryWrapper<AuthResourceDO> resourceWrapper = new QueryWrapper<>();

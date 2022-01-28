@@ -76,7 +76,7 @@ public class AuthorizationFilter implements GlobalFilter, Ordered {
 
       // 重写 request，将 user 的信息放入 HttpHeader 中
       ServerHttpRequest request = exchange.getRequest().mutate()
-          .header(GatewayConstants.ACCOUNT_NAME, URLEncoder.encode(String.valueOf(checkDTO.getAccountId()), GatewayConstants.UTF_8))
+          .header(GatewayConstants.ACCOUNT_NAME, URLEncoder.encode(String.valueOf(checkDTO.getAccountName()), GatewayConstants.UTF_8))
           .header(GatewayConstants.ACCOUNT_ID, URLEncoder.encode(String.valueOf(checkDTO.getAccountId()), GatewayConstants.UTF_8))
           .header(GatewayConstants.ROLE_ID_LIST, URLEncoder.encode(JSONUtil.toJsonStr(checkDTO.getRoleIdList()), GatewayConstants.UTF_8))
           .header(GatewayConstants.PHONE, URLEncoder.encode(checkDTO.getPhone(), GatewayConstants.UTF_8))

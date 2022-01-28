@@ -68,7 +68,7 @@ CREATE TABLE `auth_resource`
     `icon_url`     varchar(255)        NOT NULL DEFAULT '' COMMENT 'icon图标地址',
     `parent_id`    bigint(20)          NOT NULL DEFAULT '0' COMMENT '功能权限对应菜单的id',
     `visible`      tinyint(1)          NOT NULL DEFAULT '1' COMMENT '是否可见 0-隐藏 1-可见',
-    `status`       tinyint(1)          NOT NULL DEFAULT '0' COMMENT '0-停用 1-正常',
+    `status`       tinyint(1)          NOT NULL DEFAULT '1' COMMENT '0-停用 1-正常',
     `sort_num`     int(11)             NOT NULL DEFAULT '0' COMMENT '排序值',
 
     `version`      int                 NOT NULL DEFAULT '0' COMMENT '乐观锁版本',
