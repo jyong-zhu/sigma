@@ -19,16 +19,16 @@ import org.springframework.stereotype.Service;
 @Service
 public class ProcessCategoryQueryService {
 
-    @Autowired
-    private ProcessCategoryQuery categoryQuery;
+  @Autowired
+  private ProcessCategoryQuery categoryQuery;
 
-    /**
-     * 分页查询流程分类
-     */
-    public Page<CategoryDetailDTO> page(String name, Integer pageNo, Integer pageSize) {
+  /**
+   * 分页查询流程分类
+   */
+  public Page<CategoryDetailDTO> page(String name, Integer pageNo, Integer pageSize) {
 
-        Page<ProcessCategoryDO> page = PlusPageConverter.convert(categoryQuery.page(name, pageNo, pageSize));
+    Page<ProcessCategoryDO> page = PlusPageConverter.convert(categoryQuery.page(name, pageNo, pageSize));
 
-        return page.convert(tmp -> CategoryDetailDTOAssembler.getCategoryDetailDTO(tmp));
-    }
+    return page.convert(CategoryDetailDTOAssembler::getCategoryDetailDTO);
+  }
 }

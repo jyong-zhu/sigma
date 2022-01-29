@@ -11,7 +11,7 @@ public interface ProcessCategoryAggRepository {
 
     ProcessCategoryAgg queryById(Long categoryId);
 
-    void save(ProcessCategoryAgg categoryAgg);
+    Long save(ProcessCategoryAgg categoryAgg);
 
-    void update(ProcessCategoryAgg categoryAgg);
+    Long update(ProcessCategoryAgg categoryAgg);
 }

@@ -5,7 +5,6 @@ import com.zone.process.application.service.command.cmd.CategoryCommand;
 import com.zone.process.application.service.command.transfer.ProcessCategoryAggTransfer;
 import com.zone.process.domain.agg.ProcessCategoryAgg;
 import com.zone.process.domain.repository.ProcessCategoryAggRepository;
-import com.zone.process.domain.service.AggIdentityDomainService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,40 +19,37 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ProcessCategoryCmdService {
 
-    @Autowired
-    private ProcessCategoryAggRepository categoryAggRepository;
+  @Autowired
+  private ProcessCategoryAggRepository categoryAggRepository;
 
-    @Autowired
-    private AggIdentityDomainService identityDomainService;
+  /**
+   * 新增流程分类
+   */
+  @Transactional(rollbackFor = Exception.class)
+  public Long save(CategoryCommand categoryCommand) {
 
-    /**
-     * 新增流程分类
-     */
-    @Transactional(rollbackFor = Exception.class)
-    public Long add(CategoryCommand categoryCommand) {
+    ProcessCategoryAgg categoryAgg = ProcessCategoryAggTransfer.getProcessCategoryAgg(categoryCommand);
 
-        ProcessCategoryAgg categoryAgg = ProcessCategoryAggTransfer.getProcessCategoryAgg(categoryCommand);
+    Long id = categoryAggRepository.save(categoryAgg);
+    Preconditions.checkNotNull(id, "新增流程分类失败");
 
-        categoryAgg.init(identityDomainService.generateCategoryAggId());
+    return id;
+  }
 
-        categoryAggRepository.save(categoryAgg);
+  /**
+   * 编辑流程分类
+   */
+  @Transactional(rollbackFor = Exception.class)
+  public Long edit(CategoryCommand categoryCommand) {
 
-        return categoryAgg.getId();
-    }
+    ProcessCategoryAgg categoryAgg = categoryAggRepository.queryById(categoryCommand.getId());
+    Preconditions.checkNotNull(categoryAgg, "流程分类不存在");
 
-    /**
-     * 编辑流程分类
-     */
-    @Transactional(rollbackFor = Exception.class)
-    public Long edit(CategoryCommand categoryCommand) {
+    categoryAgg.edit(categoryCommand.getName(), categoryCommand.getIconUrl());
 
-        ProcessCategoryAgg categoryAgg = categoryAggRepository.queryById(categoryCommand.getId());
-        Preconditions.checkNotNull(categoryAgg, "流程分类不存在");
+    Long id = categoryAggRepository.update(categoryAgg);
+    Preconditions.checkNotNull(id, "流程分类更新失败");
 
-        categoryAgg.edit(categoryCommand.getName(), categoryCommand.getIconUrl());
-
-        categoryAggRepository.update(categoryAgg);
-
-        return categoryAgg.getId();
-    }
+    return id;
+  }
 }

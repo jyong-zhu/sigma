@@ -1,6 +1,5 @@
 package com.zone.process.application.service.query.assembler;
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import com.zone.process.application.service.query.dto.CategoryDetailDTO;
 import com.zone.process.infrastructure.db.dataobject.ProcessCategoryDO;
@@ -13,10 +12,20 @@ import com.zone.process.infrastructure.db.dataobject.ProcessCategoryDO;
 public class CategoryDetailDTOAssembler {
 
 
-    public static CategoryDetailDTO getCategoryDetailDTO(ProcessCategoryDO tmp) {
-        CategoryDetailDTO detailDTO = BeanUtil.copyProperties(tmp, CategoryDetailDTO.class, "createTime", "updateTime");
-        detailDTO.setCreateTime(LocalDateTimeUtil.toEpochMilli(tmp.getCreateTime()));
-        detailDTO.setUpdateTime(LocalDateTimeUtil.toEpochMilli(tmp.getUpdateTime()));
-        return detailDTO;
+  public static CategoryDetailDTO getCategoryDetailDTO(ProcessCategoryDO categoryDO) {
+    if (categoryDO == null) {
+      return null;
     }
+    CategoryDetailDTO categoryDetailDTO = new CategoryDetailDTO();
+    categoryDetailDTO.setId(categoryDO.getId());
+    categoryDetailDTO.setName(categoryDO.getName());
+    categoryDetailDTO.setIconUrl(categoryDO.getIconUrl());
+    categoryDetailDTO.setCreateTime(LocalDateTimeUtil.toEpochMilli(categoryDO.getCreateTime()));
+    categoryDetailDTO.setCreateBy(categoryDO.getCreateBy());
+    categoryDetailDTO.setCreateName(categoryDO.getCreateName());
+    categoryDetailDTO.setUpdateTime(LocalDateTimeUtil.toEpochMilli(categoryDO.getUpdateTime()));
+    categoryDetailDTO.setUpdateBy(categoryDO.getUpdateBy());
+    categoryDetailDTO.setUpdateName(categoryDO.getUpdateName());
+    return categoryDetailDTO;
+  }
 }
