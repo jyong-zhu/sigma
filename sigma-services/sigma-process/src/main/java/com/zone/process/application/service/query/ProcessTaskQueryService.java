@@ -52,8 +52,7 @@ public class ProcessTaskQueryService {
     List<String> procInstIdList = taskList.stream().map(task -> task.getProcInstId()).collect(Collectors.toList());
 
     // 按条件根据流程实例进行过滤
-    List<ProcessInstDO> instList = instQuery.queryInProcInstIdList(procInstIdList, name,
-        startTime, endTime, submitBy);
+    List<ProcessInstDO> instList = instQuery.queryInProcInstIdList(procInstIdList, name, startTime, endTime, submitBy);
     procInstIdList = instList.stream().map(inst -> inst.getProcInstId()).collect(Collectors.toList());
 
     // 以任务的维度进行分页
@@ -61,7 +60,7 @@ public class ProcessTaskQueryService {
     Map<String, ProcessInstDO> instDOMap = instList.stream()
         .collect(Collectors.toMap(key -> key.getProcInstId(), value -> value));
     return taskPage.convert(task -> TaskDetailDTOAssembler.getTaskDetailDTO(
-        instDOMap.get(task.getProcInstId()), task.getTaskId()));
+        instDOMap.get(task.getProcInstId()), task.getTaskId(), task.getTaskName()));
   }
 
   /**
@@ -81,6 +80,6 @@ public class ProcessTaskQueryService {
     List<FormStructureDO> formList = formStructureQuery.queryByIds(formIds);
     List<ProcessInstDataDO> instDataDOList = instQuery.queryDataByFormIds(instDO.getId(), formIds);
 
-    return TaskDetailDTOAssembler.getTaskDetailDTO(instDO, taskId, formList, instDataDOList, node.getInputFormIds());
+    return TaskDetailDTOAssembler.getTaskDetailDTO(instDO, taskId, taskVO.getTaskName(), formList, instDataDOList, node.getInputFormIds());
   }
 }

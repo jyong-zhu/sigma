@@ -75,8 +75,8 @@ public class ProcessInstQuery {
       return Lists.newArrayList();
     }
 
-    QueryWrapper<ProcessInstDO> queryWrapper = new QueryWrapper<ProcessInstDO>()
-        .in("proc_inst_id", procInstIdList);
+    QueryWrapper<ProcessInstDO> queryWrapper = new QueryWrapper<>();
+    queryWrapper.lambda().in(ProcessInstDO::getProcInstId, procInstIdList);
 
     assembleConditions(queryWrapper, name, null, startTime, endTime, null, submitBy, "");
 

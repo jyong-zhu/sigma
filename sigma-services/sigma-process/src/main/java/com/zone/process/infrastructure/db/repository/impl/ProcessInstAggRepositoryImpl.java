@@ -92,8 +92,8 @@ public class ProcessInstAggRepositoryImpl implements ProcessInstAggRepository {
 
   @Override
   public ProcessInstAgg queryByInstId(String procInstId) {
-    ProcessInstDO instDO = instMapper.selectOne(new QueryWrapper<ProcessInstDO>()
-        .eq("proc_inst_id", procInstId));
+    ProcessInstDO instDO = instMapper.selectOne(new QueryWrapper<ProcessInstDO>().lambda()
+        .eq(ProcessInstDO::getProcInstId, procInstId));
     return assemble(instDO);
   }
 
