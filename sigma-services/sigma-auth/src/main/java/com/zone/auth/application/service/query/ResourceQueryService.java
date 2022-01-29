@@ -1,7 +1,5 @@
 package com.zone.auth.application.service.query;
 
-import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.base.Preconditions;
@@ -10,12 +8,12 @@ import com.zone.auth.application.service.query.assembler.ResourceDetailDTOAssemb
 import com.zone.auth.application.service.query.dto.ResourceDetailDTO;
 import com.zone.auth.application.service.query.dto.ResourceTreeDTO;
 import com.zone.auth.infrastructure.db.dataobject.AuthResourceDO;
-import com.zone.auth.infrastructure.db.mapper.AuthResourceMapper;
+import com.zone.auth.infrastructure.db.query.ResourceQuery;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import javax.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -27,8 +25,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class ResourceQueryService {
 
-  @Resource
-  private AuthResourceMapper authResourceMapper;
+  @Autowired
+  private ResourceQuery resourceQuery;
 
   private static final Long FINAL_PARENT_ID = 0L;
 
@@ -37,7 +35,8 @@ public class ResourceQueryService {
    */
   public ResourceDetailDTO detail(Long resourceId) {
 
-    AuthResourceDO resourceDO = authResourceMapper.selectById(resourceId);
+    AuthResourceDO resourceDO = resourceQuery.queryById(resourceId);
+
     Preconditions.checkNotNull(resourceDO, "资源点不存在");
 
     return ResourceDetailDTOAssembler.toResourceDetailDTO(resourceDO);
@@ -48,20 +47,7 @@ public class ResourceQueryService {
    */
   public IPage<ResourceDetailDTO> page(String name, String resourceUrl, Boolean visible, Integer pageNo, Integer pageSize) {
 
-    QueryWrapper<AuthResourceDO> wrapper = new QueryWrapper<>();
-    if (StrUtil.isNotBlank(name)) {
-      wrapper.lambda().like(AuthResourceDO::getName, name);
-    }
-
-    if (StrUtil.isNotBlank(resourceUrl)) {
-      wrapper.lambda().eq(AuthResourceDO::getResourceUrl, resourceUrl);
-    }
-
-    if (visible != null) {
-      wrapper.lambda().eq(AuthResourceDO::getVisible, visible);
-    }
-
-    Page<AuthResourceDO> authResourceDOPage = authResourceMapper.selectPage(new Page<>(pageNo, pageSize), wrapper);
+    Page<AuthResourceDO> authResourceDOPage = resourceQuery.page(name, resourceUrl, visible, pageNo, pageSize);
 
     return authResourceDOPage.convert(ResourceDetailDTOAssembler::toResourceDetailDTO);
   }
@@ -72,7 +58,7 @@ public class ResourceQueryService {
   public List<ResourceTreeDTO> tree() {
 
     // 获取全部的资源
-    List<AuthResourceDO> resourceList = authResourceMapper.selectList(new QueryWrapper<>());
+    List<AuthResourceDO> resourceList = resourceQuery.queryAll();
 
     // 按 parentID 进行聚合
     Map<Long, List<AuthResourceDO>> resourceMap = resourceList.stream().collect(Collectors.groupingBy(AuthResourceDO::getParentId));
@@ -80,6 +66,9 @@ public class ResourceQueryService {
     return generateTree(resourceMap, FINAL_PARENT_ID);
   }
 
+  /**
+   * 生成树
+   */
   private List<ResourceTreeDTO> generateTree(Map<Long, List<AuthResourceDO>> resourceMap, Long finalParentId) {
     List<ResourceTreeDTO> result = Lists.newArrayList();
     List<AuthResourceDO> resourceDOList = resourceMap.getOrDefault(finalParentId, Lists.newArrayList());

@@ -1,8 +1,5 @@
 package com.zone.auth.application.service.query;
 
-import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.base.Preconditions;
@@ -11,13 +8,13 @@ import com.zone.auth.application.service.query.assembler.RoleDetailDTOAssembler;
 import com.zone.auth.application.service.query.dto.RoleDetailDTO;
 import com.zone.auth.infrastructure.db.dataobject.AuthResourceDO;
 import com.zone.auth.infrastructure.db.dataobject.AuthRoleDO;
-import com.zone.auth.infrastructure.db.mapper.AuthResourceMapper;
-import com.zone.auth.infrastructure.db.mapper.AuthRoleMapper;
+import com.zone.auth.infrastructure.db.query.ResourceQuery;
+import com.zone.auth.infrastructure.db.query.RoleQuery;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -29,11 +26,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class RoleQueryService {
 
-  @Resource
-  private AuthRoleMapper authRoleMapper;
+  @Autowired
+  private RoleQuery roleQuery;
 
-  @Resource
-  private AuthResourceMapper authResourceMapper;
+  @Autowired
+  private ResourceQuery resourceQuery;
 
   /**
    * 获取角色详情
@@ -41,18 +38,13 @@ public class RoleQueryService {
   public RoleDetailDTO detail(Long roleId) {
 
     // 查询角色
-    AuthRoleDO roleDO = authRoleMapper.selectById(roleId);
+    AuthRoleDO roleDO = roleQuery.queryById(roleId);
     Preconditions.checkNotNull(roleDO, "角色不存在");
 
     // 查询资源
     List<Long> resourceIdList = Arrays.stream(roleDO.getResources().split(","))
         .map(Long::valueOf).collect(Collectors.toList());
-    List<AuthResourceDO> resourceList = Lists.newArrayList();
-    if (CollectionUtil.isNotEmpty(resourceIdList)) {
-      QueryWrapper<AuthResourceDO> wrapper = new QueryWrapper<>();
-      wrapper.lambda().in(AuthResourceDO::getId, resourceIdList);
-      resourceList = authResourceMapper.selectList(wrapper);
-    }
+    List<AuthResourceDO> resourceList = resourceQuery.queryInIdList(resourceIdList);
 
     return RoleDetailDTOAssembler.toRoleDetailDTO(roleDO, resourceList);
   }
@@ -62,12 +54,7 @@ public class RoleQueryService {
    */
   public IPage<RoleDetailDTO> page(String name, Integer pageNo, Integer pageSize) {
 
-    QueryWrapper<AuthRoleDO> wrapper = new QueryWrapper<>();
-    if (StrUtil.isNotBlank(name)) {
-      wrapper.lambda().like(AuthRoleDO::getRoleName, name);
-    }
-
-    Page<AuthRoleDO> authRoleDOPage = authRoleMapper.selectPage(new Page<>(pageNo, pageSize), wrapper);
+    Page<AuthRoleDO> authRoleDOPage = roleQuery.page(name, pageNo, pageSize);
 
     return authRoleDOPage.convert(roleDO -> RoleDetailDTOAssembler.toRoleDetailDTO(roleDO, Lists.newArrayList()));
   }

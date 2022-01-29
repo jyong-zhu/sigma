@@ -1,29 +1,24 @@
 package com.zone.auth.application.service.query;
 
 import cn.hutool.core.collection.CollectionUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.zone.auth.application.service.command.cmd.AccountLoginCommand;
+import com.zone.auth.application.service.query.assembler.AccountCheckDetailAssembler;
 import com.zone.auth.infrastructure.db.dataobject.AuthAccountDO;
-import com.zone.auth.infrastructure.db.dataobject.AuthAccountRoleDO;
 import com.zone.auth.infrastructure.db.dataobject.AuthResourceDO;
-import com.zone.auth.infrastructure.db.dataobject.AuthRoleDO;
-import com.zone.auth.infrastructure.db.mapper.AuthAccountMapper;
-import com.zone.auth.infrastructure.db.mapper.AuthAccountRoleMapper;
-import com.zone.auth.infrastructure.db.mapper.AuthResourceMapper;
-import com.zone.auth.infrastructure.db.mapper.AuthRoleMapper;
+import com.zone.auth.infrastructure.db.query.AccountQuery;
+import com.zone.auth.infrastructure.db.query.ResourceQuery;
+import com.zone.auth.infrastructure.db.query.RoleQuery;
 import com.zone.auth.shared.enums.AccountTypeEnum;
 import com.zone.commons.entity.LoginUser;
 import com.zone.commons.util.JWTUtil;
 import com.zone.commons.util.SecurityUtil;
 import com.zone.rpc.dto.auth.AccountCheckDTO;
 import com.zone.rpc.req.auth.AccountCheckReq;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
-import javax.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -35,17 +30,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class AccountLoginQueryService {
 
-  @Resource
-  private AuthAccountMapper authAccountMapper;
+  @Autowired
+  private AccountQuery accountQuery;
 
-  @Resource
-  private AuthAccountRoleMapper authAccountRoleMapper;
+  @Autowired
+  private RoleQuery roleQuery;
 
-  @Resource
-  private AuthRoleMapper authRoleMapper;
-
-  @Resource
-  private AuthResourceMapper authResourceMapper;
+  @Autowired
+  private ResourceQuery resourceQuery;
 
   /**
    * 用户登陆 关于密码的加密与解密：
@@ -67,11 +59,8 @@ public class AccountLoginQueryService {
     // 0. 校验用户是否存在
     String decryptPhone = SecurityUtil.rsaDecrypt(loginCommand.getPhone());
 
-    QueryWrapper<AuthAccountDO> accountWrapper = new QueryWrapper<>();
-    accountWrapper.lambda().eq(AuthAccountDO::getPhone, decryptPhone);
-    AuthAccountDO accountDO = authAccountMapper.selectOne(accountWrapper);
-
-    Preconditions.checkNotNull(accountDO, "用户名或者密码错误");
+    AuthAccountDO accountDO = accountQuery.queryByPhone(decryptPhone);
+    Preconditions.checkState(accountDO != null && accountDO.getStatus(), "用户名或者密码错误");
 
     // 1. 比对密码
     String decryptPwd = SecurityUtil.rsaDecrypt(loginCommand.getPassword());
@@ -91,7 +80,7 @@ public class AccountLoginQueryService {
     log.info("开始鉴权，请求参数为AccountCheckReq=[{}]", checkReq);
 
     // 1. 获取账户详情
-    AuthAccountDO accountDO = authAccountMapper.selectById(checkReq.getAccountId());
+    AuthAccountDO accountDO = accountQuery.queryById(checkReq.getAccountId());
     if (accountDO == null || !accountDO.getStatus()) {
       log.warn("鉴权失败，账号不存在或被禁用：accountDO=[{}]", accountDO);
       return null;
@@ -99,54 +88,30 @@ public class AccountLoginQueryService {
 
     // 2. 判断是否为超级管理员
     if (AccountTypeEnum.isAdmin(accountDO.getAccountType())) {
-      return new AccountCheckDTO()
-          .setAccountId(accountDO.getId())
-          .setAccountName(accountDO.getName())
-          .setAccountType(accountDO.getAccountType())
-          .setPhone(accountDO.getPhone())
-          .setRoleIdList(Lists.newArrayList());
+      return AccountCheckDetailAssembler.toAccountCheckDTO(accountDO, Lists.newArrayList());
     }
 
-    // 2. 获取角色列表
-    QueryWrapper<AuthAccountRoleDO> accountRoleWrapper = new QueryWrapper<>();
-    accountRoleWrapper.lambda().eq(AuthAccountRoleDO::getAccountId, accountDO.getId());
-    List<AuthAccountRoleDO> accountRoleList = authAccountRoleMapper.selectList(accountRoleWrapper);
-    List<Long> roleIdList = accountRoleList.stream().map(AuthAccountRoleDO::getRoleId).collect(Collectors.toList());
+    // 3. 获取角色列表
+    List<Long> roleIdList = roleQuery.queryRoleIdList(accountDO.getId());
     if (CollectionUtil.isEmpty(roleIdList)) {
       log.warn("鉴权失败，角色为空：accountDO=[{}]", accountDO);
       return null;
     }
 
-    // 3. 获取角色详情
-    QueryWrapper<AuthRoleDO> roleWrapper = new QueryWrapper<>();
-    roleWrapper.lambda().in(AuthRoleDO::getId, roleIdList).eq(AuthRoleDO::getStatus, true);
-    List<AuthRoleDO> roleList = authRoleMapper.selectList(roleWrapper);
-    List<Long> resourceIdList = roleList.stream()
-        .flatMap(tmp -> Arrays.stream(tmp.getResources().split(",")))
-        .map(Long::valueOf)
-        .distinct().collect(Collectors.toList());
+    // 3. 获取角色对应的资源id列表
+    List<Long> resourceIdList = roleQuery.queryRoleResourceIdList(roleIdList);
     if (CollectionUtil.isEmpty(resourceIdList)) {
       log.warn("鉴权失败，资源为空：accountDO=[{}], roleIdList=[{}]", accountDO, roleIdList);
       return null;
     }
 
     // 4. 判断url是否存在
-    QueryWrapper<AuthResourceDO> resourceWrapper = new QueryWrapper<>();
-    resourceWrapper.lambda().eq(AuthResourceDO::getStatus, true)
-        .eq(AuthResourceDO::getResourceUrl, checkReq.getUrl())
-        .in(AuthResourceDO::getId, resourceIdList);
-    List<AuthResourceDO> resourceList = authResourceMapper.selectList(resourceWrapper);
-
+    List<AuthResourceDO> resourceList = resourceQuery.queryByUrlInIdList(resourceIdList, checkReq.getUrl());
     if (CollectionUtil.isEmpty(resourceList)) {
       log.warn("鉴权失败，资源为空：accountDO=[{}], roleIdList=[{}]", accountDO, roleIdList);
       return null;
     }
 
-    return new AccountCheckDTO()
-        .setAccountId(accountDO.getId())
-        .setAccountName(accountDO.getName())
-        .setAccountType(accountDO.getAccountType())
-        .setPhone(accountDO.getPhone())
-        .setRoleIdList(roleIdList);
+    return AccountCheckDetailAssembler.toAccountCheckDTO(accountDO, roleIdList);
   }
 }
