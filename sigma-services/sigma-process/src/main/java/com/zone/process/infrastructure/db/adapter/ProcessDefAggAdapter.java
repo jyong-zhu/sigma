@@ -64,6 +64,7 @@ public class ProcessDefAggAdapter {
     processDefDO.setProcDefKey(processDefAgg.getProcDefKey());
     processDefDO.setProcDefVersion(processDefAgg.getProcDefVersion());
     processDefDO.setName(processDefAgg.getName());
+    processDefDO.setIsLatest(true);
     processDefDO.setStatus(processDefAgg.getStatus());
     processDefDO.setBpmnXml(processDefAgg.getBpmnXml());
     processDefDO.setStartBpmnNodeId(processDefAgg.getStartBpmnNodeId());

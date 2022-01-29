@@ -1,9 +1,9 @@
 package com.zone.process.infrastructure.db.repository.impl;
 
-import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.zone.process.domain.agg.FormStructureAgg;
 import com.zone.process.domain.repository.FormStructureAggRepository;
+import com.zone.process.infrastructure.db.adapter.FormStructureAggAdapter;
 import com.zone.process.infrastructure.db.dataobject.FormStructureDO;
 import com.zone.process.infrastructure.db.mapper.FormStructureMapper;
 import javax.annotation.Resource;
@@ -28,14 +28,14 @@ public class FormStructureAggRepositoryImpl implements FormStructureAggRepositor
     queryWrapper.lambda().eq(FormStructureDO::getFormKey, formKey)
         .eq(FormStructureDO::getIsLatest, true);
     FormStructureDO formDO = formMapper.selectOne(queryWrapper);
-    return formDO == null ? null : BeanUtil.copyProperties(formDO, FormStructureAgg.class);
+    return FormStructureAggAdapter.getFormStructureAgg(formDO);
   }
 
   @Override
   public Long save(FormStructureAgg newFormAgg, FormStructureAgg oldFormAgg) {
     // 将原先的表单的 is_latest 字段更新掉
     if (oldFormAgg != null) {
-      FormStructureDO oldForm = BeanUtil.copyProperties(oldFormAgg, FormStructureDO.class);
+      FormStructureDO oldForm = FormStructureAggAdapter.getFormStructureDO(oldFormAgg);
       oldForm.setIsLatest(false);
       int num = formMapper.updateById(oldForm);
 
@@ -45,7 +45,7 @@ public class FormStructureAggRepositoryImpl implements FormStructureAggRepositor
         return null;
       }
     }
-    FormStructureDO newForm = BeanUtil.copyProperties(newFormAgg, FormStructureDO.class);
+    FormStructureDO newForm = FormStructureAggAdapter.getFormStructureDO(newFormAgg);
     formMapper.insert(newForm);
     return newForm.getId();
   }
