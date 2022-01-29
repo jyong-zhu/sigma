@@ -35,6 +35,9 @@ public class ProcessInstAgg {
   @ApiModelProperty(value = "流程定义id")
   private Long defId;
 
+  @ApiModelProperty(value = "流程定义名称")
+  private String defName;
+
   @ApiModelProperty(value = "流程定义key")
   private String procDefKey;
 
@@ -92,8 +95,9 @@ public class ProcessInstAgg {
   /**
    * 初始化流程实例
    */
-  public void init(Long defId, String procDefKey, String procInstId, LoginUser loginUser) {
+  public void init(Long defId, String defName, String procDefKey, String procInstId, LoginUser loginUser) {
     this.setDefId(defId);
+    this.setDefName(defName);
     this.setProcDefKey(procDefKey);
     this.setSubmitBy(loginUser.getAccountId());
     this.setSubmitName(loginUser.getAccountName());

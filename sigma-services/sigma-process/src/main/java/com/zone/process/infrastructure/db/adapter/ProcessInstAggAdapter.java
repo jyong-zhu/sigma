@@ -77,6 +77,7 @@ public class ProcessInstAggAdapter {
     processInstAgg.setId(instDO.getId());
     processInstAgg.setProcInstId(instDO.getProcInstId());
     processInstAgg.setDefId(instDO.getDefId());
+    processInstAgg.setDefName(instDO.getDefName());
     processInstAgg.setProcDefKey(instDO.getProcDefKey());
     processInstAgg.setName(instDO.getName());
     processInstAgg.setStatus(instDO.getStatus());
@@ -157,6 +158,7 @@ public class ProcessInstAggAdapter {
     processInstDO.setId(instAgg.getId());
     processInstDO.setProcInstId(instAgg.getProcInstId());
     processInstDO.setDefId(instAgg.getDefId());
+    processInstDO.setDefName(instAgg.getDefName());
     processInstDO.setProcDefKey(instAgg.getProcDefKey());
     processInstDO.setName(instAgg.getName());
     processInstDO.setStatus(instAgg.getStatus());

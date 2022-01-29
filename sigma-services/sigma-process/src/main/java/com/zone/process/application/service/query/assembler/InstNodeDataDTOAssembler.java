@@ -3,7 +3,6 @@ package com.zone.process.application.service.query.assembler;
 import com.zone.process.application.service.query.dto.InstNodeDataDTO;
 import com.zone.process.infrastructure.db.dataobject.FormStructureDO;
 import com.zone.process.infrastructure.db.dataobject.ProcessInstDataDO;
-
 import java.util.List;
 
 /**
@@ -13,11 +12,11 @@ import java.util.List;
  */
 public class InstNodeDataDTOAssembler {
 
-    public static InstNodeDataDTO getInstNodeDataDTO(Long instId, String bpmnNodeId, List<ProcessInstDataDO> instDataDOList,
-                                                     List<FormStructureDO> formList) {
-        return new InstNodeDataDTO()
-                .setBpmnNodeId(bpmnNodeId)
-                .setInstanceId(instId)
-                .setDataList(InstDataDTOAssembler.getInstDataDTOList(instDataDOList, formList));
-    }
+  public static InstNodeDataDTO getInstNodeDataDTO(Long instId, String bpmnNodeId,
+      List<ProcessInstDataDO> instDataDOList, List<FormStructureDO> formList) {
+    return new InstNodeDataDTO()
+        .setBpmnNodeId(bpmnNodeId)
+        .setInstanceId(instId)
+        .setDataList(InstDataDTOAssembler.getInstDataDTOList(instDataDOList, formList));
+  }
 }

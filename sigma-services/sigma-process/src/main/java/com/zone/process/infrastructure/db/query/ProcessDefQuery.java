@@ -53,9 +53,9 @@ public class ProcessDefQuery {
   }
 
   public ProcessDefNodeDO queryNodeById(Long defId, String bpmnNodeId) {
-    return defNodeMapper.selectOne(new QueryWrapper<ProcessDefNodeDO>()
-        .eq("def_id", defId)
-        .eq("bpmn_node_id", bpmnNodeId));
+    return defNodeMapper.selectOne(new QueryWrapper<ProcessDefNodeDO>().lambda()
+        .eq(ProcessDefNodeDO::getDefId, defId)
+        .eq(ProcessDefNodeDO::getBpmnNodeId, bpmnNodeId));
   }
 
   public IPage<ProcessDefDO> page(Long categoryId, String name, Integer pageNo, Integer pageSize) {

@@ -2,11 +2,10 @@ package com.zone.process.application.service.query.dto;
 
 import com.zone.rpc.dto.auth.UserDetailDTO;
 import io.swagger.annotations.ApiModelProperty;
+import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-
-import java.util.List;
 
 /**
  * @Author: jianyong.zhu
@@ -43,6 +42,7 @@ public class InstDetailDTO {
     private List<Long> curHandlerIdList;
 
     @ApiModelProperty("当前处理人信息")
+    // todo 用户信息填充
     private List<UserDetailDTO> curHandlerList;
 
     @ApiModelProperty("要求时间")

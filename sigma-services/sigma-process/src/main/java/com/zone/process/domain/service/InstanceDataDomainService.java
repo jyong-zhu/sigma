@@ -29,7 +29,7 @@ public class InstanceDataDomainService {
   /**
    * 发起流程时保存数据
    */
-  public void saveStartFormData(ProcessDefAgg defAgg, ProcessInstAgg instAgg, Map<Long, Map<String, String>> formDataMap, String comment, LoginUser loginUser) {
+  public void saveStartData(ProcessDefAgg defAgg, ProcessInstAgg instAgg, Map<Long, Map<String, String>> formDataMap, String comment, LoginUser loginUser) {
     DefNodeVO nodeVO = defAgg.getNodeByNodeId(defAgg.getStartBpmnNodeId());
     List<Long> formIdList = Arrays.asList(nodeVO.getInputFormIds().split(","))
         .stream().map(tmp -> Long.valueOf(tmp)).collect(Collectors.toList());

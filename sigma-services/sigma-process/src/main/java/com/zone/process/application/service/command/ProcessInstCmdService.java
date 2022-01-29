@@ -65,8 +65,8 @@ public class ProcessInstCmdService {
 
     // 初始化并保存相关数据
     ProcessInstAgg instAgg = ProcessInstAggTransfer.getProcessInstAgg(startCommand);
-    instAgg.init(defAgg.getId(), defAgg.getProcDefKey(), procInstId, loginUser);
-    dataDomainService.saveStartFormData(defAgg, instAgg, startCommand.getFormDataMap(), startCommand.getComment(), loginUser);
+    instAgg.init(defAgg.getId(), defAgg.getName(), defAgg.getProcDefKey(), procInstId, loginUser);
+    dataDomainService.saveStartData(defAgg, instAgg, startCommand.getFormDataMap(), startCommand.getComment(), loginUser);
 
     // 同步流程实例的当前状态
     ProcessInstanceVO processInstanceVO = processEngineQueryAPI.syncInstance(procInstId);

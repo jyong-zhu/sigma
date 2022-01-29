@@ -6,11 +6,10 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.Version;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * <p>
@@ -36,6 +35,9 @@ public class ProcessInstDO implements Serializable {
 
     @ApiModelProperty(value = "流程定义id")
     private Long defId;
+
+    @ApiModelProperty(value = "流程定义名称")
+    private String defName;
 
     @ApiModelProperty(value = "流程定义key")
     private String procDefKey;

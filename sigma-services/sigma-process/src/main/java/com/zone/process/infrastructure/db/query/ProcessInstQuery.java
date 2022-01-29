@@ -13,12 +13,11 @@ import com.zone.process.infrastructure.db.dataobject.ProcessInstOperationDO;
 import com.zone.process.infrastructure.db.mapper.ProcessInstDataMapper;
 import com.zone.process.infrastructure.db.mapper.ProcessInstMapper;
 import com.zone.process.infrastructure.db.mapper.ProcessInstOperationMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.annotation.Resource;
+import org.springframework.stereotype.Service;
 
 /**
  * @Author: jianyong.zhu
@@ -28,136 +27,145 @@ import java.util.stream.Collectors;
 @Service
 public class ProcessInstQuery {
 
-    @Autowired
-    private ProcessInstMapper instMapper;
+  @Resource
+  private ProcessInstMapper instMapper;
 
-    @Autowired
-    private ProcessInstOperationMapper instOperationMapper;
+  @Resource
+  private ProcessInstOperationMapper instOperationMapper;
 
-    @Autowired
-    private ProcessInstDataMapper instDataMapper;
+  @Resource
+  private ProcessInstDataMapper instDataMapper;
 
-    /**
-     * 查询与 userId 相关的流程实例ID
-     */
-    public List<Long> queryRelateInstIdList(Long userId) {
-        List<ProcessInstOperationDO> operationDOList = instOperationMapper.selectList(
-                new QueryWrapper<ProcessInstOperationDO>().eq("operate_by", userId).select("instance_id"));
+  /**
+   * 查询与 userId 相关的流程实例ID
+   */
+  public List<Long> queryRelateInstIdList(Long userId) {
 
-        return operationDOList.stream().map(tmp -> tmp.getInstanceId()).collect(Collectors.toList());
+    List<ProcessInstOperationDO> operationDOList = instOperationMapper.selectList(
+        new QueryWrapper<ProcessInstOperationDO>().lambda()
+            .eq(ProcessInstOperationDO::getOperateBy, userId)
+            .select(ProcessInstOperationDO::getInstanceId));
+
+    return operationDOList.stream().map(tmp -> tmp.getInstanceId()).collect(Collectors.toList());
+  }
+
+  /**
+   * 根据主键id进行分页查询
+   */
+  public IPage<ProcessInstDO> pageInIdList(List<Long> idList, String name, String defName, Long startTime, Long endTime, Long curHandlerId, Long submitBy,
+      String status, Integer pageNo, Integer pageSize) {
+    if (CollectionUtil.isEmpty(idList)) {
+      return new Page<>();
     }
 
-    /**
-     * 根据主键id进行分页查询
-     */
-    public IPage<ProcessInstDO> pageInIdList(List<Long> idList, String name, Long startTime, Long endTime, Long curHandlerId, Long submitBy,
-                                             String status, Integer pageNo, Integer pageSize) {
-        if (CollectionUtil.isEmpty(idList)) {
-            return new Page<>();
-        }
+    QueryWrapper<ProcessInstDO> queryWrapper = new QueryWrapper<>();
+    queryWrapper.lambda().in(ProcessInstDO::getId, idList).orderByDesc(ProcessInstDO::getId);
 
-        QueryWrapper<ProcessInstDO> queryWrapper = new QueryWrapper<ProcessInstDO>()
-                .in("id", idList).orderByDesc("submit_time");
+    assembleConditions(queryWrapper, name, defName, startTime, endTime, curHandlerId, submitBy, status);
 
-        assembleConditions(queryWrapper, name, startTime, endTime, curHandlerId, submitBy, status);
+    return instMapper.selectPage(new Page<>(pageNo, pageSize), queryWrapper);
+  }
 
-        return instMapper.selectPage(new Page<>(pageNo, pageSize), queryWrapper);
+  /**
+   * 根据procInstId进行分页查询
+   */
+  public List<ProcessInstDO> queryInProcInstIdList(List<String> procInstIdList, String name, Long startTime, Long endTime, Long submitBy) {
+
+    if (CollectionUtil.isEmpty(procInstIdList)) {
+      return Lists.newArrayList();
     }
 
-    /**
-     * 根据procInstId进行分页查询
-     */
-    public List<ProcessInstDO> queryInProcInstIdList(List<String> procInstIdList, String name, Long startTime, Long endTime, Long submitBy) {
+    QueryWrapper<ProcessInstDO> queryWrapper = new QueryWrapper<ProcessInstDO>()
+        .in("proc_inst_id", procInstIdList);
 
-        if (CollectionUtil.isEmpty(procInstIdList)) {
-            return Lists.newArrayList();
-        }
+    assembleConditions(queryWrapper, name, null, startTime, endTime, null, submitBy, "");
 
-        QueryWrapper<ProcessInstDO> queryWrapper = new QueryWrapper<ProcessInstDO>()
-                .in("proc_inst_id", procInstIdList);
+    return instMapper.selectList(queryWrapper);
+  }
 
-        assembleConditions(queryWrapper, name, startTime, endTime, null, submitBy, "");
+  /**
+   * 查询流程实例
+   */
+  public ProcessInstDO queryInstById(Long instId) {
+    return instMapper.selectById(instId);
+  }
 
-        return instMapper.selectList(queryWrapper);
+
+  /**
+   * 查询流程实例
+   */
+  public ProcessInstDO queryInstByProcInstId(String procInstId) {
+    return instMapper.selectOne(new QueryWrapper<ProcessInstDO>()
+        .eq("proc_inst_id", procInstId));
+  }
+
+  /**
+   * 查询userId作为操作人是否操作过instId这个流程实例
+   */
+  public ProcessInstOperationDO queryRelateOperation(Long instId, Long userId) {
+    return instOperationMapper.selectOne(
+        new QueryWrapper<ProcessInstOperationDO>().lambda()
+            .eq(ProcessInstOperationDO::getInstanceId, instId)
+            .eq(ProcessInstOperationDO::getOperateBy, userId)
+            .last(" limit 1 "));
+  }
+
+  /**
+   * 获取流程实例上指定表单的数据
+   */
+  public List<ProcessInstDataDO> queryDataByFormIds(Long instId, String inputFormIds) {
+    List<ProcessInstDataDO> result = Lists.newArrayList();
+    if (StrUtil.isNotBlank(inputFormIds)) {
+      List<Long> formIdList = Arrays.asList(inputFormIds.split(","))
+          .stream().filter(StrUtil::isNotBlank)
+          .map(Long::valueOf).collect(Collectors.toList());
+      if (CollectionUtil.isNotEmpty(formIdList)) {
+        return instDataMapper.selectList(new QueryWrapper<ProcessInstDataDO>().lambda()
+            .eq(ProcessInstDataDO::getInstanceId, instId)
+            .in(ProcessInstDataDO::getFormId, formIdList));
+      }
+    }
+    return result;
+  }
+
+  private void assembleConditions(QueryWrapper<ProcessInstDO> queryWrapper, String name, String defName, Long startTime, Long endTime,
+      Long curHandlerId, Long submitBy, String status) {
+
+    if (StrUtil.isNotBlank(name)) {
+      queryWrapper.lambda().like(ProcessInstDO::getName, name);
     }
 
-    /**
-     * 查询流程实例
-     */
-    public ProcessInstDO queryInstById(Long instId) {
-        return instMapper.selectById(instId);
+    if (StrUtil.isNotBlank(defName)) {
+      queryWrapper.lambda().like(ProcessInstDO::getDefName, name);
     }
 
-
-    /**
-     * 查询流程实例
-     */
-    public ProcessInstDO queryInstByProcInstId(String procInstId) {
-        return instMapper.selectOne(new QueryWrapper<ProcessInstDO>()
-                .eq("proc_inst_id", procInstId));
+    if (startTime != null) {
+      queryWrapper.lambda().ge(ProcessInstDO::getSubmitTime, LocalDateTimeUtil.of(startTime));
     }
 
-    /**
-     * 查询userId作为操作人是否操作过instId这个流程实例
-     */
-    public ProcessInstOperationDO queryRelateOperation(Long instId, Long userId) {
-        return instOperationMapper.selectOne(
-                new QueryWrapper<ProcessInstOperationDO>().eq("instance_id", instId)
-                        .eq("operate_by", userId).last(" limit 1 "));
+    if (endTime != null) {
+      queryWrapper.lambda().le(ProcessInstDO::getSubmitTime, LocalDateTimeUtil.of(endTime));
     }
 
-    /**
-     * 获取流程实例上指定表单的数据
-     */
-    public List<ProcessInstDataDO> queryDataByFormIds(Long instId, String inputFormIds) {
-        List<ProcessInstDataDO> result = Lists.newArrayList();
-        if (StrUtil.isNotBlank(inputFormIds)) {
-            List<Long> formIdList = Arrays.asList(inputFormIds.split(","))
-                    .stream().filter(tmp -> StrUtil.isNotBlank(tmp))
-                    .map(tmp -> Long.valueOf(tmp)).collect(Collectors.toList());
-            if (CollectionUtil.isNotEmpty(formIdList)) {
-                return instDataMapper.selectList(new QueryWrapper<ProcessInstDataDO>()
-                        .eq("instance_id", instId)
-                        .in("form_id", formIdList));
-            }
-        }
-        return result;
+    if (curHandlerId != null) {
+      // 虽然 cur_handler_id 中存的既可能是 userId 也可能是 roleId
+      // 但这里只根据 userId 去查，不根据 roleId 去查
+      queryWrapper.lambda().like(ProcessInstDO::getCurHandlerId, curHandlerId);
     }
 
-    private void assembleConditions(QueryWrapper<ProcessInstDO> queryWrapper, String name, Long startTime, Long endTime,
-                                    Long curHandlerId, Long submitBy, String status) {
-
-        if (StrUtil.isNotBlank(name)) {
-            queryWrapper.like("name", name);
-        }
-
-        if (startTime != null) {
-            queryWrapper.ge("submit_time", LocalDateTimeUtil.of(startTime));
-        }
-
-        if (endTime != null) {
-            queryWrapper.le("end_time", LocalDateTimeUtil.of(endTime));
-        }
-
-        if (curHandlerId != null) {
-            // 虽然 cur_handler_id 中存的既可能是 userId 也可能是 roleId
-            // 但这里只根据 userId 去查，不根据 roleId 去查
-            queryWrapper.like("cur_handler_id", curHandlerId);
-        }
-
-        if (submitBy != null) {
-            queryWrapper.eq("submit_by", submitBy);
-        }
-
-        if (StrUtil.isNotBlank(status)) {
-            queryWrapper.eq("status", status);
-        }
+    if (submitBy != null) {
+      queryWrapper.lambda().eq(ProcessInstDO::getSubmitBy, submitBy);
     }
 
-    public List<ProcessInstOperationDO> queryOperationList(Long instId) {
-        return instOperationMapper.selectList(
-                new QueryWrapper<ProcessInstOperationDO>()
-                        .eq("instance_id", instId)
-                        .orderByDesc("create_time"));
+    if (StrUtil.isNotBlank(status)) {
+      queryWrapper.lambda().eq(ProcessInstDO::getStatus, status);
     }
+  }
+
+  public List<ProcessInstOperationDO> queryOperationList(Long instId) {
+    return instOperationMapper.selectList(
+        new QueryWrapper<ProcessInstOperationDO>().lambda()
+            .eq(ProcessInstOperationDO::getInstanceId, instId)
+            .orderByDesc(ProcessInstOperationDO::getId));
+  }
 }
