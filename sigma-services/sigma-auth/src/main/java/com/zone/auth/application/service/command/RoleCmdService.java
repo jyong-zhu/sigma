@@ -3,6 +3,7 @@ package com.zone.auth.application.service.command;
 import com.google.common.base.Preconditions;
 import com.zone.auth.application.service.command.cmd.RoleCreateCommand;
 import com.zone.auth.application.service.command.cmd.RoleUpdateCommand;
+import com.zone.auth.application.service.command.transfer.RoleAggTransfer;
 import com.zone.auth.domain.agg.RoleAgg;
 import com.zone.auth.domain.repository.RoleAggRepository;
 import com.zone.auth.shared.enums.AccountTypeEnum;
@@ -34,7 +35,7 @@ public class RoleCmdService {
     Preconditions.checkState(AccountTypeEnum.isAdmin(loginUser.getAccountType()), "非管理员不能更新资源点");
 
     // 1. 获取角色聚合根
-    RoleAgg roleAgg = RoleAgg.create(createCommand, loginUser);
+    RoleAgg roleAgg = RoleAggTransfer.getRoleAgg(createCommand);
 
     // 2. 落地角色数据
     return roleAggRepository.save(roleAgg);
@@ -54,7 +55,7 @@ public class RoleCmdService {
     Preconditions.checkNotNull(roleAgg, "角色不存在");
 
     // 2. 更新角色数据
-    roleAgg.update(updateCommand, loginUser);
+    roleAgg.update(updateCommand);
 
     // 3. 落地角色数据
     return roleAggRepository.update(roleAgg);

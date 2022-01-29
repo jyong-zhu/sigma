@@ -33,7 +33,7 @@ public class AccountLoginCmdService {
     Preconditions.checkNotNull(accountAgg, "用户名不存在");
 
     // 1. 修改个人信息
-    accountAgg.change(changeCommand, loginUser);
+    accountAgg.change(changeCommand);
 
     // 2. 更新个人信息
     return accountAggRepository.update(accountAgg);

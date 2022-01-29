@@ -2,7 +2,6 @@ package com.zone.auth.domain.agg;
 
 import com.google.common.base.Preconditions;
 import com.zone.auth.application.service.command.cmd.AccountChangeCommand;
-import com.zone.auth.application.service.command.cmd.AccountCreateCommand;
 import com.zone.auth.application.service.command.cmd.AccountUpdateCommand;
 import com.zone.auth.shared.enums.AccountTypeEnum;
 import com.zone.commons.entity.LoginUser;
@@ -59,30 +58,19 @@ public class AccountAgg {
 
 
   /**
-   * 新建一个 account
+   * 新建账号 初始化数据
    */
-  public static AccountAgg create(AccountCreateCommand createCommand, LoginUser loginUser) {
-    return new AccountAgg()
-        .setName(createCommand.getName())
-        .setPhone(createCommand.getPhone())
-        .setPassword(SecurityUtil.digestSha1(getDefaultPwd()))
-        .setAccountType(AccountTypeEnum.NORMAL_USER)
-        .setEmail(createCommand.getEmail())
-        .setRoleIdList(createCommand.getRoleIdList())
-        .setStatus(true);
-  }
-
-  /**
-   * 获取默认密码
-   */
-  private static String getDefaultPwd() {
-    return "123456";
+  public void init(LoginUser loginUser) {
+    // 默认密码：123456
+    this.setPassword(SecurityUtil.digestSha1("123456"));
+    this.setAccountType(AccountTypeEnum.NORMAL_USER);
+    this.setStatus(true);
   }
 
   /**
    * 更新账号
    */
-  public void update(AccountUpdateCommand updateCommand, LoginUser loginUser) {
+  public void update(AccountUpdateCommand updateCommand) {
     this.setEmail(updateCommand.getEmail());
     this.setName(updateCommand.getName());
     this.setStatus(updateCommand.getStatus());
@@ -91,11 +79,11 @@ public class AccountAgg {
   /**
    * 修改个人信息
    */
-  public void change(AccountChangeCommand changeCommand, LoginUser loginUser) {
+  public void change(AccountChangeCommand changeCommand) {
     String oldPwd = SecurityUtil.digestSha1(SecurityUtil.rsaDecrypt(changeCommand.getOldPwd()));
     String newPwd = SecurityUtil.digestSha1(SecurityUtil.rsaDecrypt(changeCommand.getNewPwd()));
 
-    Preconditions.checkState(this.getPassword().equals(oldPwd),"旧密码不正确");
+    Preconditions.checkState(this.getPassword().equals(oldPwd), "旧密码不正确");
     this.setPassword(newPwd);
     this.setName(changeCommand.getName());
     this.setEmail(changeCommand.getEmail());

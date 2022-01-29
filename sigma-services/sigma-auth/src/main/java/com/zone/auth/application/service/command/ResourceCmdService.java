@@ -3,6 +3,7 @@ package com.zone.auth.application.service.command;
 import com.google.common.base.Preconditions;
 import com.zone.auth.application.service.command.cmd.ResourceCreateCommand;
 import com.zone.auth.application.service.command.cmd.ResourceUpdateCommand;
+import com.zone.auth.application.service.command.transfer.ResourceAggTransfer;
 import com.zone.auth.domain.agg.ResourceAgg;
 import com.zone.auth.domain.repository.ResourceAggRepository;
 import com.zone.auth.shared.enums.AccountTypeEnum;
@@ -34,7 +35,7 @@ public class ResourceCmdService {
     Preconditions.checkState(AccountTypeEnum.isAdmin(loginUser.getAccountType()), "非管理员不能创建资源点");
 
     // 1. 创建资源点聚合根
-    ResourceAgg resourceAgg = ResourceAgg.create(createCommand, loginUser);
+    ResourceAgg resourceAgg = ResourceAggTransfer.getResourceAgg(createCommand);
 
     // 2. 落地资源点数据
     return resourceAggRepository.save(resourceAgg);
@@ -54,7 +55,7 @@ public class ResourceCmdService {
     Preconditions.checkNotNull(resourceAgg, "资源点不存在");
 
     // 2. 更新资源点
-    resourceAgg.update(updateCommand, loginUser);
+    resourceAgg.update(updateCommand);
 
     // 3. 落地资源点数据
     return resourceAggRepository.update(resourceAgg);

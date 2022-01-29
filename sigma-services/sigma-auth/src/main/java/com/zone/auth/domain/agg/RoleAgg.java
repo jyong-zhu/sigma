@@ -1,8 +1,6 @@
 package com.zone.auth.domain.agg;
 
-import com.zone.auth.application.service.command.cmd.RoleCreateCommand;
 import com.zone.auth.application.service.command.cmd.RoleUpdateCommand;
-import com.zone.commons.entity.LoginUser;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.List;
 import lombok.Data;
@@ -42,19 +40,9 @@ public class RoleAgg {
   private String updateName;
 
   /**
-   * 创建角色
-   */
-  public static RoleAgg create(RoleCreateCommand createCommand, LoginUser loginUser) {
-    return new RoleAgg()
-        .setRoleName(createCommand.getRoleName())
-        .setResourceIdList(createCommand.getResourceIdList())
-        .setStatus(createCommand.getStatus());
-  }
-
-  /**
    * 更新角色
    */
-  public void update(RoleUpdateCommand updateCommand, LoginUser loginUser) {
+  public void update(RoleUpdateCommand updateCommand) {
     this.setRoleName(updateCommand.getRoleName());
     this.setResourceIdList(updateCommand.getResourceIdList());
     this.setStatus(updateCommand.getStatus());

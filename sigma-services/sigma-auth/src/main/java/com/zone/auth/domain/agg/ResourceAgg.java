@@ -1,9 +1,7 @@
 package com.zone.auth.domain.agg;
 
-import com.zone.auth.application.service.command.cmd.ResourceCreateCommand;
 import com.zone.auth.application.service.command.cmd.ResourceUpdateCommand;
 import com.zone.auth.shared.enums.ResourceTypeEnum;
-import com.zone.commons.entity.LoginUser;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -61,26 +59,9 @@ public class ResourceAgg {
 
 
   /**
-   * 创建资源点
-   */
-  public static ResourceAgg create(ResourceCreateCommand createCommand, LoginUser loginUser) {
-    ResourceAgg resourceAgg = new ResourceAgg();
-    resourceAgg.setType(ResourceTypeEnum.getByCode(createCommand.getType()));
-    resourceAgg.setKey(createCommand.getKey());
-    resourceAgg.setName(createCommand.getName());
-    resourceAgg.setResourceUrl(createCommand.getResourceUrl());
-    resourceAgg.setIconUrl(createCommand.getIconUrl());
-    resourceAgg.setParentId(createCommand.getParentId());
-    resourceAgg.setVisible(createCommand.getVisible());
-    resourceAgg.setStatus(true);
-    resourceAgg.setSortNum(createCommand.getSortNum());
-    return resourceAgg;
-  }
-
-  /**
    * 更新资源点
    */
-  public void update(ResourceUpdateCommand updateCommand, LoginUser loginUser) {
+  public void update(ResourceUpdateCommand updateCommand) {
     this.setType(ResourceTypeEnum.getByCode(updateCommand.getType()));
     this.setKey(updateCommand.getKey());
     this.setName(updateCommand.getName());
