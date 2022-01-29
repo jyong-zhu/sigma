@@ -96,12 +96,12 @@ public class ProcessDefAgg {
    * 获取指定节点
    */
   public DefNodeVO getNodeByNodeId(String curNodeId) {
-    for (DefNodeVO nodeVO : this.getNodeVOList()) {
-      if (nodeVO.getBpmnNodeId().equals(curNodeId)) {
-        return nodeVO;
-      }
+    if (CollectionUtil.isEmpty(this.getNodeVOList())) {
+      return null;
     }
-    return null;
+    return this.getNodeVOList().stream()
+        .filter(tmp -> tmp.getBpmnNodeId().equals(curNodeId))
+        .findFirst().orElse(null);
   }
 
   /**

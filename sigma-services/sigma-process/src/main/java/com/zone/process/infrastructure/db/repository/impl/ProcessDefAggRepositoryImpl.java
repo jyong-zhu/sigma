@@ -2,15 +2,13 @@ package com.zone.process.infrastructure.db.repository.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.zone.commons.util.IdWorkerUtil;
 import com.zone.process.domain.agg.ProcessDefAgg;
 import com.zone.process.domain.repository.ProcessDefAggRepository;
-import com.zone.process.domain.valueobject.DefNodePropertyVO;
 import com.zone.process.domain.valueobject.DefNodeVO;
-import com.zone.process.domain.valueobject.DefNodeVariableVO;
 import com.zone.process.infrastructure.db.adapter.ProcessDefAggAdapter;
 import com.zone.process.infrastructure.db.dataobject.ProcessDefDO;
 import com.zone.process.infrastructure.db.dataobject.ProcessDefNodeDO;
@@ -47,7 +45,6 @@ public class ProcessDefAggRepositoryImpl implements ProcessDefAggRepository {
 
   @Resource
   private ProcessDefNodeVariableMapper nodeVariableMapper;
-
 
   @Override
   public Long save(ProcessDefAgg processDefAgg) {
@@ -122,69 +119,50 @@ public class ProcessDefAggRepositoryImpl implements ProcessDefAggRepository {
   public ProcessDefAgg queryById(Long defId) {
 
     ProcessDefDO processDefDO = defMapper.selectById(defId);
-    if (processDefDO != null) {
-      ProcessDefAgg defAgg = BeanUtil.copyProperties(processDefDO, ProcessDefAgg.class);
-      defAgg.setNodeVOList(queryNodeList(defId));
-      return defAgg;
-    }
-    return null;
+
+    return ProcessDefAggAdapter.getProcessDefAgg(processDefDO, queryNodeList(processDefDO.getId()));
   }
 
   @Override
   public ProcessDefAgg queryByKey(String defKey) {
-    ProcessDefDO processDefDO = defMapper.selectOne(
-        new QueryWrapper<ProcessDefDO>().eq("proc_def_key", defKey)
-            .eq("is_latest", true));
-    if (processDefDO != null) {
-      ProcessDefAgg defAgg = BeanUtil.copyProperties(processDefDO, ProcessDefAgg.class);
-      defAgg.setNodeVOList(queryNodeList(processDefDO.getId()));
-      return defAgg;
-    }
-    return null;
+    QueryWrapper<ProcessDefDO> wrapper = new QueryWrapper<>();
+    wrapper.lambda().eq(ProcessDefDO::getProcDefKey, defKey)
+        .eq(ProcessDefDO::getIsLatest, true);
+    ProcessDefDO processDefDO = defMapper.selectOne(wrapper);
+
+    return ProcessDefAggAdapter.getProcessDefAgg(processDefDO, queryNodeList(processDefDO.getId()));
+
   }
 
   private List<DefNodeVO> queryNodeList(Long defId) {
     List<DefNodeVO> result = Lists.newArrayList();
-    List<ProcessDefNodeDO> nodeDOList = defNodeMapper.selectList(new QueryWrapper<ProcessDefNodeDO>()
-        .eq("def_id", defId));
+
+    // 1. 查询指定defId下的节点
+    List<ProcessDefNodeDO> nodeDOList = defNodeMapper.selectList(
+        new LambdaQueryWrapper<ProcessDefNodeDO>().eq(ProcessDefNodeDO::getDefId, defId));
+
+    // 2. 节点属性配置
     if (CollectionUtil.isNotEmpty(nodeDOList)) {
       // 只查一次，将节点参数与属性查出来
       List<Long> nodeIdList = nodeDOList.stream().map(node -> node.getId()).collect(Collectors.toList());
       List<ProcessDefNodePropertyDO> propertyDOList = nodePropertyMapper.selectList(
-          new QueryWrapper<ProcessDefNodePropertyDO>().in("node_id", nodeIdList));
+          new LambdaQueryWrapper<ProcessDefNodePropertyDO>().in(ProcessDefNodePropertyDO::getNodeId, nodeIdList));
       List<ProcessDefNodeVariableDO> variableDOList = nodeVariableMapper.selectList(
-          new QueryWrapper<ProcessDefNodeVariableDO>().in("node_id", nodeIdList));
+          new LambdaQueryWrapper<ProcessDefNodeVariableDO>().in(ProcessDefNodeVariableDO::getNodeId, nodeIdList));
 
-      Map<Long, List<ProcessDefNodePropertyDO>> propertyMap = Maps.newHashMap();
-      Map<Long, List<ProcessDefNodeVariableDO>> variableMap = Maps.newHashMap();
-      propertyDOList.forEach(tmp -> {
-        List<ProcessDefNodePropertyDO> list = propertyMap.getOrDefault(tmp.getNodeId(), Lists.newArrayList());
-        list.add(tmp);
-        propertyMap.put(tmp.getNodeId(), list);
-      });
-      variableDOList.forEach(tmp -> {
-        List<ProcessDefNodeVariableDO> list = variableMap.getOrDefault(tmp.getNodeId(), Lists.newArrayList());
-        list.add(tmp);
-        variableMap.put(tmp.getNodeId(), list);
-      });
+      Map<Long, List<ProcessDefNodePropertyDO>> propertyMap = propertyDOList.stream()
+          .collect(Collectors.groupingBy(ProcessDefNodePropertyDO::getNodeId));
+      Map<Long, List<ProcessDefNodeVariableDO>> variableMap = variableDOList.stream()
+          .collect(Collectors.groupingBy(ProcessDefNodeVariableDO::getNodeId));
 
       nodeDOList.forEach(node -> {
         DefNodeVO nodeVO = BeanUtil.copyProperties(node, DefNodeVO.class);
-        nodeVO.setVariableVOList(getVariableVOList(variableMap.getOrDefault(node.getId(), Lists.newArrayList())));
-        nodeVO.setPropertyVOList(getPropertyVOList(propertyMap.getOrDefault(node.getId(), Lists.newArrayList())));
+        nodeVO.setVariableVOList(ProcessDefAggAdapter.getDefNodeVariableVOList(variableMap.getOrDefault(node.getId(), Lists.newArrayList())));
+        nodeVO.setPropertyVOList(ProcessDefAggAdapter.getDefNodePropertyVOList(propertyMap.getOrDefault(node.getId(), Lists.newArrayList())));
         result.add(nodeVO);
       });
     }
     return result;
   }
 
-  private List<DefNodePropertyVO> getPropertyVOList(List<ProcessDefNodePropertyDO> propertyDOList) {
-    return CollectionUtil.isEmpty(propertyDOList) ? Lists.newArrayList() :
-        propertyDOList.stream().map(property -> BeanUtil.copyProperties(property, DefNodePropertyVO.class)).collect(Collectors.toList());
-  }
-
-  private List<DefNodeVariableVO> getVariableVOList(List<ProcessDefNodeVariableDO> variableDOList) {
-    return CollectionUtil.isEmpty(variableDOList) ? Lists.newArrayList() :
-        variableDOList.stream().map(variable -> BeanUtil.copyProperties(variable, DefNodeVariableVO.class)).collect(Collectors.toList());
-  }
 }

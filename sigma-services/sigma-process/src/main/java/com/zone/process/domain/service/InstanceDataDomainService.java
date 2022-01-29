@@ -26,34 +26,36 @@ import org.springframework.stereotype.Service;
 public class InstanceDataDomainService {
 
 
-    /**
-     * 发起流程时保存数据
-     */
-    public void saveStartFormData(ProcessDefAgg defAgg, ProcessInstAgg instAgg, Map<Long, Map<String, String>> formDataMap, String comment, LoginUser loginUser) {
-        DefNodeVO nodeVO = defAgg.getNodeByNodeId(defAgg.getStartBpmnNodeId());
-        List<Long> formIdList = Arrays.asList(nodeVO.getInputFormIds().split(","))
-                .stream().map(tmp -> Long.valueOf(tmp)).collect(Collectors.toList());
+  /**
+   * 发起流程时保存数据
+   */
+  public void saveStartFormData(ProcessDefAgg defAgg, ProcessInstAgg instAgg, Map<Long, Map<String, String>> formDataMap, String comment, LoginUser loginUser) {
+    DefNodeVO nodeVO = defAgg.getNodeByNodeId(defAgg.getStartBpmnNodeId());
+    List<Long> formIdList = Arrays.asList(nodeVO.getInputFormIds().split(","))
+        .stream().map(tmp -> Long.valueOf(tmp)).collect(Collectors.toList());
 
-        instAgg.setDataVOList(InstDataVO.generateDataVOList(defAgg.getStartBpmnNodeId(), formDataMap, Lists.newArrayList(), formIdList));
-        instAgg.setOperationVOList(Lists.newArrayList(InstOperationVO.generateOperationVO(defAgg.getStartBpmnNodeId(), InstanceOperationTypeEnum.START.getCode(),
-                InstanceOperationTypeEnum.START.getCode(), comment, formDataMap, loginUser, loginUser.getAccountName() + "发起流程实例")));
+    // 保存表单数据
+    instAgg.setDataVOList(InstDataVO.generateDataVOList(defAgg.getStartBpmnNodeId(), formDataMap, Lists.newArrayList(), formIdList));
+    // 保存操作记录，这里获取不到taskId，所以用InstanceOperationTypeEnum.START来代替
+    instAgg.setOperationVOList(Lists.newArrayList(InstOperationVO.generateOperationVO(defAgg.getStartBpmnNodeId(), InstanceOperationTypeEnum.START.getCode(),
+        InstanceOperationTypeEnum.START.getCode(), comment, formDataMap, loginUser, loginUser.getAccountName() + "发起流程实例")));
+  }
+
+  /**
+   * 操作任务时保存数据
+   */
+  public void saveUserTaskData(ProcessInstAgg instAgg, TaskVO taskVO, String operationType, String comment,
+      Map<Long, Map<String, String>> formDataMap, ProcessDefAgg defAgg, LoginUser loginUser) {
+    DefNodeVO nodeVO = defAgg.getNodeByNodeId(taskVO.getCurNodeId());
+    List<Long> formIdList = Arrays.asList(nodeVO.getInputFormIds().split(","))
+        .stream().filter(tmp -> StrUtil.isNotBlank(tmp))
+        .map(tmp -> Long.valueOf(tmp)).collect(Collectors.toList());
+
+    // 只有完成任务能够保存表单数据
+    if (TaskOperationTypeEnum.COMPLETE.getCode().equals(operationType)) {
+      instAgg.setDataVOList(InstDataVO.generateDataVOList(taskVO.getCurNodeId(), formDataMap, instAgg.getDataVOList(), formIdList));
     }
-
-    /**
-     * 操作任务时保存数据
-     */
-    public void saveUserTaskData(ProcessInstAgg instAgg, TaskVO taskVO, String operationType, String comment,
-                                 Map<Long, Map<String, String>> formDataMap, ProcessDefAgg defAgg, LoginUser loginUser) {
-        DefNodeVO nodeVO = defAgg.getNodeByNodeId(taskVO.getCurNodeId());
-        List<Long> formIdList = Arrays.asList(nodeVO.getInputFormIds().split(","))
-                .stream().filter(tmp -> StrUtil.isNotBlank(tmp))
-                .map(tmp -> Long.valueOf(tmp)).collect(Collectors.toList());
-
-        // 只有完成任务能够保存表单数据
-        if (TaskOperationTypeEnum.COMPLETE.getCode().equals(operationType)) {
-            instAgg.setDataVOList(InstDataVO.generateDataVOList(taskVO.getCurNodeId(), formDataMap, instAgg.getDataVOList(), formIdList));
-        }
-        String ext = TaskOperationTypeEnum.COMPLETE.getCode().equals(operationType) ? loginUser.getAccountName() + "提交任务" : loginUser.getAccountName() + "转派任务";
-        instAgg.getOperationVOList().add(InstOperationVO.generateOperationVO(taskVO.getCurNodeId(), taskVO.getTaskId(), operationType, comment, formDataMap, loginUser, ext));
-    }
+    String ext = TaskOperationTypeEnum.COMPLETE.getCode().equals(operationType) ? loginUser.getAccountName() + "提交任务" : loginUser.getAccountName() + "转派任务";
+    instAgg.getOperationVOList().add(InstOperationVO.generateOperationVO(taskVO.getCurNodeId(), taskVO.getTaskId(), operationType, comment, formDataMap, loginUser, ext));
+  }
 }

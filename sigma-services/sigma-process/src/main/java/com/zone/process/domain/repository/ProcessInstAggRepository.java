@@ -9,11 +9,11 @@ import com.zone.process.domain.agg.ProcessInstAgg;
  */
 public interface ProcessInstAggRepository {
 
-    void save(ProcessInstAgg instAgg);
+  Long save(ProcessInstAgg instAgg);
 
-    ProcessInstAgg queryById(Long id);
+  ProcessInstAgg queryById(Long id);
 
-    Boolean update(ProcessInstAgg instAgg);
+  Long update(ProcessInstAgg instAgg);
 
-    ProcessInstAgg queryByInstId(String procInstId);
+  ProcessInstAgg queryByInstId(String procInstId);
 }

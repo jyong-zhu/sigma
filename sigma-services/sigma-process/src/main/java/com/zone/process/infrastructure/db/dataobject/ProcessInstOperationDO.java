@@ -6,11 +6,10 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.Version;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * <p>
@@ -47,7 +46,7 @@ public class ProcessInstOperationDO implements Serializable {
     private String comment;
 
     @ApiModelProperty(value = "操作人的user_id")
-    private String operateBy;
+    private Long operateBy;
 
     @ApiModelProperty(value = "操作人的姓名")
     private String operateName;

@@ -10,7 +10,6 @@ import com.zone.process.domain.agg.ProcessDefAgg;
 import com.zone.process.domain.agg.ProcessInstAgg;
 import com.zone.process.domain.repository.ProcessDefAggRepository;
 import com.zone.process.domain.repository.ProcessInstAggRepository;
-import com.zone.process.domain.service.AggIdentityDomainService;
 import com.zone.process.domain.service.InstanceDataDomainService;
 import com.zone.process.domain.service.InstanceParamDomainService;
 import com.zone.process.shared.process.ProcessEngineCommandAPI;
@@ -31,82 +30,79 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ProcessInstCmdService {
 
-    @Autowired
-    private ProcessEngineCommandAPI processEngineCommandAPI;
+  @Autowired
+  private ProcessEngineCommandAPI processEngineCommandAPI;
 
-    @Autowired
-    private ProcessEngineQueryAPI processEngineQueryAPI;
+  @Autowired
+  private ProcessEngineQueryAPI processEngineQueryAPI;
 
-    @Autowired
-    private ProcessDefAggRepository defAggRepository;
+  @Autowired
+  private ProcessDefAggRepository defAggRepository;
 
-    @Autowired
-    private ProcessInstAggRepository instAggRepository;
+  @Autowired
+  private ProcessInstAggRepository instAggRepository;
 
-    @Autowired
-    private InstanceParamDomainService paramDomainService;
+  @Autowired
+  private InstanceParamDomainService paramDomainService;
 
-    @Autowired
-    private AggIdentityDomainService identityDomainService;
+  @Autowired
+  private InstanceDataDomainService dataDomainService;
 
-    @Autowired
-    private InstanceDataDomainService dataDomainService;
+  /**
+   * 发起流程实例
+   */
+  @Transactional(rollbackFor = Exception.class)
+  public Long start(InstStartCommand startCommand, LoginUser loginUser) {
 
+    ProcessDefAgg defAgg = defAggRepository.queryByKey(startCommand.getDefKey());
+    Preconditions.checkNotNull(defAgg, "流程定义不存在");
+    Preconditions.checkState(defAgg.getStatus(), "流程定义被禁用");
 
-    /**
-     * 发起流程实例
-     */
-    @Transactional(rollbackFor = Exception.class)
-    public Long start(InstStartCommand startCommand, LoginUser loginUser) {
+    // 发起流程实例
+    Map<String, Object> paramMap = paramDomainService.generateParamMap(startCommand.getFormDataMap(), defAgg.getStartBpmnNodeId(), defAgg);
+    String procInstId = processEngineCommandAPI.startInstance(defAgg.getProcDefKey(), paramMap);
+    Preconditions.checkState(StrUtil.isNotBlank(procInstId), "发起流程实例失败");
 
-        ProcessDefAgg defAgg = defAggRepository.queryByKey(startCommand.getDefKey());
-        Preconditions.checkNotNull(defAgg, "流程定义不存在");
-        Preconditions.checkState(defAgg.getStatus(), "流程定义被禁用");
+    // 初始化并保存相关数据
+    ProcessInstAgg instAgg = ProcessInstAggTransfer.getProcessInstAgg(startCommand);
+    instAgg.init(defAgg.getId(), defAgg.getProcDefKey(), procInstId, loginUser);
+    dataDomainService.saveStartFormData(defAgg, instAgg, startCommand.getFormDataMap(), startCommand.getComment(), loginUser);
 
-        // 发起流程实例
-        Map<String, Object> paramMap = paramDomainService.generateParamMap(startCommand.getFormDataMap(), defAgg.getStartBpmnNodeId(), defAgg);
-        String procInstId = processEngineCommandAPI.startInstance(defAgg.getProcDefKey(), paramMap);
-        Preconditions.checkState(StrUtil.isNotBlank(procInstId), "发起流程实例失败");
+    // 同步流程实例的当前状态
+    ProcessInstanceVO processInstanceVO = processEngineQueryAPI.syncInstance(procInstId);
+    instAgg.sync(processInstanceVO, defAgg);
 
-        // 初始化并保存相关数据
-        ProcessInstAgg instAgg = ProcessInstAggTransfer.getProcessInstAgg(startCommand);
-        instAgg.init(identityDomainService.generateInstAggId(), defAgg.getId(), defAgg.getProcDefKey(), procInstId, loginUser);
-        dataDomainService.saveStartFormData(defAgg, instAgg, startCommand.getFormDataMap(), startCommand.getComment(), loginUser);
+    Long instId = instAggRepository.save(instAgg);
+    Preconditions.checkNotNull(instId, "创建流程实例出错");
 
-        // 同步流程实例的当前状态
-        ProcessInstanceVO processInstanceVO = processEngineQueryAPI.syncInstance(procInstId);
-        instAgg.sync(processInstanceVO, defAgg);
+    return instId;
+  }
 
-        instAggRepository.save(instAgg);
+  /**
+   * 中止流程实例，只支持中止自己发起的流程实例
+   */
+  @Transactional(rollbackFor = Exception.class)
+  public Long stop(InstStopCommand stopCommand, LoginUser loginUser) {
 
-        return instAgg.getId();
-    }
+    ProcessInstAgg instAgg = instAggRepository.queryById(stopCommand.getId());
+    Preconditions.checkState(instAgg != null
+        && instAgg.getSubmitBy().equals(loginUser.getAccountId()), "流程实例不存在");
 
-    /**
-     * 中止流程实例，只支持中止自己发起的流程实例
-     */
-    @Transactional(rollbackFor = Exception.class)
-    public Long stop(InstStopCommand stopCommand, LoginUser loginUser) {
+    ProcessDefAgg defAgg = defAggRepository.queryById(instAgg.getDefId());
+    Preconditions.checkNotNull(defAgg, "流程定义不存在");
 
-        ProcessInstAgg instAgg = instAggRepository.queryById(stopCommand.getId());
-        Preconditions.checkState(instAgg != null
-                && instAgg.getSubmitBy().equals(loginUser.getAccountId()), "流程实例不存在");
+    // 中止流程实例
+    processEngineCommandAPI.stopInstance(instAgg.getProcInstId(), stopCommand.getComment());
+    instAgg.stop(stopCommand.getComment(), instAgg.getCurNodeId(), loginUser);
 
-        ProcessDefAgg defAgg = defAggRepository.queryById(instAgg.getDefId());
-        Preconditions.checkNotNull(defAgg, "流程定义不存在");
+    // 同步流程实例的当前状态
+    ProcessInstanceVO processInstanceVO = processEngineQueryAPI.syncInstance(instAgg.getProcInstId());
+    instAgg.sync(processInstanceVO, defAgg);
 
-        // 中止流程实例
-        processEngineCommandAPI.stopInstance(instAgg.getProcInstId(), stopCommand.getComment());
-        instAgg.stop(stopCommand.getComment(), instAgg.getCurNodeId(), loginUser);
+    // 采用乐观锁更新，失败必须报错，否则camunda中的数据和扩展表中的数据不一致
+    Long instId = instAggRepository.update(instAgg);
+    Preconditions.checkNotNull(instId, "中止流程实例失败");
 
-        // 同步流程实例的当前状态
-        ProcessInstanceVO processInstanceVO = processEngineQueryAPI.syncInstance(instAgg.getProcInstId());
-        instAgg.sync(processInstanceVO, defAgg);
-
-        // 采用乐观锁更新，失败必须报错，否则camunda中的数据和扩展表中的数据不一致
-        Boolean isSuccess = instAggRepository.update(instAgg);
-        Preconditions.checkState(isSuccess, "中止流程实例失败");
-
-        return instAgg.getId();
-    }
+    return instAgg.getId();
+  }
 }

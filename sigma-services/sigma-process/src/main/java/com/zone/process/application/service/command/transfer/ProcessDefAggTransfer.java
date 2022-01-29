@@ -77,7 +77,7 @@ public class ProcessDefAggTransfer {
     DefNodePropertyVO defNodePropertyVO = new DefNodePropertyVO();
     defNodePropertyVO.setPropertyName(cmd.getPropertyName());
     defNodePropertyVO.setPropertyValue(cmd.getPropertyValue());
-    defNodePropertyVO.setDesc(cmd.getDesc());
+    defNodePropertyVO.setDescription(cmd.getDesc());
     return defNodePropertyVO;
   }
 

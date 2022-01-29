@@ -74,9 +74,9 @@ public class ProcessTaskCmdService {
     ProcessInstanceVO processInstanceVO = processEngineQueryAPI.syncInstance(taskVO.getProcInstId());
     instAgg.sync(processInstanceVO, defAgg);
 
-    Boolean isSuccess = instAggRepository.update(instAgg);
-    Preconditions.checkState(isSuccess, "操作任务失败");
+    Long instId = instAggRepository.update(instAgg);
+    Preconditions.checkNotNull(instId, "操作任务失败");
 
-    return instAgg.getId();
+    return instId;
   }
 }

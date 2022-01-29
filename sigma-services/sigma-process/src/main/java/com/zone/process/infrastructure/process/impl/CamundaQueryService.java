@@ -127,8 +127,9 @@ public class CamundaQueryService implements ProcessEngineQueryAPI {
         .processInstanceId(procInstId)
         .list();
     if (CollectionUtil.isNotEmpty(taskList)) {
-      List<ActRuIdentitylinkDO> identityLinkDOList = identityLinkMapper.selectList(new QueryWrapper<ActRuIdentitylinkDO>().in("TASK_ID_",
-          taskList.stream().map(tmp -> tmp.getId()).collect(Collectors.toList())));
+      List<String> taskIdList = taskList.stream().map(tmp -> tmp.getId()).collect(Collectors.toList());
+      List<ActRuIdentitylinkDO> identityLinkDOList = identityLinkMapper.selectList(new QueryWrapper<ActRuIdentitylinkDO>().lambda()
+          .in(ActRuIdentitylinkDO::getTaskId, taskIdList));
       return identityLinkDOList.stream().map(tmp -> tmp.getGroupId()).collect(Collectors.toList());
     }
     return Lists.newArrayList();

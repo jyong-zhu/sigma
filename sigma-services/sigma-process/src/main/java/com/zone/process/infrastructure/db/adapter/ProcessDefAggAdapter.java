@@ -1,5 +1,7 @@
 package com.zone.process.infrastructure.db.adapter;
 
+import cn.hutool.core.collection.CollectionUtil;
+import com.google.common.collect.Lists;
 import com.zone.process.domain.agg.ProcessDefAgg;
 import com.zone.process.domain.valueobject.DefNodePropertyVO;
 import com.zone.process.domain.valueobject.DefNodeVO;
@@ -8,6 +10,8 @@ import com.zone.process.infrastructure.db.dataobject.ProcessDefDO;
 import com.zone.process.infrastructure.db.dataobject.ProcessDefNodeDO;
 import com.zone.process.infrastructure.db.dataobject.ProcessDefNodePropertyDO;
 import com.zone.process.infrastructure.db.dataobject.ProcessDefNodeVariableDO;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @Author: jianyong.zhu
@@ -37,7 +41,7 @@ public class ProcessDefAggAdapter {
     processDefNodePropertyDO.setBpmnNodeId(bpmnNodeId);
     processDefNodePropertyDO.setPropertyName(propertyVO.getPropertyName());
     processDefNodePropertyDO.setPropertyValue(propertyVO.getPropertyValue());
-    processDefNodePropertyDO.setDescription(propertyVO.getDesc());
+    processDefNodePropertyDO.setDescription(propertyVO.getDescription());
     return processDefNodePropertyDO;
   }
 
@@ -71,5 +75,79 @@ public class ProcessDefAggAdapter {
     processDefDO.setFormIds(processDefAgg.getFormIds());
     processDefDO.setIconUrl(processDefAgg.getIconUrl());
     return processDefDO;
+  }
+
+  public static ProcessDefAgg getProcessDefAgg(ProcessDefDO processDefDO, List<DefNodeVO> nodeVOList) {
+    if (processDefDO == null) {
+      return null;
+    }
+    ProcessDefAgg processDefAgg = new ProcessDefAgg();
+    processDefAgg.setId(processDefDO.getId());
+    processDefAgg.setCategoryId(processDefDO.getCategoryId());
+    processDefAgg.setProcDefId(processDefDO.getProcDefId());
+    processDefAgg.setProcDefKey(processDefDO.getProcDefKey());
+    processDefAgg.setProcDefVersion(processDefDO.getProcDefVersion());
+    processDefAgg.setName(processDefDO.getName());
+    processDefAgg.setStatus(processDefDO.getStatus());
+    processDefAgg.setBpmnXml(processDefDO.getBpmnXml());
+    processDefAgg.setStartBpmnNodeId(processDefDO.getStartBpmnNodeId());
+    processDefAgg.setFormIds(processDefDO.getFormIds());
+    processDefAgg.setIconUrl(processDefDO.getIconUrl());
+    processDefAgg.setVersion(processDefDO.getVersion());
+    processDefAgg.setNodeVOList(nodeVOList);
+    processDefAgg.setCreateTime(processDefDO.getCreateTime());
+    processDefAgg.setCreateBy(processDefDO.getCreateBy());
+    processDefAgg.setCreateName(processDefDO.getCreateName());
+    return processDefAgg;
+  }
+
+  public static List<DefNodeVariableVO> getDefNodeVariableVOList(List<ProcessDefNodeVariableDO> variableDOList) {
+    if (CollectionUtil.isEmpty(variableDOList)) {
+      return Lists.newArrayList();
+    }
+    return variableDOList.stream().filter(variableDO -> variableDO != null)
+        .map(variableDO -> getDefNodeVariableVO(variableDO))
+        .collect(Collectors.toList());
+  }
+
+  public static List<DefNodePropertyVO> getDefNodePropertyVOList(List<ProcessDefNodePropertyDO> propertyDOList) {
+    if (CollectionUtil.isEmpty(propertyDOList)) {
+      return Lists.newArrayList();
+    }
+    return propertyDOList.stream().filter(propertyDO -> propertyDO != null)
+        .map(propertyDO -> getDefNodePropertyVO(propertyDO))
+        .collect(Collectors.toList());
+  }
+
+  public static DefNodeVariableVO getDefNodeVariableVO(ProcessDefNodeVariableDO variableDO) {
+    if (variableDO == null) {
+      return null;
+    }
+    DefNodeVariableVO defNodeVariableVO = new DefNodeVariableVO();
+    defNodeVariableVO.setVariableName(variableDO.getVariableName());
+    defNodeVariableVO.setFormId(variableDO.getFormId());
+    defNodeVariableVO.setFieldId(variableDO.getFieldId());
+    defNodeVariableVO.setJavaType(variableDO.getJavaType());
+    defNodeVariableVO.setDefaultValue(variableDO.getDefaultValue());
+    defNodeVariableVO.setCreateTime(variableDO.getCreateTime());
+    defNodeVariableVO.setCreateBy(variableDO.getCreateBy());
+    defNodeVariableVO.setCreateName(variableDO.getCreateName());
+    return defNodeVariableVO;
+
+  }
+
+  public static DefNodePropertyVO getDefNodePropertyVO(ProcessDefNodePropertyDO propertyDO) {
+    if (propertyDO == null) {
+      return null;
+    }
+    DefNodePropertyVO defNodePropertyVO = new DefNodePropertyVO();
+    defNodePropertyVO.setPropertyName(propertyDO.getPropertyName());
+    defNodePropertyVO.setPropertyValue(propertyDO.getPropertyValue());
+    defNodePropertyVO.setDescription(propertyDO.getDescription());
+    defNodePropertyVO.setCreateTime(propertyDO.getCreateTime());
+    defNodePropertyVO.setCreateBy(propertyDO.getCreateBy());
+    defNodePropertyVO.setCreateName(propertyDO.getCreateName());
+    return defNodePropertyVO;
+
   }
 }

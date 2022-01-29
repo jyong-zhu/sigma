@@ -1,6 +1,5 @@
 package com.zone.process.application.service.command.transfer;
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import com.zone.process.application.service.command.cmd.InstStartCommand;
 import com.zone.process.domain.agg.ProcessInstAgg;
@@ -12,13 +11,17 @@ import com.zone.process.domain.agg.ProcessInstAgg;
  */
 public class ProcessInstAggTransfer {
 
-    public static ProcessInstAgg getProcessInstAgg(InstStartCommand startCommand) {
-        ProcessInstAgg processInstAgg = new ProcessInstAgg();
-        BeanUtil.copyProperties(startCommand, processInstAgg, "dueTime");
-        if (startCommand.getDueTime() != null) {
-            processInstAgg.setDueTime(LocalDateTimeUtil.of(startCommand.getDueTime()));
-        }
-        return processInstAgg;
+  public static ProcessInstAgg getProcessInstAgg(InstStartCommand startCommand) {
+    if (startCommand == null) {
+      return null;
     }
+    ProcessInstAgg processInstAgg = new ProcessInstAgg();
+    processInstAgg.setProcDefKey(startCommand.getDefKey());
+    processInstAgg.setName(startCommand.getName());
+    processInstAgg.setDueTime(startCommand.getDueTime() != null ? LocalDateTimeUtil.of(startCommand.getDueTime()) : null);
+    processInstAgg.setComment(startCommand.getComment());
+    processInstAgg.setDescription(startCommand.getDescription());
+    return processInstAgg;
+  }
 
 }
