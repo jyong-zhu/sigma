@@ -39,7 +39,7 @@ public class ProcessDefCmdService {
     /**
      * 部署流程定义
      */
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Long deploy(DefDeployCommand deployCommand) {
 
         ProcessCategoryAgg categoryAgg = categoryAggRepository.queryById(deployCommand.getCategoryId());

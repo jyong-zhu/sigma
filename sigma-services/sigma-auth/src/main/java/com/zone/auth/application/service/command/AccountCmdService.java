@@ -27,7 +27,7 @@ public class AccountCmdService {
   /**
    * 创建账号
    */
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public Long create(AccountCreateCommand createCommand, LoginUser loginUser) {
 
     // 0. 校验账号类型
@@ -43,7 +43,7 @@ public class AccountCmdService {
   /**
    * 更新账号
    */
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public Long update(AccountUpdateCommand updateCommand, LoginUser loginUser) {
 
     // 0. 校验账号类型
@@ -63,7 +63,7 @@ public class AccountCmdService {
   /**
    * 删除账号
    */
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public Long delete(Long accountId, LoginUser loginUser) {
 
     // 0. 校验账号类型

@@ -10,6 +10,7 @@ import com.zone.commons.entity.LoginUser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @Author: jianyong.zhu
@@ -26,6 +27,7 @@ public class RoleCmdService {
   /**
    * 创建角色
    */
+  @Transactional(rollbackFor = Exception.class)
   public Long create(RoleCreateCommand createCommand, LoginUser loginUser) {
 
     // 0. 校验账号类型
@@ -41,6 +43,7 @@ public class RoleCmdService {
   /**
    * 更新角色
    */
+  @Transactional(rollbackFor = Exception.class)
   public Long update(RoleUpdateCommand updateCommand, LoginUser loginUser) {
 
     // 0. 校验账号类型
@@ -60,6 +63,7 @@ public class RoleCmdService {
   /**
    * 删除角色
    */
+  @Transactional(rollbackFor = Exception.class)
   public Long delete(Long roleId, LoginUser loginUser) {
 
     // 0. 校验账号类型

@@ -29,7 +29,7 @@ public class ProcessCategoryCmdService {
     /**
      * 新增流程分类
      */
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Long add(CategoryCommand categoryCommand) {
 
         ProcessCategoryAgg categoryAgg = ProcessCategoryAggTransfer.getProcessCategoryAgg(categoryCommand);
@@ -44,7 +44,7 @@ public class ProcessCategoryCmdService {
     /**
      * 编辑流程分类
      */
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Long edit(CategoryCommand categoryCommand) {
 
         ProcessCategoryAgg categoryAgg = categoryAggRepository.queryById(categoryCommand.getId());

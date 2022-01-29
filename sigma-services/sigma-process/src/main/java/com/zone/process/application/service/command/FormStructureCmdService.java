@@ -25,7 +25,7 @@ public class FormStructureCmdService {
   /**
    * 保存表单
    */
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public Long save(FormCommand categoryCommand) {
 
     FormStructureAgg oldFormAgg = formAggRepository.queryByKey(categoryCommand.getFormKey());

@@ -51,7 +51,7 @@ public class ProcessTaskCmdService {
   /**
    * 操作任务
    */
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public Long operate(TaskOperateCommand operateCommand, LoginUser loginUser) {
 
     TaskVO taskVO = processEngineQueryAPI.queryRelateTaskById(operateCommand.getTaskId(), loginUser.getAccountId(), loginUser.getRoleIdList());

@@ -27,7 +27,7 @@ public class ResourceCmdService {
   /**
    * 创建资源点
    */
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public Long create(ResourceCreateCommand createCommand, LoginUser loginUser) {
 
     // 0. 校验账号类型
@@ -43,7 +43,7 @@ public class ResourceCmdService {
   /**
    * 更新资源点
    */
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public Long update(ResourceUpdateCommand updateCommand, LoginUser loginUser) {
 
     // 0. 校验账号类型
@@ -63,7 +63,7 @@ public class ResourceCmdService {
   /**
    * 删除资源点
    */
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public Long delete(Long resourceId, LoginUser loginUser) {
 
     // 0. 校验账号类型

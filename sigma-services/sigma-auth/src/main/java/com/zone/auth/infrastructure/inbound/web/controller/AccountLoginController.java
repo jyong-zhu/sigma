@@ -3,6 +3,7 @@ package com.zone.auth.infrastructure.inbound.web.controller;
 import com.zone.auth.application.service.command.AccountLoginCmdService;
 import com.zone.auth.application.service.command.cmd.AccountChangeCommand;
 import com.zone.auth.application.service.command.cmd.AccountLoginCommand;
+import com.zone.auth.application.service.query.AccountLoginQueryService;
 import com.zone.commons.context.CurrentContext;
 import com.zone.commons.entity.LoginUser;
 import com.zone.commons.entity.ResponseData;
@@ -29,6 +30,9 @@ public class AccountLoginController {
   @Autowired
   private AccountLoginCmdService accountLoginCmdService;
 
+  @Autowired
+  private AccountLoginQueryService accountLoginQueryService;
+
   @ApiOperation(value = "获取用户密码加密公钥", notes = "返回公钥")
   @PostMapping("/public-key")
   public ResponseData<String> queryPublicKey() {
@@ -38,7 +42,7 @@ public class AccountLoginController {
   @ApiOperation(value = "用户登陆",notes = "返回JWT")
   @PostMapping("/login")
   public ResponseData<String> login(@Valid @RequestBody AccountLoginCommand loginCommand) {
-    return ResponseData.ok(accountLoginCmdService.login(loginCommand));
+    return ResponseData.ok(accountLoginQueryService.login(loginCommand));
   }
 
   @ApiOperation(value = "登陆用户更改个人信息",notes = "返回boolean")

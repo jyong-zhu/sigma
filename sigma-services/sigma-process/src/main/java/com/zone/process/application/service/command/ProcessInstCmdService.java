@@ -56,7 +56,7 @@ public class ProcessInstCmdService {
     /**
      * 发起流程实例
      */
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Long start(InstStartCommand startCommand, LoginUser loginUser) {
 
         ProcessDefAgg defAgg = defAggRepository.queryByKey(startCommand.getDefKey());
@@ -85,7 +85,7 @@ public class ProcessInstCmdService {
     /**
      * 中止流程实例，只支持中止自己发起的流程实例
      */
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Long stop(InstStopCommand stopCommand, LoginUser loginUser) {
 
         ProcessInstAgg instAgg = instAggRepository.queryById(stopCommand.getId());
