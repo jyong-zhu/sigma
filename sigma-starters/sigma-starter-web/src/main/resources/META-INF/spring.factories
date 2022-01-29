@@ -2,4 +2,5 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   com.zone.web.config.ContextInterceptorConfig,\
   com.zone.web.config.GlobalExceptionConfig,\
   com.zone.web.config.ResponseBodyConfig,\
-  com.zone.web.config.RestTemplateConfig
+  com.zone.web.config.RestTemplateConfig,\
+  com.zone.web.util.SpringContextUtil

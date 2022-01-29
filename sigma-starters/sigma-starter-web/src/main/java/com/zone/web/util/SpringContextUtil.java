@@ -3,14 +3,14 @@ package com.zone.web.util;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * @Author: jianyong.zhu
  * @Date: 2022/1/29 11:16 上午
  * @Description: spring context 工具类
  */
-@Component
+@Configuration
 public class SpringContextUtil implements ApplicationContextAware {
 
   private static ApplicationContext applicationContext;
