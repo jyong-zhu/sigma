@@ -9,6 +9,7 @@ import com.zone.auth.infrastructure.db.dataobject.AuthAccountDO;
 import com.zone.auth.infrastructure.db.dataobject.AuthAccountRoleDO;
 import com.zone.auth.infrastructure.db.mapper.AuthAccountMapper;
 import com.zone.auth.infrastructure.db.mapper.AuthAccountRoleMapper;
+import com.zone.commons.util.IdWorkerUtil;
 import java.util.List;
 import javax.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -38,6 +39,10 @@ public class AccountAggRepositoryImpl implements AccountAggRepository {
       return null;
     }
 
+    // 用户id采用雪花算法生成，角色id采用自增主键
+    // 这样用于区分流程实例中当前处理人是角色的情况
+    Long accountId = IdWorkerUtil.nextId();
+    accountDO.setId(accountId);
     authAccountMapper.insert(accountDO);
 
     // 插入账号-角色表信息
