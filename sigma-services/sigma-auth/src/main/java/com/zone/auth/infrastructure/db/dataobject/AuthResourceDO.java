@@ -1,5 +1,6 @@
 package com.zone.auth.infrastructure.db.dataobject;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -63,21 +64,27 @@ public class AuthResourceDO implements Serializable {
     private Integer version;
 
     @ApiModelProperty(value = "创建时间")
+    @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
     @ApiModelProperty(value = "user_id")
+    @TableField(fill = FieldFill.INSERT)
     private Long createBy;
 
     @ApiModelProperty(value = "user_name")
+    @TableField(fill = FieldFill.INSERT)
     private String createName;
 
     @ApiModelProperty(value = "更新时间")
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
 
     @ApiModelProperty(value = "user_id")
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private Long updateBy;
 
     @ApiModelProperty(value = "user_name")
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private String updateName;
 
 

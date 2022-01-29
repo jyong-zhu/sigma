@@ -48,11 +48,7 @@ public class RoleAgg {
     return new RoleAgg()
         .setRoleName(createCommand.getRoleName())
         .setResourceIdList(createCommand.getResourceIdList())
-        .setStatus(createCommand.getStatus())
-        .setCreateBy(loginUser.getAccountId())
-        .setCreateName(loginUser.getAccountName())
-        .setUpdateBy(loginUser.getAccountId())
-        .setUpdateName(loginUser.getAccountName());
+        .setStatus(createCommand.getStatus());
   }
 
   /**
@@ -62,7 +58,5 @@ public class RoleAgg {
     this.setRoleName(updateCommand.getRoleName());
     this.setResourceIdList(updateCommand.getResourceIdList());
     this.setStatus(updateCommand.getStatus());
-    this.setUpdateBy(loginUser.getAccountId());
-    this.setUpdateName(loginUser.getAccountName());
   }
 }

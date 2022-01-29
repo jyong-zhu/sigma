@@ -74,10 +74,6 @@ public class ResourceAgg {
     resourceAgg.setVisible(createCommand.getVisible());
     resourceAgg.setStatus(true);
     resourceAgg.setSortNum(createCommand.getSortNum());
-    resourceAgg.setCreateBy(loginUser.getAccountId());
-    resourceAgg.setCreateName(loginUser.getAccountName());
-    resourceAgg.setUpdateBy(loginUser.getAccountId());
-    resourceAgg.setUpdateName(loginUser.getAccountName());
     return resourceAgg;
   }
 
@@ -94,7 +90,5 @@ public class ResourceAgg {
     this.setVisible(updateCommand.getVisible());
     this.setStatus(updateCommand.getStatus());
     this.setSortNum(updateCommand.getSortNum());
-    this.setUpdateBy(loginUser.getAccountId());
-    this.setUpdateName(loginUser.getAccountName());
   }
 }
