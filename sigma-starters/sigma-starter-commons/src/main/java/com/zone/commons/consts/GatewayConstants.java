@@ -10,6 +10,10 @@ import java.util.List;
  */
 public class GatewayConstants {
 
+  /**
+   * swagger访问地址：http://localhost:9090/sigma-auth/swagger-ui/index.html
+   * actuator访问路径：http://localhost:9090/sigma-auth/actuator
+   */
   public static final List<String> whiteList = Lists.newArrayList(
       "/sigma-auth/rpc/auth/check",
       "/sigma-auth/account/login",

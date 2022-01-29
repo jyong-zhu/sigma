@@ -19,11 +19,20 @@ spring:
         group: DEFAULT_GROUP
       discovery:
         server-addr: 127.0.0.1:8848
-  # 以下配置项用于屏蔽
+
+  # 以下配置项用于统一404接口时的返回体格式
+  # 配合 GlobalExceptionInterceptor#noHandlerException
   mvc:
     throw-exception-if-no-handler-found: true
   resources:
     add-mappings: false
+
+# 暴露actuator所有端点
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
 
 server:
   port: 9090

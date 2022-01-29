@@ -31,6 +31,13 @@ spring:
   resources:
     add-mappings: false
 
+# 暴露actuator所有端点
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
 feign:
   hystrix:
     enabled: true
