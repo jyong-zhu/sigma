@@ -10,13 +10,13 @@ import org.camunda.bpm.engine.repository.ProcessDefinition;
  */
 public class ProcessDefinitionAdapter {
 
-    public static ProcessDefinitionVO getProcessDefinitionVO(ProcessDefinition processDefinition) {
-        if (processDefinition == null) {
-            return null;
-        }
-        return new ProcessDefinitionVO()
-                .setProcDefId(processDefinition.getId())
-                .setProcDefKey(processDefinition.getKey())
-                .setProcDefVersion(processDefinition.getVersion());
+  public static ProcessDefinitionVO getProcessDefinitionVO(ProcessDefinition processDefinition) {
+    if (processDefinition == null) {
+      return null;
     }
+    return new ProcessDefinitionVO()
+        .setProcDefId(processDefinition.getId())
+        .setProcDefKey(processDefinition.getKey())
+        .setProcDefVersion(processDefinition.getVersion());
+  }
 }

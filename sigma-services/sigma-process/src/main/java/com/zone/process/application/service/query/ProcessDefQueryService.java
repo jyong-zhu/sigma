@@ -1,8 +1,6 @@
 package com.zone.process.application.service.query;
 
-import cn.hutool.core.bean.BeanUtil;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
 import com.zone.commons.entity.Page;
 import com.zone.mybatis.util.PlusPageConverter;
 import com.zone.process.application.service.query.assembler.DefDetailDTOAssembler;
@@ -11,15 +9,19 @@ import com.zone.process.application.service.query.assembler.StartNodeDTOAssemble
 import com.zone.process.application.service.query.dto.DefDetailDTO;
 import com.zone.process.application.service.query.dto.DefNodeDetailDTO;
 import com.zone.process.application.service.query.dto.StartNodeDTO;
-import com.zone.process.infrastructure.db.dataobject.*;
+import com.zone.process.infrastructure.db.dataobject.FormStructureDO;
+import com.zone.process.infrastructure.db.dataobject.ProcessDefDO;
+import com.zone.process.infrastructure.db.dataobject.ProcessDefNodeDO;
+import com.zone.process.infrastructure.db.dataobject.ProcessDefNodePropertyDO;
+import com.zone.process.infrastructure.db.dataobject.ProcessDefNodeVariableDO;
 import com.zone.process.infrastructure.db.query.FormStructureQuery;
 import com.zone.process.infrastructure.db.query.ProcessDefQuery;
+import com.zone.process.shared.enums.BpmnNodeTypeEnum;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @Author: jianyong.zhu
@@ -30,57 +32,59 @@ import java.util.stream.Collectors;
 @Service
 public class ProcessDefQueryService {
 
-    @Autowired
-    private ProcessDefQuery defQuery;
+  @Autowired
+  private ProcessDefQuery defQuery;
 
-    @Autowired
-    private FormStructureQuery formQuery;
+  @Autowired
+  private FormStructureQuery formQuery;
 
-    /**
-     * 分页查询流程定义，不含节点的信息
-     */
-    public Page<DefDetailDTO> page(Long categoryId, String name, Integer pageNo, Integer pageSize) {
-        Page<ProcessDefDO> page = PlusPageConverter.convert(defQuery.page(categoryId, name, pageNo, pageSize));
+  /**
+   * 分页查询流程定义，不含节点的信息
+   */
+  public Page<DefDetailDTO> page(Long categoryId, String name, Integer pageNo, Integer pageSize) {
 
-        return page.convert(processDefDO -> BeanUtil.copyProperties(processDefDO, DefDetailDTO.class));
-    }
+    Page<ProcessDefDO> page = PlusPageConverter.convert(defQuery.page(categoryId, name, pageNo, pageSize));
 
-    /**
-     * 含有完整的节点的信息，包括节点变量与节点属性
-     */
-    public DefDetailDTO queryDetailByKey(String procDefKey) {
-        ProcessDefDO def = defQuery.queryDefByProcKey(procDefKey);
-        Preconditions.checkNotNull(def, "流程定义不存在");
+    return page.convert(DefDetailDTOAssembler::getDefDetailDTO);
+  }
 
-        List<ProcessDefNodeDO> nodeList = defQuery.queryNodeListByDefId(def.getId());
-        List<Long> nodeIdList = nodeList.stream().map(tmp -> tmp.getId()).collect(Collectors.toList());
+  /**
+   * 含有完整的节点的信息，包括节点变量与节点属性
+   */
+  public DefDetailDTO queryDetailByKey(String procDefKey) {
 
-        List<ProcessDefNodeVariableDO> variableList = defQuery.queryNodeVariableList(nodeIdList);
-        List<ProcessDefNodePropertyDO> propertyList = defQuery.queryNodePropertyList(nodeIdList);
+    ProcessDefDO def = defQuery.queryDefByProcKey(procDefKey);
+    Preconditions.checkNotNull(def, "流程定义不存在");
 
-        return DefDetailDTOAssembler.getDefDetailDTO(def, nodeList, variableList, propertyList);
-    }
+    List<ProcessDefNodeDO> nodeList = defQuery.queryNodeListByDefId(def.getId());
+    List<Long> nodeIdList = nodeList.stream().map(tmp -> tmp.getId()).collect(Collectors.toList());
 
-    /**
-     * 开始节点的信息，主要是开始节点的表单信息
-     */
-    public StartNodeDTO queryStartNodeDetail(String procDefKey) {
-        ProcessDefDO def = defQuery.queryDefByProcKey(procDefKey);
-        Preconditions.checkNotNull(def, "流程定义不存在");
+    List<ProcessDefNodeVariableDO> variableList = defQuery.queryNodeVariableList(nodeIdList);
+    List<ProcessDefNodePropertyDO> propertyList = defQuery.queryNodePropertyList(nodeIdList);
 
-        ProcessDefNodeDO startNode = defQuery.queryStartNode(def.getId());
+    return DefDetailDTOAssembler.getDefDetailDTO(def, nodeList, variableList, propertyList);
+  }
 
-        List<FormStructureDO> formDOList = formQuery.queryByIds(startNode.getInputFormIds());
+  /**
+   * 开始节点的信息，主要是开始节点的表单信息
+   */
+  public StartNodeDTO queryStartNodeDetail(String procDefKey) {
+    ProcessDefDO def = defQuery.queryDefByProcKey(procDefKey);
+    Preconditions.checkNotNull(def, "流程定义不存在");
 
-        return StartNodeDTOAssembler.getStartNodeDTO(def, formDOList);
-    }
+    ProcessDefNodeDO startNode = defQuery.queryByNodeType(def.getId(), BpmnNodeTypeEnum.START_EVENT, "");
 
-    /**
-     * 只有节点的信息
-     */
-    public List<DefNodeDetailDTO> queryNodeList(Long defId) {
-        List<ProcessDefNodeDO> nodeDOList = defQuery.queryNodeListByDefId(defId);
-        return DefNodeDetailDTOAssembler.getDefNodeDetailDTOList(nodeDOList, Lists.newArrayList(), Lists.newArrayList());
-    }
+    List<FormStructureDO> formDOList = formQuery.queryByIds(startNode.getInputFormIds());
+
+    return StartNodeDTOAssembler.getStartNodeDTO(def, formDOList);
+  }
+
+  /**
+   * 只有节点的信息
+   */
+  public List<DefNodeDetailDTO> queryNodeList(Long defId) {
+    List<ProcessDefNodeDO> nodeDOList = defQuery.queryNodeListByDefId(defId);
+    return DefNodeDetailDTOAssembler.getDefNodeDetailDTOList(nodeDOList);
+  }
 
 }

@@ -16,7 +16,7 @@ import lombok.experimental.Accessors;
 public class DefNodeVariableDTO {
 
     @ApiModelProperty("变量id")
-    private Long variableId;
+    private Long id;
 
     @ApiModelProperty("节点id")
     private Long nodeId;

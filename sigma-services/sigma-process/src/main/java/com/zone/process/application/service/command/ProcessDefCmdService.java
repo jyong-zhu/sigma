@@ -24,34 +24,35 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ProcessDefCmdService {
 
-    @Autowired
-    private ProcessEngineCommandAPI processEngineCommandAPI;
+  @Autowired
+  private ProcessEngineCommandAPI processEngineCommandAPI;
 
-    @Autowired
-    private ProcessCategoryAggRepository categoryAggRepository;
+  @Autowired
+  private ProcessCategoryAggRepository categoryAggRepository;
 
-    @Autowired
-    private ProcessDefAggRepository defAggRepository;
+  @Autowired
+  private ProcessDefAggRepository defAggRepository;
 
-    @Autowired
-    private AggIdentityDomainService identityDomainService;
+  @Autowired
+  private AggIdentityDomainService identityDomainService;
 
-    /**
-     * 部署流程定义
-     */
-    @Transactional(rollbackFor = Exception.class)
-    public Long deploy(DefDeployCommand deployCommand) {
+  /**
+   * 部署流程定义
+   */
+  @Transactional(rollbackFor = Exception.class)
+  public Long deploy(DefDeployCommand deployCommand) {
 
-        ProcessCategoryAgg categoryAgg = categoryAggRepository.queryById(deployCommand.getCategoryId());
-        Preconditions.checkNotNull(categoryAgg, "流程分类不存在");
+    ProcessCategoryAgg categoryAgg = categoryAggRepository.queryById(deployCommand.getCategoryId());
+    Preconditions.checkNotNull(categoryAgg, "流程分类不存在");
 
-        ProcessDefinitionVO definitionVO = processEngineCommandAPI.deploy(deployCommand.getBpmnXml(), deployCommand.getName());
-        Preconditions.checkNotNull(definitionVO, "流程部署出错");
+    ProcessDefinitionVO definitionVO = processEngineCommandAPI.deploy(deployCommand.getBpmnXml(), deployCommand.getName());
+    Preconditions.checkNotNull(definitionVO, "流程部署出错");
 
-        ProcessDefAgg processDefAgg = ProcessDefAggTransfer.getProcessDefAgg(deployCommand);
-        processDefAgg.init(identityDomainService.generateDefAggId(), definitionVO);
-        defAggRepository.save(processDefAgg);
+    ProcessDefAgg processDefAgg = ProcessDefAggTransfer.getProcessDefAgg(deployCommand);
+    processDefAgg.init(definitionVO);
+    Long id = defAggRepository.save(processDefAgg);
+    Preconditions.checkNotNull(id, "流程部署失败");
 
-        return processDefAgg.getId();
-    }
+    return id;
+  }
 }

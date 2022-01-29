@@ -1,13 +1,11 @@
 package com.zone.process.application.service.query.assembler;
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import com.google.common.collect.Lists;
 import com.zone.process.application.service.query.dto.FormStructureDTO;
 import com.zone.process.application.service.query.dto.StartNodeDTO;
 import com.zone.process.infrastructure.db.dataobject.FormStructureDO;
 import com.zone.process.infrastructure.db.dataobject.ProcessDefDO;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,13 +16,14 @@ import java.util.stream.Collectors;
  */
 public class StartNodeDTOAssembler {
 
-    public static StartNodeDTO getStartNodeDTO(ProcessDefDO defDO, List<FormStructureDO> formDOList) {
-        List<FormStructureDTO> formDTOList = CollectionUtil.isEmpty(formDOList) ? Lists.newArrayList() :
-                formDOList.stream().map(tmp -> BeanUtil.copyProperties(tmp, FormStructureDTO.class)).collect(Collectors.toList());
+  public static StartNodeDTO getStartNodeDTO(ProcessDefDO defDO, List<FormStructureDO> formDOList) {
+    List<FormStructureDTO> formDTOList = CollectionUtil.isEmpty(formDOList) ? Lists.newArrayList() :
+        formDOList.stream().map(FormStructureDTOAssembler::getFormStructureDTO)
+            .collect(Collectors.toList());
 
-        return new StartNodeDTO()
-                .setDefId(defDO.getId())
-                .setDefName(defDO.getName())
-                .setInputFormList(formDTOList);
-    }
+    return new StartNodeDTO()
+        .setDefId(defDO.getId())
+        .setDefName(defDO.getName())
+        .setInputFormList(formDTOList);
+  }
 }

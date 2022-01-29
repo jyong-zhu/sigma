@@ -9,9 +9,9 @@ import com.zone.process.domain.agg.ProcessCategoryAgg;
  */
 public interface ProcessCategoryAggRepository {
 
-    ProcessCategoryAgg queryById(Long categoryId);
+  ProcessCategoryAgg queryById(Long categoryId);
 
-    Long save(ProcessCategoryAgg categoryAgg);
+  Long save(ProcessCategoryAgg categoryAgg);
 
-    Long update(ProcessCategoryAgg categoryAgg);
+  Long update(ProcessCategoryAgg categoryAgg);
 }

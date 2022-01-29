@@ -1,7 +1,6 @@
 package com.zone.process.shared.process;
 
 import com.zone.process.shared.process.valueobject.ProcessDefinitionVO;
-
 import java.util.List;
 import java.util.Map;
 
@@ -12,11 +11,11 @@ import java.util.Map;
  */
 public interface ProcessEngineCommandAPI {
 
-    ProcessDefinitionVO deploy(String xml, String name);
+  ProcessDefinitionVO deploy(String xml, String name);
 
-    String startInstance(String processDefKey, Map<String, Object> paramMap);
+  String startInstance(String processDefKey, Map<String, Object> paramMap);
 
-    void stopInstance(String procInstId, String comment);
+  void stopInstance(String procInstId, String comment);
 
-    void operateTask(String taskId, String procInstId, Map<String, Object> paramMap, List<String> identityList, String operationType);
+  void operateTask(String taskId, String procInstId, Map<String, Object> paramMap, List<String> identityList, String operationType);
 }

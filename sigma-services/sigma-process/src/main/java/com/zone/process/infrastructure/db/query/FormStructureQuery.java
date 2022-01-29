@@ -31,12 +31,13 @@ public class FormStructureQuery {
   public List<FormStructureDO> queryByIds(String ids) {
     List<FormStructureDO> result = Lists.newArrayList();
     if (StrUtil.isNotBlank(ids)) {
-      List<Long> idList = Arrays.asList(ids.split(","))
-          .stream().filter(tmp -> StrUtil.isNotBlank(tmp))
-          .map(tmp -> Long.valueOf(tmp)).collect(Collectors.toList());
+      List<Long> idList = Arrays.asList(ids.split(",")).stream()
+          .filter(tmp -> StrUtil.isNotBlank(tmp))
+          .map(Long::valueOf).collect(Collectors.toList());
       if (CollectionUtil.isNotEmpty(idList)) {
-        return formStructureMapper.selectList(
-            new QueryWrapper<FormStructureDO>().in("id", idList));
+        QueryWrapper<FormStructureDO> wrapper = new QueryWrapper<>();
+        wrapper.lambda().in(FormStructureDO::getId, idList);
+        return formStructureMapper.selectList(wrapper);
       }
     }
     return result;

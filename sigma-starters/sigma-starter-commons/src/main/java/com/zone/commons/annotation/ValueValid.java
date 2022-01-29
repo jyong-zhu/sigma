@@ -1,10 +1,13 @@
 package com.zone.commons.annotation;
 
 import com.zone.commons.annotation.impl.ValueValidator;
-
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
-import java.lang.annotation.*;
 
 /**
  * @Author: jianyong.zhu
@@ -17,15 +20,15 @@ import java.lang.annotation.*;
 @Constraint(validatedBy = ValueValidator.class)
 public @interface ValueValid {
 
-    String message();
+  String message();
 
-    Class checkClass();
+  Class checkClass();
 
-    String methodName() default "getByCode";
+  String methodName() default "getByCode";
 
-    boolean notNull() default true;
+  boolean notNull() default true;
 
-    Class<?>[] groups() default {};
+  Class<?>[] groups() default {};
 
-    Class<? extends Payload>[] payload() default {};
+  Class<? extends Payload>[] payload() default {};
 }

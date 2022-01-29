@@ -1,12 +1,10 @@
 package com.zone.process.application.service.query.assembler;
 
-import cn.hutool.core.bean.BeanUtil;
 import com.zone.process.application.service.query.dto.DefDetailDTO;
 import com.zone.process.infrastructure.db.dataobject.ProcessDefDO;
 import com.zone.process.infrastructure.db.dataobject.ProcessDefNodeDO;
 import com.zone.process.infrastructure.db.dataobject.ProcessDefNodePropertyDO;
 import com.zone.process.infrastructure.db.dataobject.ProcessDefNodeVariableDO;
-
 import java.util.List;
 
 /**
@@ -16,16 +14,36 @@ import java.util.List;
  */
 public class DefDetailDTOAssembler {
 
-    public static DefDetailDTO getDefDetailDTO(ProcessDefDO def, List<ProcessDefNodeDO> nodeList,
-                                               List<ProcessDefNodeVariableDO> variableList,
-                                               List<ProcessDefNodePropertyDO> propertyList) {
-        if (def == null) {
-            return null;
-        }
-        DefDetailDTO defDTO = BeanUtil.copyProperties(def, DefDetailDTO.class);
-
-        defDTO.setNodeList(DefNodeDetailDTOAssembler.getDefNodeDetailDTOList(nodeList, variableList, propertyList));
-
-        return defDTO;
+  /**
+   * 不包含节点信息
+   */
+  public static DefDetailDTO getDefDetailDTO(ProcessDefDO def) {
+    if (def == null) {
+      return null;
     }
+    DefDetailDTO defDetailDTO = new DefDetailDTO();
+    defDetailDTO.setId(def.getId());
+    defDetailDTO.setCategoryId(def.getCategoryId());
+    defDetailDTO.setBpmnXml(def.getBpmnXml());
+    defDetailDTO.setProcDefId(def.getProcDefId());
+    defDetailDTO.setProcDefKey(def.getProcDefKey());
+    defDetailDTO.setProcDefVersion(def.getProcDefVersion());
+    defDetailDTO.setName(def.getName());
+    defDetailDTO.setFormIds(def.getFormIds());
+    defDetailDTO.setIconUrl(def.getIconUrl());
+    return defDetailDTO;
+  }
+
+  public static DefDetailDTO getDefDetailDTO(ProcessDefDO def, List<ProcessDefNodeDO> nodeList,
+      List<ProcessDefNodeVariableDO> variableList, List<ProcessDefNodePropertyDO> propertyList) {
+
+    DefDetailDTO defDTO = getDefDetailDTO(def);
+    if (defDTO == null) {
+      return null;
+    }
+
+    defDTO.setNodeList(DefNodeDetailDTOAssembler.getDefNodeDetailDTOList(nodeList, variableList, propertyList));
+
+    return defDTO;
+  }
 }

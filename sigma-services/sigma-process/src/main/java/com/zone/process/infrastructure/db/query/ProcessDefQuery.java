@@ -15,10 +15,9 @@ import com.zone.process.infrastructure.db.mapper.ProcessDefNodeMapper;
 import com.zone.process.infrastructure.db.mapper.ProcessDefNodePropertyMapper;
 import com.zone.process.infrastructure.db.mapper.ProcessDefNodeVariableMapper;
 import com.zone.process.shared.enums.BpmnNodeTypeEnum;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
+import javax.annotation.Resource;
+import org.springframework.stereotype.Service;
 
 /**
  * @Author: jianyong.zhu
@@ -28,72 +27,79 @@ import java.util.List;
 @Service
 public class ProcessDefQuery {
 
-    @Autowired
-    private ProcessDefMapper defMapper;
+  @Resource
+  private ProcessDefMapper defMapper;
 
-    @Autowired
-    private ProcessDefNodeMapper defNodeMapper;
+  @Resource
+  private ProcessDefNodeMapper defNodeMapper;
 
-    @Autowired
-    private ProcessDefNodeVariableMapper nodeVariableMapper;
+  @Resource
+  private ProcessDefNodeVariableMapper nodeVariableMapper;
 
-    @Autowired
-    private ProcessDefNodePropertyMapper nodePropertyMapper;
+  @Resource
+  private ProcessDefNodePropertyMapper nodePropertyMapper;
 
-    public ProcessDefNodeDO queryStartNode(Long defId) {
-        return defNodeMapper.selectOne(new QueryWrapper<ProcessDefNodeDO>()
-                .eq("def_id", defId)
-                .eq("bpmn_node_type", BpmnNodeTypeEnum.START_EVENT.getCode())
-                .eq("parent_bpmn_node_id", ""));
+  /**
+   * 根据节点类型查询指定流程定义下的节点
+   */
+  public ProcessDefNodeDO queryByNodeType(Long defId, BpmnNodeTypeEnum nodeType, String parentBpmnNodeId) {
+
+    QueryWrapper<ProcessDefNodeDO> queryWrapper = new QueryWrapper<>();
+    queryWrapper.lambda().eq(ProcessDefNodeDO::getDefId, defId)
+        .eq(ProcessDefNodeDO::getBpmnNodeType, nodeType.getCode())
+        .eq(ProcessDefNodeDO::getParentBpmnNodeId, parentBpmnNodeId);
+
+    return defNodeMapper.selectOne(queryWrapper);
+  }
+
+  public ProcessDefNodeDO queryNodeById(Long defId, String bpmnNodeId) {
+    return defNodeMapper.selectOne(new QueryWrapper<ProcessDefNodeDO>()
+        .eq("def_id", defId)
+        .eq("bpmn_node_id", bpmnNodeId));
+  }
+
+  public IPage<ProcessDefDO> page(Long categoryId, String name, Integer pageNo, Integer pageSize) {
+    QueryWrapper<ProcessDefDO> queryWrapper = new QueryWrapper<>();
+    queryWrapper.lambda().eq(ProcessDefDO::getCategoryId, categoryId)
+        .eq(ProcessDefDO::getIsLatest, true)
+        .orderByDesc(ProcessDefDO::getId);
+    if (StrUtil.isNotBlank(name)) {
+      queryWrapper.lambda().like(ProcessDefDO::getName, name);
     }
+    return defMapper.selectPage(new Page<>(pageNo, pageSize), queryWrapper);
+  }
 
-    public ProcessDefNodeDO queryNodeById(Long defId, String bpmnNodeId) {
-        return defNodeMapper.selectOne(new QueryWrapper<ProcessDefNodeDO>()
-                .eq("def_id", defId)
-                .eq("bpmn_node_id", bpmnNodeId));
-    }
+  /**
+   * 根据 procKey 查询最新版本的流程定义
+   */
+  public ProcessDefDO queryDefByProcKey(String procDefKey) {
+    QueryWrapper<ProcessDefDO> queryWrapper = new QueryWrapper<>();
+    queryWrapper.lambda().eq(ProcessDefDO::getProcDefKey, procDefKey)
+        .eq(ProcessDefDO::getIsLatest, true);
+    return defMapper.selectOne(queryWrapper);
+  }
 
-    public IPage<ProcessDefDO> page(Long categoryId, String name, Integer pageNo, Integer pageSize) {
-        QueryWrapper<ProcessDefDO> queryWrapper = new QueryWrapper<ProcessDefDO>()
-                .eq("category_id", categoryId)
-                .eq("is_latest", true);
-        if (StrUtil.isNotBlank(name)) {
-            queryWrapper.like("name", name);
-        }
-        return defMapper.selectPage(new Page<>(pageNo, pageSize), queryWrapper);
-    }
+  public List<ProcessDefNodeDO> queryNodeListByDefId(Long id) {
+    QueryWrapper<ProcessDefNodeDO> queryWrapper = new QueryWrapper<>();
+    queryWrapper.lambda().eq(ProcessDefNodeDO::getDefId, id);
+    return defNodeMapper.selectList(queryWrapper);
+  }
 
-    /**
-     * 根据 procKey 查询最新版本的流程定义
-     */
-    public ProcessDefDO queryDefByProcKey(String procDefKey) {
-        QueryWrapper<ProcessDefDO> queryWrapper = new QueryWrapper<ProcessDefDO>()
-                .eq("proc_def_key", procDefKey)
-                .eq("is_latest", 1);
-        return defMapper.selectOne(queryWrapper);
+  public List<ProcessDefNodeVariableDO> queryNodeVariableList(List<Long> nodeIdList) {
+    if (CollectionUtil.isNotEmpty(nodeIdList)) {
+      QueryWrapper<ProcessDefNodeVariableDO> queryWrapper = new QueryWrapper<>();
+      queryWrapper.lambda().in(ProcessDefNodeVariableDO::getNodeId, nodeIdList);
+      return nodeVariableMapper.selectList(queryWrapper);
     }
+    return Lists.newArrayList();
+  }
 
-    public List<ProcessDefNodeDO> queryNodeListByDefId(Long id) {
-        QueryWrapper<ProcessDefNodeDO> queryWrapper = new QueryWrapper<ProcessDefNodeDO>()
-                .eq("def_id", id);
-        return defNodeMapper.selectList(queryWrapper);
+  public List<ProcessDefNodePropertyDO> queryNodePropertyList(List<Long> nodeIdList) {
+    if (CollectionUtil.isNotEmpty(nodeIdList)) {
+      QueryWrapper<ProcessDefNodePropertyDO> queryWrapper = new QueryWrapper<>();
+      queryWrapper.lambda().in(ProcessDefNodePropertyDO::getNodeId, nodeIdList);
+      return nodePropertyMapper.selectList(queryWrapper);
     }
-
-    public List<ProcessDefNodeVariableDO> queryNodeVariableList(List<Long> nodeIdList) {
-        if (CollectionUtil.isNotEmpty(nodeIdList)) {
-            QueryWrapper<ProcessDefNodeVariableDO> queryWrapper = new QueryWrapper<ProcessDefNodeVariableDO>()
-                    .in("node_id", nodeIdList);
-            return nodeVariableMapper.selectList(queryWrapper);
-        }
-        return Lists.newArrayList();
-    }
-
-    public List<ProcessDefNodePropertyDO> queryNodePropertyList(List<Long> nodeIdList) {
-        if (CollectionUtil.isNotEmpty(nodeIdList)) {
-            QueryWrapper<ProcessDefNodePropertyDO> queryWrapper = new QueryWrapper<ProcessDefNodePropertyDO>()
-                    .in("node_id", nodeIdList);
-            return nodePropertyMapper.selectList(queryWrapper);
-        }
-        return Lists.newArrayList();
-    }
+    return Lists.newArrayList();
+  }
 }

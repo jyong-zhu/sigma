@@ -18,6 +18,7 @@ import com.zone.process.infrastructure.db.dataobject.ProcessInstOperationDO;
 import com.zone.process.infrastructure.db.query.FormStructureQuery;
 import com.zone.process.infrastructure.db.query.ProcessDefQuery;
 import com.zone.process.infrastructure.db.query.ProcessInstQuery;
+import com.zone.process.shared.enums.BpmnNodeTypeEnum;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
@@ -68,7 +69,7 @@ public class ProcessInstQueryService {
         Preconditions.checkState(instDO != null && operationDO != null, "流程实例不存在");
 
         // 详情中只返回开始节点的表单数据，要查看其他节点上的表单需要调接口进行切换
-        ProcessDefNodeDO startNode = defQuery.queryStartNode(instDO.getDefId());
+        ProcessDefNodeDO startNode = defQuery.queryByNodeType(instDO.getDefId(), BpmnNodeTypeEnum.START_EVENT, "");
         Preconditions.checkNotNull(startNode, "开始节点不存在");
 
         String formIds = startNode.getInputFormIds() + "," + startNode.getDisplayFormIds();

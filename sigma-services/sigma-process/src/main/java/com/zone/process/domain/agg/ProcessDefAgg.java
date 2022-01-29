@@ -7,13 +7,12 @@ import com.zone.process.domain.valueobject.DefNodeVO;
 import com.zone.process.shared.enums.BpmnNodeTypeEnum;
 import com.zone.process.shared.process.valueobject.ProcessDefinitionVO;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 /**
  * @Author: jianyong.zhu
@@ -25,97 +24,96 @@ import java.util.stream.Collectors;
 @Accessors(chain = true)
 public class ProcessDefAgg {
 
-    @ApiModelProperty("主键id")
-    private Long id;
+  @ApiModelProperty("主键id")
+  private Long id;
 
-    @ApiModelProperty("分类id")
-    private Long categoryId;
+  @ApiModelProperty("分类id")
+  private Long categoryId;
 
-    @ApiModelProperty(value = "camunda中的流程定义id，关联到ACT_RE_PROCDEF")
-    private String procDefId;
+  @ApiModelProperty(value = "camunda中的流程定义id，关联到ACT_RE_PROCDEF")
+  private String procDefId;
 
-    @ApiModelProperty(value = "camunda中的流程定义key，关联到ACT_RE_PROCDEF的key")
-    private String procDefKey;
+  @ApiModelProperty(value = "camunda中的流程定义key，关联到ACT_RE_PROCDEF的key")
+  private String procDefKey;
 
-    @ApiModelProperty(value = "camunda中的流程定义版本，关联到ACT_RE_PROCDEF的version")
-    private Integer procDefVersion;
+  @ApiModelProperty(value = "camunda中的流程定义版本，关联到ACT_RE_PROCDEF的version")
+  private Integer procDefVersion;
 
-    @ApiModelProperty(value = "流程定义名称")
-    private String name;
+  @ApiModelProperty(value = "流程定义名称")
+  private String name;
 
-    @ApiModelProperty(value = "流程定义的状态，0-禁用 1-启用")
-    private Boolean status;
+  @ApiModelProperty(value = "流程定义的状态，0-禁用 1-启用")
+  private Boolean status;
 
-    @ApiModelProperty("bpmn2.0 xml")
-    private String bpmnXml;
+  @ApiModelProperty("bpmn2.0 xml")
+  private String bpmnXml;
 
-    @ApiModelProperty(value = "开始节点的id")
-    private String startBpmnNodeId;
+  @ApiModelProperty(value = "开始节点的id")
+  private String startBpmnNodeId;
 
-    @ApiModelProperty("当前流程定义下所关联的全部表单id, 用,隔开")
-    private String formIds;
+  @ApiModelProperty("当前流程定义下所关联的全部表单id, 用,隔开")
+  private String formIds;
 
-    @ApiModelProperty("分类展示图标")
-    private String iconUrl;
+  @ApiModelProperty("分类展示图标")
+  private String iconUrl;
 
-    @ApiModelProperty(value = "数据版本")
-    private Integer version;
+  @ApiModelProperty(value = "数据版本")
+  private Integer version;
 
-    @ApiModelProperty("流程定义中节点的信息")
-    private List<DefNodeVO> nodeVOList;
+  @ApiModelProperty("流程定义中节点的信息")
+  private List<DefNodeVO> nodeVOList;
 
-    @ApiModelProperty(value = "创建时间")
-    private LocalDateTime createTime;
+  @ApiModelProperty(value = "创建时间")
+  private LocalDateTime createTime;
 
-    @ApiModelProperty(value = "user_id")
-    private Long createBy;
+  @ApiModelProperty(value = "user_id")
+  private Long createBy;
 
-    @ApiModelProperty(value = "user_name")
-    private String createName;
+  @ApiModelProperty(value = "user_name")
+  private String createName;
 
-    /**
-     * 初始化流程定义的数据，包括聚合根的id、版本信息等
-     */
-    public void init(Long id, ProcessDefinitionVO definitionVO) {
-        this.setId(id);
-        this.setProcDefId(definitionVO.getProcDefId());
-        this.setProcDefKey(definitionVO.getProcDefKey());
-        this.setProcDefVersion(definitionVO.getProcDefVersion());
-        this.setStatus(true);
-        this.setVersion(0);
+  /**
+   * 初始化流程定义的数据，包括聚合根的id、版本信息等
+   */
+  public void init(ProcessDefinitionVO definitionVO) {
+    this.setProcDefId(definitionVO.getProcDefId());
+    this.setProcDefKey(definitionVO.getProcDefKey());
+    this.setProcDefVersion(definitionVO.getProcDefVersion());
+    this.setStatus(true);
+    this.setVersion(0);
 
-        // 解析 xml 文件，填充节点的信息
-        this.nodeVOList = DefNodeVO.parseNodeList(this.bpmnXml, this.nodeVOList);
+    // 解析 xml 文件，填充节点的信息
+    this.nodeVOList = DefNodeVO.parseNodeList(this.bpmnXml, this.nodeVOList);
 
-        // 获取开始节点的信息
-        DefNodeVO startNode = DefNodeVO.getNodeByType(this.nodeVOList, BpmnNodeTypeEnum.START_EVENT, "");
-        DefNodeVO endNode = DefNodeVO.getNodeByType(this.nodeVOList, BpmnNodeTypeEnum.START_EVENT, "");
-        Preconditions.checkState(startNode != null && endNode != null, "xml格式错误");
-        this.setStartBpmnNodeId(startNode.getBpmnNodeId());
+    // 获取开始节点的信息
+    DefNodeVO startNode = DefNodeVO.getNodeByType(this.nodeVOList, BpmnNodeTypeEnum.START_EVENT, "");
+    DefNodeVO endNode = DefNodeVO.getNodeByType(this.nodeVOList, BpmnNodeTypeEnum.END_EVENT, "");
+    Preconditions.checkState(startNode != null && endNode != null, "xml格式错误");
+    this.setStartBpmnNodeId(startNode.getBpmnNodeId());
+  }
+
+  /**
+   * 获取指定节点
+   */
+  public DefNodeVO getNodeByNodeId(String curNodeId) {
+    for (DefNodeVO nodeVO : this.getNodeVOList()) {
+      if (nodeVO.getBpmnNodeId().equals(curNodeId)) {
+        return nodeVO;
+      }
     }
+    return null;
+  }
 
-    /**
-     * 获取指定节点
-     */
-    public DefNodeVO getNodeByNodeId(String curNodeId) {
-        for (DefNodeVO nodeVO : this.getNodeVOList()) {
-            if (nodeVO.getBpmnNodeId().equals(curNodeId)) {
-                return nodeVO;
-            }
-        }
-        return null;
+  /**
+   * 获取指定id的节点列表
+   */
+  public List<DefNodeVO> getNodeByIdList(List<String> nodeIdList) {
+    if (CollectionUtil.isEmpty(nodeIdList)) {
+      return Lists.newArrayList();
     }
+    return this.getNodeVOList().stream()
+        .filter(tmp -> nodeIdList.contains(tmp.getBpmnNodeId()))
+        .collect(Collectors.toList());
 
-    /**
-     * 获取指定id的节点列表
-     */
-    public List<DefNodeVO> getNodeByIdList(List<String> nodeIdList) {
-        if (CollectionUtil.isEmpty(nodeIdList)) {
-            return Lists.newArrayList();
-        }
-        return this.getNodeVOList().stream()
-                .filter(tmp -> nodeIdList.contains(tmp.getBpmnNodeId()))
-                .collect(Collectors.toList());
-
-    }
+  }
 }

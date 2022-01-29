@@ -9,7 +9,10 @@ import com.zone.process.domain.agg.ProcessDefAgg;
  */
 public interface ProcessDefAggRepository {
 
-    void save(ProcessDefAgg processDefAgg);
+    /**
+     * 落地流程数据
+     */
+    Long save(ProcessDefAgg processDefAgg);
 
     /**
      * repository 中的查询操作都是以聚合根的维度查出来的
