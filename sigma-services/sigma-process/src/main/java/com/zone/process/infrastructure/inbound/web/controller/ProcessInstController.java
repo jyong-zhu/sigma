@@ -14,11 +14,15 @@ import com.zone.process.application.service.query.dto.InstNodeDataDTO;
 import com.zone.process.application.service.query.dto.InstTransferDTO;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 import java.util.List;
+import javax.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
@@ -85,7 +89,7 @@ public class ProcessInstController {
         return ResponseData.ok(queryService.queryInstNodeData(instId, bpmnNodeId, loginUser));
     }
 
-    @ApiOperation(value = "获取指定节点上的流程实例的表单数据")
+    @ApiOperation(value = "获取流程实例的流转数据")
     @GetMapping("/transfer")
     public ResponseData<List<InstTransferDTO>> queryInstTransfer(
             @ApiParam(value = "流程实例id") @RequestParam(value = "instId") Long instId) {

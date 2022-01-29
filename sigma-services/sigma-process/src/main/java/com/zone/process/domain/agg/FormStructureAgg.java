@@ -1,11 +1,10 @@
 package com.zone.process.domain.agg;
 
 import io.swagger.annotations.ApiModelProperty;
+import java.time.LocalDateTime;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-
-import java.time.LocalDateTime;
 
 /**
  * @Author: jianyong.zhu
@@ -50,8 +49,7 @@ public class FormStructureAgg {
     /**
      * 初始化id和版本号
      */
-    public void init(Long id, FormStructureAgg oldFormAgg) {
-        this.setId(id);
+    public void init(FormStructureAgg oldFormAgg) {
         this.setFormVersion(oldFormAgg == null ? 0 : oldFormAgg.getVersion() + 1);
     }
 }

@@ -17,5 +17,5 @@ public interface FormStructureAggRepository {
     /**
      * 保存表单
      */
-    void save(FormStructureAgg newFormAgg, FormStructureAgg oldFormAgg);
+    Long save(FormStructureAgg newFormAgg, FormStructureAgg oldFormAgg);
 }

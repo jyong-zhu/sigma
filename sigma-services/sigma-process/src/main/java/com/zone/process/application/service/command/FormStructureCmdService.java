@@ -1,10 +1,10 @@
 package com.zone.process.application.service.command;
 
+import com.google.common.base.Preconditions;
 import com.zone.process.application.service.command.cmd.FormCommand;
 import com.zone.process.application.service.command.transfer.FormStructureAggTransfer;
 import com.zone.process.domain.agg.FormStructureAgg;
 import com.zone.process.domain.repository.FormStructureAggRepository;
-import com.zone.process.domain.service.AggIdentityDomainService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,26 +19,24 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class FormStructureCmdService {
 
-    @Autowired
-    private FormStructureAggRepository formAggRepository;
+  @Autowired
+  private FormStructureAggRepository formAggRepository;
 
-    @Autowired
-    private AggIdentityDomainService identityDomainService;
+  /**
+   * 保存表单
+   */
+  @Transactional
+  public Long save(FormCommand categoryCommand) {
 
-    /**
-     * 保存表单
-     */
-    @Transactional
-    public Long save(FormCommand categoryCommand) {
+    FormStructureAgg oldFormAgg = formAggRepository.queryByKey(categoryCommand.getFormKey());
 
-        FormStructureAgg oldFormAgg = formAggRepository.queryByKey(categoryCommand.getFormKey());
+    FormStructureAgg newFormAgg = FormStructureAggTransfer.getFormStructureAgg(categoryCommand);
 
-        FormStructureAgg newFormAgg = FormStructureAggTransfer.getFormStructureAgg(categoryCommand);
+    newFormAgg.init(oldFormAgg);
 
-        newFormAgg.init(identityDomainService.generateFormAggId(), oldFormAgg);
+    Long id = formAggRepository.save(newFormAgg, oldFormAgg);
+    Preconditions.checkNotNull(id, "保存表单失败");
 
-        formAggRepository.save(newFormAgg, oldFormAgg);
-
-        return newFormAgg.getId();
-    }
+    return id;
+  }
 }

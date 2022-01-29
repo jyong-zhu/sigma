@@ -1,6 +1,5 @@
 package com.zone.process.application.service.command.transfer;
 
-import cn.hutool.core.bean.BeanUtil;
 import com.zone.process.application.service.command.cmd.FormCommand;
 import com.zone.process.domain.agg.FormStructureAgg;
 
@@ -11,7 +10,12 @@ import com.zone.process.domain.agg.FormStructureAgg;
  */
 public class FormStructureAggTransfer {
 
-    public static FormStructureAgg getFormStructureAgg(FormCommand categoryCommand) {
-        return BeanUtil.copyProperties(categoryCommand, FormStructureAgg.class);
-    }
+  public static FormStructureAgg getFormStructureAgg(FormCommand categoryCommand) {
+    FormStructureAgg formStructureAgg = new FormStructureAgg();
+    formStructureAgg.setName(categoryCommand.getName());
+    formStructureAgg.setFormKey(categoryCommand.getFormKey());
+    formStructureAgg.setFormJson(categoryCommand.getFormJson());
+    formStructureAgg.setDescription(categoryCommand.getDescription());
+    return formStructureAgg;
+  }
 }
