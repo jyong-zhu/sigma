@@ -7,14 +7,16 @@ import com.zone.process.infrastructure.db.adapter.ProcessCategoryAggAdapter;
 import com.zone.process.infrastructure.db.dataobject.ProcessCategoryDO;
 import com.zone.process.infrastructure.db.mapper.ProcessCategoryMapper;
 import javax.annotation.Resource;
-import org.springframework.stereotype.Service;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Repository;
 
 /**
  * @Author: jianyong.zhu
  * @Date: 2021/3/29 3:08 下午
  * @Description:
  */
-@Service
+@Slf4j
+@Repository
 public class ProcessCategoryAggRepositoryImpl implements ProcessCategoryAggRepository {
 
   @Resource
@@ -42,6 +44,10 @@ public class ProcessCategoryAggRepositoryImpl implements ProcessCategoryAggRepos
   public Long update(ProcessCategoryAgg categoryAgg) {
     ProcessCategoryDO categoryDO = BeanUtil.copyProperties(categoryAgg, ProcessCategoryDO.class);
     int num = categoryMapper.updateById(categoryDO);
-    return num == 0 ? null : categoryDO.getId();
+    if (num == 0) {
+      log.warn("【乐观锁】更新流程分类失败，categoryAgg=[{}]", categoryAgg);
+      return null;
+    }
+    return categoryDO.getId();
   }
 }

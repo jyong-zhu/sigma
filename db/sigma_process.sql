@@ -222,7 +222,7 @@ CREATE TABLE `form_structure`
     `update_by`    bigint(20)   NULL COMMENT 'user_id',
     `update_name`  varchar(45)  NULL COMMENT 'user_name',
     PRIMARY KEY (`id`) USING BTREE,
-    UNIQUE KEY `uk_form_version` (`form_key`, `version`) USING BTREE,
+    UNIQUE KEY `uk_form_version` (`form_key`, `form_version`) USING BTREE,
     INDEX `index_form_name` (`name`) USING BTREE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4

@@ -58,7 +58,10 @@ public class ResourceCmdService {
     resourceAgg.update(updateCommand);
 
     // 3. 落地资源点数据
-    return resourceAggRepository.update(resourceAgg);
+    Long resourceId = resourceAggRepository.update(resourceAgg);
+    Preconditions.checkNotNull(resourceId, "资源点更新失败，请重试");
+
+    return resourceId;
   }
 
   /**

@@ -27,6 +27,9 @@ public class RoleAgg {
   @ApiModelProperty(value = "0-停用 1-正常")
   private Boolean status;
 
+  @ApiModelProperty(value = "数据版本")
+  private Integer version;
+
   @ApiModelProperty(value = "user_id")
   private Long createBy;
 

@@ -50,6 +50,6 @@ public class FormStructureAgg {
      * 初始化id和版本号
      */
     public void init(FormStructureAgg oldFormAgg) {
-        this.setFormVersion(oldFormAgg == null ? 0 : oldFormAgg.getVersion() + 1);
+        this.setFormVersion(oldFormAgg == null ? 0 : oldFormAgg.getFormVersion() + 1);
     }
 }

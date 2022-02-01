@@ -15,7 +15,7 @@ import com.zone.process.infrastructure.db.mapper.ProcessInstOperationMapper;
 import java.util.List;
 import javax.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
 /**
  * @Author: jianyong.zhu
@@ -23,7 +23,7 @@ import org.springframework.stereotype.Service;
  * @Description:
  */
 @Slf4j
-@Service
+@Repository
 public class ProcessInstAggRepositoryImpl implements ProcessInstAggRepository {
 
   @Resource
@@ -71,7 +71,7 @@ public class ProcessInstAggRepositoryImpl implements ProcessInstAggRepository {
     ProcessInstDO instDO = ProcessInstAggAdapter.getInstDO(instAgg);
     int num = instMapper.updateById(instDO);
     if (num == 0) {
-      log.error("更新流程失败，instAgg=[{}]", instAgg);
+      log.error("【乐观锁】更新流程实例失败，instAgg=[{}]", instAgg);
       return null;
     }
 

@@ -36,7 +36,10 @@ public class AccountLoginCmdService {
     accountAgg.change(changeCommand);
 
     // 2. 更新个人信息
-    return accountAggRepository.update(accountAgg);
+    Long accountId = accountAggRepository.update(accountAgg);
+    Preconditions.checkNotNull(accountId, "账号更新失败，请重试");
+
+    return accountId;
   }
 
 }

@@ -26,6 +26,7 @@ public class ResourceAggAdapter {
     authResourceDO.setVisible(resourceAgg.getVisible());
     authResourceDO.setStatus(resourceAgg.getStatus());
     authResourceDO.setSortNum(resourceAgg.getSortNum());
+    authResourceDO.setVersion(resourceAgg.getVersion());
     authResourceDO.setCreateBy(resourceAgg.getCreateBy());
     authResourceDO.setCreateName(resourceAgg.getCreateName());
     authResourceDO.setUpdateBy(resourceAgg.getUpdateBy());
@@ -48,6 +49,7 @@ public class ResourceAggAdapter {
     resourceAgg.setVisible(resourceDO.getVisible());
     resourceAgg.setStatus(resourceDO.getStatus());
     resourceAgg.setSortNum(resourceDO.getSortNum());
+    resourceAgg.setVersion(resourceDO.getVersion());
     resourceAgg.setCreateBy(resourceDO.getCreateBy());
     resourceAgg.setCreateName(resourceDO.getCreateName());
     resourceAgg.setUpdateBy(resourceDO.getUpdateBy());

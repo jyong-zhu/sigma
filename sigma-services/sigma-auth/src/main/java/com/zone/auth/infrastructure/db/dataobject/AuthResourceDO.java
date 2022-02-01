@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.Version;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
@@ -61,6 +62,7 @@ public class AuthResourceDO implements Serializable {
     private Integer sortNum;
 
     @ApiModelProperty(value = "乐观锁版本")
+    @Version
     private Integer version;
 
     @ApiModelProperty(value = "创建时间")

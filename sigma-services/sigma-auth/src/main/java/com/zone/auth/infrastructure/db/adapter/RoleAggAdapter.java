@@ -24,6 +24,7 @@ public class RoleAggAdapter {
         .map(String::valueOf)
         .collect(Collectors.joining(",")));
     authRoleDO.setStatus(roleAgg.getStatus());
+    authRoleDO.setVersion(roleAgg.getVersion());
     authRoleDO.setCreateBy(roleAgg.getCreateBy());
     authRoleDO.setCreateName(roleAgg.getCreateName());
     authRoleDO.setUpdateBy(roleAgg.getUpdateBy());
@@ -42,6 +43,7 @@ public class RoleAggAdapter {
         .map(Long::valueOf)
         .collect(Collectors.toList()));
     roleAgg.setStatus(roleDO.getStatus());
+    roleAgg.setVersion(roleDO.getVersion());
     roleAgg.setCreateBy(roleDO.getCreateBy());
     roleAgg.setCreateName(roleDO.getCreateName());
     roleAgg.setUpdateBy(roleDO.getUpdateBy());

@@ -8,7 +8,7 @@ import com.zone.process.infrastructure.db.dataobject.FormStructureDO;
 import com.zone.process.infrastructure.db.mapper.FormStructureMapper;
 import javax.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
 /**
  * @Author: jianyong.zhu
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
  * @Description:
  */
 @Slf4j
-@Service
+@Repository
 public class FormStructureAggRepositoryImpl implements FormStructureAggRepository {
 
   @Resource

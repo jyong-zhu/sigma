@@ -63,6 +63,10 @@ public class AccountAggRepositoryImpl implements AccountAggRepository {
     }
 
     int num = authAccountMapper.updateById(accountDO);
+    if (num == 0) {
+      log.warn("【乐观锁】更新账号失败，accountAgg=[{}]", accountAgg);
+      return null;
+    }
 
     List<AuthAccountRoleDO> accountRoleDOList = AccountAggAdapter.getAccountRoleDOList(accountAgg.getRoleIdList(), accountDO.getId());
     if (num != 0 && CollectionUtil.isNotEmpty(accountRoleDOList)) {

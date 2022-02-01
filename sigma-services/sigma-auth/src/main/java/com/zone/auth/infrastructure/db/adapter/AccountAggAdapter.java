@@ -26,6 +26,7 @@ public class AccountAggAdapter {
     authAccountDO.setAccountType(accountAgg.getAccountType().getCode());
     authAccountDO.setEmail(accountAgg.getEmail());
     authAccountDO.setStatus(accountAgg.getStatus());
+    authAccountDO.setVersion(accountAgg.getVersion());
     authAccountDO.setCreateBy(accountAgg.getCreateBy());
     authAccountDO.setCreateName(accountAgg.getCreateName());
     authAccountDO.setUpdateBy(accountAgg.getUpdateBy());
@@ -55,6 +56,7 @@ public class AccountAggAdapter {
     accountAgg.setEmail(authAccountDO.getEmail());
     accountAgg.setRoleIdList(accountRoleDOList.stream().map(tmp -> tmp.getRoleId()).collect(Collectors.toList()));
     accountAgg.setStatus(authAccountDO.getStatus());
+    accountAgg.setVersion(authAccountDO.getVersion());
     accountAgg.setCreateBy(authAccountDO.getCreateBy());
     accountAgg.setCreateName(authAccountDO.getCreateName());
     accountAgg.setUpdateBy(authAccountDO.getUpdateBy());

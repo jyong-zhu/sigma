@@ -45,6 +45,9 @@ public class ResourceAgg {
   @ApiModelProperty(value = "排序值")
   private Integer sortNum;
 
+  @ApiModelProperty(value = "数据版本")
+  private Integer version;
+
   @ApiModelProperty(value = "user_id")
   private Long createBy;
 

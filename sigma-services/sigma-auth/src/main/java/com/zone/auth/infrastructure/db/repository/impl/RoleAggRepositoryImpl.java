@@ -6,6 +6,7 @@ import com.zone.auth.infrastructure.db.adapter.RoleAggAdapter;
 import com.zone.auth.infrastructure.db.dataobject.AuthRoleDO;
 import com.zone.auth.infrastructure.db.mapper.AuthRoleMapper;
 import javax.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Repository;
  * @Date: 2022/1/21 4:42 下午
  * @Description:
  */
+@Slf4j
 @Repository
 public class RoleAggRepositoryImpl implements RoleAggRepository {
 
@@ -39,7 +41,11 @@ public class RoleAggRepositoryImpl implements RoleAggRepository {
       return null;
     }
 
-    authRoleMapper.updateById(roleDO);
+    int num = authRoleMapper.updateById(roleDO);
+    if (num == 0) {
+      log.warn("【乐观锁】更新角色失败，roleAgg=[{}]", roleAgg);
+      return null;
+    }
 
     return roleDO.getId();
   }

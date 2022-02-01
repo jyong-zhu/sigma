@@ -58,7 +58,10 @@ public class RoleCmdService {
     roleAgg.update(updateCommand);
 
     // 3. 落地角色数据
-    return roleAggRepository.update(roleAgg);
+    Long roleId = roleAggRepository.update(roleAgg);
+    Preconditions.checkNotNull(roleId, "角色更新失败，请重试");
+
+    return roleId;
   }
 
   /**

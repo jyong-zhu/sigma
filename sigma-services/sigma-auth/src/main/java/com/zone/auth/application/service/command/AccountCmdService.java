@@ -59,7 +59,11 @@ public class AccountCmdService {
     oldAccount.update(updateCommand);
 
     // 3. 落地数据
-    return accountAggRepository.update(oldAccount);
+    Long accountId = accountAggRepository.update(oldAccount);
+    Preconditions.checkNotNull(accountId, "账号更新失败，请重试");
+
+    return accountId;
+
   }
 
   /**
