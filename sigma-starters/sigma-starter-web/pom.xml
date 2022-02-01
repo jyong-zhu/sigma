@@ -24,6 +24,16 @@
     </dependency>
 
     <dependency>
+      <groupId>com.zone</groupId>
+      <artifactId>sigma-starter-banner</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.zone</groupId>
+      <artifactId>sigma-rpc</artifactId>
+    </dependency>
+
+    <dependency>
       <groupId>io.springfox</groupId>
       <artifactId>springfox-boot-starter</artifactId>
     </dependency>

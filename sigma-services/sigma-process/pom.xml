@@ -33,11 +33,6 @@
       <artifactId>sigma-starter-web</artifactId>
     </dependency>
 
-    <dependency>
-      <groupId>com.zone</groupId>
-      <artifactId>sigma-rpc</artifactId>
-    </dependency>
-
     <!--Camunda相关-->
     <dependency>
       <groupId>org.camunda.bpm.springboot</groupId>

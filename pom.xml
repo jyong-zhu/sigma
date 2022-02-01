@@ -67,6 +67,11 @@
       </dependency>
       <dependency>
         <groupId>com.zone</groupId>
+        <artifactId>sigma-starter-banner</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.zone</groupId>
         <artifactId>sigma-starter-commons</artifactId>
         <version>${project.version}</version>
       </dependency>

@@ -12,14 +12,10 @@
   <artifactId>sigma-auth</artifactId>
 
   <dependencies>
-    <dependency>
-      <groupId>com.zone</groupId>
-      <artifactId>sigma-starter-web</artifactId>
-    </dependency>
 
     <dependency>
       <groupId>com.zone</groupId>
-      <artifactId>sigma-rpc</artifactId>
+      <artifactId>sigma-starter-web</artifactId>
     </dependency>
 
   </dependencies>
