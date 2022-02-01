@@ -18,8 +18,8 @@ import lombok.experimental.Accessors;
 public class RoleUpdateCommand {
 
   @ApiModelProperty(value = "主键")
-  @NotBlank(message = "主键id不能为空")
-  private Long id;
+  @NotNull(message = "主键id不能为空")
+  private Long roleId;
 
   @ApiModelProperty(value = "角色名称")
   @NotBlank(message = "角色名称不能为空")

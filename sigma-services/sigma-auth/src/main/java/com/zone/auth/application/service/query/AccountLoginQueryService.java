@@ -57,9 +57,7 @@ public class AccountLoginQueryService {
   public String login(AccountLoginCommand loginCommand) {
 
     // 0. 校验用户是否存在
-    String decryptPhone = SecurityUtil.rsaDecrypt(loginCommand.getPhone());
-
-    AuthAccountDO accountDO = accountQuery.queryByPhone(decryptPhone);
+    AuthAccountDO accountDO = accountQuery.queryByPhone(loginCommand.getPhone());
     Preconditions.checkState(accountDO != null && accountDO.getStatus(), "用户名或者密码错误");
 
     // 1. 比对密码

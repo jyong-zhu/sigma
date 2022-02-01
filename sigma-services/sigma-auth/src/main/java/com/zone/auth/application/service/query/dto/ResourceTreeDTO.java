@@ -18,5 +18,5 @@ public class ResourceTreeDTO {
   private ResourceDetailDTO curNode;
 
   @ApiModelProperty("下一层节点")
-  private List<ResourceTreeDTO> nextNodeList;
+  private List<ResourceTreeDTO> childrenList;
 }

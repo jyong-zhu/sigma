@@ -78,7 +78,7 @@ public class ResourceQueryService {
       List<ResourceTreeDTO> nextList = generateTree(resourceMap, resourceDO.getId());
       result.add(new ResourceTreeDTO()
           .setCurNode(detailDTO)
-          .setNextNodeList(nextList));
+          .setChildrenList(nextList));
     });
 
     return result;

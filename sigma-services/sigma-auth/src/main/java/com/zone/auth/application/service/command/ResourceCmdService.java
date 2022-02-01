@@ -51,7 +51,7 @@ public class ResourceCmdService {
     Preconditions.checkState(AccountTypeEnum.isAdmin(loginUser.getAccountType()), "非管理员不能更新资源点");
 
     // 1. 获取资源点
-    ResourceAgg resourceAgg = resourceAggRepository.queryById(updateCommand.getId());
+    ResourceAgg resourceAgg = resourceAggRepository.queryById(updateCommand.getResourceId());
     Preconditions.checkNotNull(resourceAgg, "资源点不存在");
 
     // 2. 更新资源点

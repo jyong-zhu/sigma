@@ -51,7 +51,7 @@ public class RoleCmdService {
     Preconditions.checkState(AccountTypeEnum.isAdmin(loginUser.getAccountType()), "非管理员不能更新角色");
 
     // 1. 获取角色详情
-    RoleAgg roleAgg = roleAggRepository.queryById(updateCommand.getId());
+    RoleAgg roleAgg = roleAggRepository.queryById(updateCommand.getRoleId());
     Preconditions.checkNotNull(roleAgg, "角色不存在");
 
     // 2. 更新角色数据

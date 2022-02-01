@@ -17,7 +17,7 @@ public class ResourceUpdateCommand {
 
   @ApiModelProperty(value = "主键")
   @NotNull(message = "主键id不能为空")
-  private Long id;
+  private Long resourceId;
 
   @ApiModelProperty(value = "权限类型 1-菜单权限 2-功能权限")
   @NotNull(message = "权限类型不能为空")

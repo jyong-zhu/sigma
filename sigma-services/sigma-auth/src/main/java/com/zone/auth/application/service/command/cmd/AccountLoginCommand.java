@@ -16,7 +16,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class AccountLoginCommand {
 
-    @ApiModelProperty("手机号, 用公钥加密")
+    @ApiModelProperty("手机号")
     @NotBlank(message = "手机号不能为空")
     private String phone;
 
