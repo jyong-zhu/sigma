@@ -68,7 +68,7 @@ public class ResourceCmdService {
   public Long delete(Long resourceId, LoginUser loginUser) {
 
     // 0. 校验账号类型
-    Preconditions.checkState(AccountTypeEnum.isAdmin(loginUser.getAccountType()), "非管理员不能更新资源点");
+    Preconditions.checkState(AccountTypeEnum.isAdmin(loginUser.getAccountType()), "非管理员不能删除资源点");
 
     // 1. 删除资源点
     return resourceAggRepository.delete(resourceId);

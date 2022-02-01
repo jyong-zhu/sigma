@@ -4,7 +4,6 @@ import com.google.common.base.Preconditions;
 import com.zone.auth.application.service.command.cmd.AccountChangeCommand;
 import com.zone.auth.application.service.command.cmd.AccountUpdateCommand;
 import com.zone.auth.shared.enums.AccountTypeEnum;
-import com.zone.commons.entity.LoginUser;
 import com.zone.commons.util.SecurityUtil;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.List;
@@ -60,7 +59,7 @@ public class AccountAgg {
   /**
    * 新建账号 初始化数据
    */
-  public void init(LoginUser loginUser) {
+  public void init() {
     // 默认密码：123456
     this.setPassword(SecurityUtil.digestSha1("123456"));
     this.setAccountType(AccountTypeEnum.NORMAL_USER);
@@ -74,6 +73,7 @@ public class AccountAgg {
     this.setEmail(updateCommand.getEmail());
     this.setName(updateCommand.getName());
     this.setStatus(updateCommand.getStatus());
+    this.setRoleIdList(updateCommand.getRoleIdList());
   }
 
   /**

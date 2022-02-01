@@ -53,4 +53,10 @@ public class GlobalExceptionInterceptor {
     log.error("404错误: [{}]", e.getMessage(), e);
     return ResponseData.error(HttpStatus.NOT_FOUND.value(), e.getMessage());
   }
+
+  @ExceptionHandler(Exception.class)
+  public ResponseData<Object> generalException(Exception e) {
+    log.error("未指定类型异常: [{}]", e.getMessage(), e);
+    return ResponseData.error("系统错误");
+  }
 }

@@ -7,7 +7,6 @@ import com.zone.process.domain.agg.ProcessCategoryAgg;
 import com.zone.process.domain.agg.ProcessDefAgg;
 import com.zone.process.domain.repository.ProcessCategoryAggRepository;
 import com.zone.process.domain.repository.ProcessDefAggRepository;
-import com.zone.process.domain.service.AggIdentityDomainService;
 import com.zone.process.shared.process.ProcessEngineCommandAPI;
 import com.zone.process.shared.process.valueobject.ProcessDefinitionVO;
 import lombok.extern.slf4j.Slf4j;
@@ -32,9 +31,6 @@ public class ProcessDefCmdService {
 
   @Autowired
   private ProcessDefAggRepository defAggRepository;
-
-  @Autowired
-  private AggIdentityDomainService identityDomainService;
 
   /**
    * 部署流程定义

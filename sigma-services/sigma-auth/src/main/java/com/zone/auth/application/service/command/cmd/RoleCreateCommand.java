@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import java.util.List;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -22,6 +23,8 @@ public class RoleCreateCommand {
 
   @ApiModelProperty(value = "角色拥有的资源列表")
   @NotNull(message = "角色的资源列表不能为空")
+  @Size(min = 1, message = "资源列表不能为空")
+  @Size(max = 300, message = "最多分配300个资源")
   private List<Long> resourceIdList;
 
   @ApiModelProperty(value = "角色状态")

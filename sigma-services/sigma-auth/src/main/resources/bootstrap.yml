@@ -34,6 +34,10 @@ management:
       exposure:
         include: '*'
 
+# mybatis-plus相关配置
+mybatis-plus:
+  mapper-locations: classpath:/mappers/*Mapper.xml
+
 server:
   port: 9090
   servlet:

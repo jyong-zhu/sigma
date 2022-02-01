@@ -83,6 +83,8 @@ public class AuthorizationFilter implements GlobalFilter, Ordered {
           .header(GatewayConstants.ACCOUNT_TYPE, URLEncoder.encode(String.valueOf(checkDTO.getAccountType()), GatewayConstants.UTF_8))
           .build();
 
+      log.info("鉴权通过，checkDTO=[{}]，转发请求path=[{}]", checkDTO, path);
+
       return chain.filter(exchange.mutate().request(request).build());
     } catch (UnsupportedEncodingException e) {
       e.printStackTrace();

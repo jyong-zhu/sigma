@@ -32,7 +32,7 @@ public class RoleCmdService {
   public Long create(RoleCreateCommand createCommand, LoginUser loginUser) {
 
     // 0. 校验账号类型
-    Preconditions.checkState(AccountTypeEnum.isAdmin(loginUser.getAccountType()), "非管理员不能更新资源点");
+    Preconditions.checkState(AccountTypeEnum.isAdmin(loginUser.getAccountType()), "非管理员不能创建角色");
 
     // 1. 获取角色聚合根
     RoleAgg roleAgg = RoleAggTransfer.getRoleAgg(createCommand);
@@ -48,7 +48,7 @@ public class RoleCmdService {
   public Long update(RoleUpdateCommand updateCommand, LoginUser loginUser) {
 
     // 0. 校验账号类型
-    Preconditions.checkState(AccountTypeEnum.isAdmin(loginUser.getAccountType()), "非管理员不能更新资源点");
+    Preconditions.checkState(AccountTypeEnum.isAdmin(loginUser.getAccountType()), "非管理员不能更新角色");
 
     // 1. 获取角色详情
     RoleAgg roleAgg = roleAggRepository.queryById(updateCommand.getId());
@@ -68,7 +68,7 @@ public class RoleCmdService {
   public Long delete(Long roleId, LoginUser loginUser) {
 
     // 0. 校验账号类型
-    Preconditions.checkState(AccountTypeEnum.isAdmin(loginUser.getAccountType()), "非管理员不能更新资源点");
+    Preconditions.checkState(AccountTypeEnum.isAdmin(loginUser.getAccountType()), "非管理员不能删除角色");
 
     // 1. 删除角色数据
     return roleAggRepository.delete(roleId);

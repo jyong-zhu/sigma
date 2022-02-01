@@ -36,7 +36,7 @@ public class AccountCmdService {
 
     // 1. 创建账号聚合根
     AccountAgg accountAgg = AccountAggTransfer.getAccountAgg(createCommand);
-    accountAgg.init(loginUser);
+    accountAgg.init();
 
     // 2. 落地账号数据
     return accountAggRepository.save(accountAgg);
@@ -49,7 +49,7 @@ public class AccountCmdService {
   public Long update(AccountUpdateCommand updateCommand, LoginUser loginUser) {
 
     // 0. 校验账号类型
-    Preconditions.checkState(AccountTypeEnum.isAdmin(loginUser.getAccountType()), "非管理员不能创建账号");
+    Preconditions.checkState(AccountTypeEnum.isAdmin(loginUser.getAccountType()), "非管理员不能更新账号");
 
     // 1. 获取账号信息
     AccountAgg oldAccount = accountAggRepository.queryById(updateCommand.getAccountId());
@@ -69,7 +69,7 @@ public class AccountCmdService {
   public Long delete(Long accountId, LoginUser loginUser) {
 
     // 0. 校验账号类型
-    Preconditions.checkState(AccountTypeEnum.isAdmin(loginUser.getAccountType()), "非管理员不能创建账号");
+    Preconditions.checkState(AccountTypeEnum.isAdmin(loginUser.getAccountType()), "非管理员不能删除账号");
 
     // 1. 删除账号
     return accountAggRepository.delete(accountId);

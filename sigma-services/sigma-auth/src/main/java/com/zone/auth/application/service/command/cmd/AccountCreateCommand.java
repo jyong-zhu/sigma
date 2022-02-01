@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import java.util.List;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -30,5 +31,7 @@ public class AccountCreateCommand {
 
   @ApiModelProperty("角色列表")
   @NotNull(message = "角色列表不能为空")
+  @Size(min = 1, message = "角色不能为空")
+  @Size(max = 5, message = "最多指定5个角色")
   private List<Long> roleIdList;
 }

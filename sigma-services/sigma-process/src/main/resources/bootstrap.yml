@@ -42,6 +42,10 @@ feign:
   hystrix:
     enabled: true
 
+# mybatis-plus相关配置
+mybatis-plus:
+  mapper-locations: classpath:/mappers/*Mapper.xml
+
 server:
   port: 9091
   servlet:
